@@ -12,6 +12,10 @@ body {
     overflow-y: hidden;
 }
 
+#lists {
+    display: none;
+}
+
 #board-container {
     width: fit-content;
     height: 100%;
