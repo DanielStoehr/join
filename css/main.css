@@ -47,3 +47,11 @@ body {
     height: 100%;
 }
 
+.d-none {
+    display: none;
+}
+
+.main-page {
+    display: unset;
+}
+
