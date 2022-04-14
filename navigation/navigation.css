@@ -1,0 +1,38 @@
+.navigation-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1E3190;
+    min-width: 100px;
+}
+
+.navigation-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+.navigation-container img {
+    height: 50px;
+    object-fit: contain;
+}
+
+.navigation-link {
+    color: #B1B4C8;
+    text-decoration: none;
+    border-left:5px solid transparent;
+    padding-left: 20px;
+    margin-bottom: 15px;
+    transition: all 250ms ease-in-out;
+}
+
+.navigation-link:hover {
+    color: white;
+    border-left-color: white;
+}
+
+.navigation-active {
+    color: white;
+    border-left-color: white;
+}

@@ -41,3 +41,8 @@ body {
     max-width: 1200px;
 }
 
+.content {
+    display: flex;
+    height: 100%;
+}
+

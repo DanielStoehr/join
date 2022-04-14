@@ -5,12 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="navigation/navigation.css">
     <title>Join</title>
+    <script src="script.js"></script>
+    <script src="navigation/navigation.js"></script>
 </head>
-<body>
+<body onload="includeHTML()">
     
     <div class="primary-container">
-
+        <div class="content">
+            <div w3-include-html="navigation/navigation.html"></div>
+            <div>Content</div>
+        </div>
     </div>
 
 </body>
