@@ -4,6 +4,12 @@
     height: 100%;
     background-color: #1E3190;
     min-width: 100px;
+    justify-content: space-between;
+}
+
+.navigation-top {
+    display: flex;
+    flex-direction: column;
 }
 
 .navigation-logo-container {
@@ -35,4 +41,13 @@
 .navigation-active {
     color: white;
     border-left-color: white;
+}
+
+.navigation-user-image {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
 }
