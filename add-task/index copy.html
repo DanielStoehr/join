@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../navigation/navigation.css">
+    <link rel="stylesheet" href="../board/css/board.css">
+    <link rel="stylesheet" href="add-task.css">
+    <title>Join</title>
+    <script src="../script.js"></script>
+    <script src="../navigation/navigation.js" defer></script>
+    <script type="module" src="../board/js/board.js"></script>
+
+</head>
+
+<body onload="includeHTML()">
+
+    <div class="primary-container">
+
+        <div class="content">
+            <div w3-include-html="../navigation/navigation.html"></div>
+            <div class="add-task">
+                <h1 class="add-task-heading">Add Task</h1>
+                <p class="add-task-slogan">Learning Management System Project</p>
+                <div>
+                    <form action="">
+                        <div>
+                            <label for="title">Title</label>
+                            <div>
+                                <input type="text">
+                            </div>
+                            <label for="category">Category</label>
+                            <select name="category" id="category">
+                                <option value="Management">Management</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Frontend">Frontend</option>
+                                <option value="Backend">Backend</option>
+                            </select>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

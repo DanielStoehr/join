@@ -3,7 +3,7 @@
 @font-face {
     font-family: "PT Sans";
     font-style: normal;
-    font-weight: 400 700;
+    font-weight: 400, 700;
     font-display: swap;
     src: url(../PT_Sans/PTSans-Regular.ttf) format("truetype"),
     url(../PT_Sans/PTSans-Bold.ttf) format("truetype");
