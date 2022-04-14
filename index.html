@@ -8,10 +8,12 @@
     <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="navigation/navigation.css">
-    <link rel="stylesheet" href="board/board.css">
+    <link rel="stylesheet" href="board/css/board.css">
     <title>Join</title>
     <script src="script.js"></script>
-    <script src="navigation/navigation.js"></script>
+    <script src="navigation/navigation.js" defer></script>
+    <script type="module" src="./board/js/board.js"></script>
+
 </head>
 
 <body onload="includeHTML()">
@@ -19,14 +21,33 @@
     <div class="primary-container">
 
         <div class="content">
+
             <div w3-include-html="navigation/navigation.html"></div>
             <div id="main-page" class="main-page">Content</div>
 
-            <div id="lists" class="d-none" w3-include-html="./board/board.html"></div>
+            <div class="board-container d-none" id="board-container">
+                <div class="board" id="board">
+                    <div class="column" id="todo">
+                        <h4>to-do</h4>
+                    </div>
+                    <div class="column" id="inprogress">
+                        <h4>in progress</h4>
+                    </div>
+                    <div class="column" id="testing">
+                        <h4>testing</h4>
+                    </div>
+                    <div class="column" id="completed">
+                        <h4>complete</h4>
+                    </div>
+                    <div class="column" id="discussing">
+                        <h4>discussing</h4>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
 </body>
-
 </html>
