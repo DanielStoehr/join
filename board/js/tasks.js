@@ -49,13 +49,13 @@ function removeTask(taskId) {
 function showTasks() {
     tasks.forEach(task => {
         const col = document.getElementById(task.columnId);
-        const taskExists = document.getElementById(task.id);
-        if (taskExists) {
-            col.removeChild(taskExists);
+        if (col) {
+            const taskExists = document.getElementById(task.id);
+            (taskExists) ? col.removeChild(taskExists) : false;
+            const div = createTaskContainer(task);
+            div.style.border = "1px solid " + window.getComputedStyle(col).borderColor;
+            col.appendChild(div);
         }
-        const div = createTaskContainer(task);
-        div.style.border = "1px solid " + window.getComputedStyle(col).borderColor;
-        col.appendChild(div);
     });
 }
 
@@ -93,6 +93,11 @@ function findTaskById(taskId) {
 }
 
 
+function findTasksByColumn(ColumnId) {
+    return tasks.filter(task => task.columnId == ColumnId);
+}
+
+
 function findTasksIndex(taskId) {
     return tasks.findIndex(task => task.id == taskId);
 }
@@ -111,5 +116,6 @@ function removeTaskFromColumn(task) {
 }
 
 
-export { tasks, priorities, inCharge, currentlyDraggedTask, };
-export { findTaskById, findTasksIndex, removeTaskFromColumn, moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate };
+export { tasks, priorities, inCharge, currentlyDraggedTask };
+export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };
+export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate };

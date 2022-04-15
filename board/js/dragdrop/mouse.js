@@ -1,7 +1,7 @@
 import { columns } from "../columns.js";
 import { currentlyDraggedTask } from "../tasks.js";
 import { findTaskById, removeTaskFromColumn, moveTaskToColumn, showTasks } from "../tasks.js";
-import { colTest } from "../board.js";
+
 
 // drag & drop support
 

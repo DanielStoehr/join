@@ -2,7 +2,7 @@ import { columns } from "../columns.js";
 import { currentlyDraggedTask, taskTemplate } from "../tasks.js";
 import { findTaskById, moveTaskToColumn, removeTaskFromColumn, showTasks } from "../tasks.js";
 import { highlightDraggedTask, removeDraggedTaskHighlighting, } from "./mouse.js";
-//import { colTest } from "../script.js";
+
 
 // support for mobile touch devices
 

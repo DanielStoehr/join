@@ -1,21 +1,13 @@
 'use strict'
 
-import { initColumns } from "./columns.js";
+import { getColumnsProperties, initColumns, addColumn, removeColumn } from "./columns.js";
 import { addTask, removeTask, showTasks } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
+import { Column } from "./column.class.js";
 
 
  //----- tested on iPhone 5s and newer as well as firefox & chromium -----
-import { Column } from "./column.class.js";
-const col = new Column("spalte", "neue Spalte");
-window.col = col;
-const colTest = [];
-window.colTest = colTest;
-colTest.push(col);
-col.appendTo("board");
-setTimeout(function () {
-    col.removeFrom("board");
-}, 10000);
+
 
 
 //-----for debugging-----
@@ -29,7 +21,9 @@ window.addEventListener("contextmenu", debug);
 
 
 (function main() {
-    let task, task1;
+    let task, task1, col;
+
+    col = addColumn("spalte", "neue Spalte", { accent: "darksalmon", background: "white"});
 
     init();
     addTask("inprogress", "Frontend programmieren", "Entwicklung", 0, inCharge[0]);
@@ -43,9 +37,9 @@ window.addEventListener("contextmenu", debug);
 
     task1 = addTask("spalte", "Fluggerät testen", "Hobby", 1, inCharge[0]);
     showTasks();
-    setTimeout(function () {
-        removeTask(task1);
-    }, 7000);
+    //setTimeout(function () {
+    //    removeTask(task1);
+    //}, 7000);
 
     setTimeout(function () {
         addTask("todo", "Büro Aufräumen", "Hausarbeit", 2, inCharge[2]);
@@ -61,6 +55,10 @@ window.addEventListener("contextmenu", debug);
         addTask("inprogress", "Backend programmieren", "Entwicklung", 0, inCharge[1]);
         showTasks();
     }, 3000);
+
+    setTimeout(function () {
+        console.log(removeColumn("spalte"));
+    }, 10000);
 
 })();
 
@@ -90,8 +88,6 @@ async function debug(e) {
         console.log("prefix c assigned to columns.js");
     }
 }
-
-export {colTest}; //for testing
 
 
 //let targetColumns = columns;
