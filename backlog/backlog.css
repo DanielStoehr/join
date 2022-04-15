@@ -1,0 +1,131 @@
+.backlog {
+    padding: 20px 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.backlog-heading {
+    margin: 0;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.backlog-slogan {
+    font-size: 16px;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 24px;
+    color: #1E3190;
+}
+
+table {
+    border-spacing: 0px;
+}
+
+table tr {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+table td, th {
+    padding-left: 12px;
+    padding-right: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table th {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E3190;
+    text-transform: uppercase;
+}
+
+table tr td:first-child, th:first-child {
+    width: 40%;
+    min-width: 225px;
+}
+
+table tr td:nth-child(2), th:nth-child(2) {
+    width: 20%;
+}
+
+table tr td:last-child, th:last-child {
+    width: 40%;
+}
+
+.backlog-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    background-color: #F4F3FB;
+    border-radius: 20px;
+}
+
+.backlog-item-image-name {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+
+.backlog-item-color {
+    width: 20px;
+    height: 100px;
+    background-color: rgb(34, 153, 23);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.backlog-user-image {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.backlog-item-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.name-mail-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.email {
+    color: #596fbd;
+}
+
+.category {
+    margin: 0px 12px 0px 12px;
+}
+
+.details {
+    text-align: justify;
+}
+
+@media (max-width: 768px) {
+    table tr td:first-child, th:first-child {
+        width: unset;
+        min-width: 225px;
+    }
+    
+    table tr td:nth-child(2), th:nth-child(2) {
+        width: unset;
+    }
+    
+    table tr td:last-child, th:last-child {
+        display: none;
+    }
+}

@@ -1,20 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../navigation/navigation.css">
     <link rel="stylesheet" href="./backlog.css">
     <script src="../script.js"></script>
     <script src="../navigation/navigation.js"></script>
     <title>Join</title>
+
+    <script>
+
+    </script>
+
 </head>
 
-<body>
-    test
-    
-    
+<body onload="includeHTML()">
+
+    <div class="primary-container">
+
+        <!---------Navigationsbar----------->
+        <div w3-include-html="../navigation/navigation.html"></div>
+
+        <div class="backlog">
+            <h1 class="backlog-heading">Add Task</h1>
+            <p class="backlog-slogan">Learning Management System Project</p>
+
+
+            <table>
+                <tr>
+                    <th>ASSIGNED-TO</th>
+                    <th>CATEGORY</th>
+                    <th>DETAILS</th>
+                </tr>
+
+
+                <tr class="backlog-item">
+                    <td class="backlog-item-image-name">
+                        <div class="backlog-item-color"></div>
+                        <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
+                        <div class="name-mail-container">
+                            <span>Darrin S. Jones</span>
+                            <span class="email">darrin@gmail.com</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category">
+                            Marketing
+                        </span>
+                    </td>
+                    <td>
+                        <p class="details">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quo optio quasi labore!
+                            Totam
+                            ratione doloremque earum natus corrupti, cum omnis sit accusamus! Placeat quas a
+                            pariatur
+                            ipsa
+                            repellat harum.
+                        </p>
+                    </td>
+                </tr>
+
+                <tr class="backlog-item">
+                    <td class="backlog-item-image-name">
+                        <div class="backlog-item-color"></div>
+                        <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
+                        <div class="name-mail-container">
+                            <span>Darrin S. Jones</span>
+                            <span class="email">darrin@gmail.com</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category">
+                            Marketing
+                        </span>
+                    </td>
+                    <td>
+                        <p class="details">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quo optio quasi labore!
+                            Totam
+                            ratione doloremque earum natus corrupti, cum omnis sit accusamus! Placeat quas a
+                            pariatur
+                            ipsa
+                            repellat harum.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+
+        </div>
+
+    </div>
+
+
 </body>
+
 </html>
