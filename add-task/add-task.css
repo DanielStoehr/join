@@ -1,5 +1,9 @@
 .add-task {
     padding: 20px 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .add-task-heading {
@@ -22,12 +26,26 @@
     border-radius: 12px;
 }
 
+.form-form {
+    width: 100%;
+}
+
 .form-container {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .form-left-section {
-    padding-right: 24px;
+    padding-right: 12px;
+    width: 50%;
+}
+
+.form-right-section {
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 
 .form-boxes {
@@ -44,7 +62,7 @@
 }
 
 .form-input-outer {
-    width: 325px;
+    width: 100%;
 }
 
 .form-input {
@@ -62,6 +80,100 @@
 }
 
 .form-textarea {
-    height: 100px;
+    height: 125px;
     resize: none;
+}
+
+.form-select {
+    cursor: pointer;
+}
+
+.form-icon-box {
+    display: flex;
+    align-items: center;
+    padding-top: 16px;
+    padding-left: 16px;
+}
+
+.form-icon-user {
+    width: 56px;
+    margin-right: 12px;
+}
+
+.form-icon-plus {
+    width: 32px;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: all 125ms ease-in-out;
+}
+
+.form-icon-plus:hover {
+    opacity: 1;
+}
+
+.form-button-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.form-button {
+    padding: 16px 16px;
+    border-radius: 8px;
+    color: white;
+    background-color: #1E3190;
+    border: none;
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 125ms ease-in-out;
+}
+
+.form-button-cancel{
+    margin-right: 16px;
+    color: #1E3190;
+    font-weight: 700;
+    background-color: transparent;
+}
+
+.form-button-cancel:hover {
+    color: #5c71d9;
+}
+
+.form-button-create:hover {
+    background-color: #3145ab;
+}
+
+@media (max-width: 768px) {
+
+    .form-container {
+        flex-direction: column;
+    }
+    .form-left-section {
+        padding: 0;
+        width: 100%;
+    }
+    .form-right-section {
+        padding: 0;
+        width: 100%;
+    }
+    .form {
+        padding: 16px 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-button {
+        font-size: 12px;
+    }
+    .form {
+        padding: 12px 12px;
+    }
+    .form-button-box {
+        padding-top: 16px;
+    }
+
 }
