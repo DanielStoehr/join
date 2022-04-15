@@ -1,0 +1,79 @@
+.backlog {
+    padding: 20px 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.backlog-heading {
+    margin: 0;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.backlog-slogan {
+    font-size: 16px;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 24px;
+    color: #1E3190;
+}
+
+.list-header-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.list-header-box span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E3190;
+    padding-bottom: 8px;
+    text-transform: uppercase;
+}
+
+#backlogs-container {
+    display: flex;
+    
+}
+
+.backlog-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F4F3FB;
+    border-radius: 20px;
+}
+
+.backlog-item-color {
+    width: 20px;
+    height: 100%;
+    background-color: rgb(34, 153, 23);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.backlog-user-image {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.email {
+    color: #596fbd;
+}
+
+.category {
+    margin: 0px 12px 0px 12px;
+}
+
+.details {
+    text-align: justify;
+    width: 50%;
+}
