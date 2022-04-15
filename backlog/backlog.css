@@ -30,6 +30,7 @@ table tr {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
 }
 
 table td, th {
@@ -66,7 +67,8 @@ table tr td:last-child, th:last-child {
     align-items: center;
     margin-top: 10px;
     background-color: #F4F3FB;
-    border-radius: 20px;
+    border-radius: 15px;
+    border-left: 10px solid red;
 }
 
 .backlog-item-image-name {
@@ -74,14 +76,6 @@ table tr td:last-child, th:last-child {
     justify-content: space-between;
     margin: 0;
     padding: 0;
-}
-
-.backlog-item-color {
-    width: 20px;
-    height: 100px;
-    background-color: rgb(34, 153, 23);
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
 }
 
 .backlog-user-image {
