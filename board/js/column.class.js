@@ -3,16 +3,16 @@ import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 // fully functional on common desktops, iPhone 5s, newer i-devices
 
 class Column {
-    constructor(id, headline) {
+    constructor(id, headline, color) {
         this.id = id;
         this.headline = headline;
         this.x = 0;
         this.y = 0;
         this.width = 180;
         this.height = 564;
-        this.color = { accent: "rgba(30, 30, 30, 0.2)", background: "white" };
+        this.color = color;
         this.listeners = [
-            { evt: "dragover", callback: dragOver },
+            { evt: "dragover", callback: dragOver },    // default event listeners
             { evt: "dragleave", callback: dragLeave },
             { evt: "drop", callback: drop },
         ];
@@ -60,11 +60,16 @@ class Column {
                     ('evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e)) : false;
                 });
             }
-            (value.length && 'evt' in value[0] && 'callback' in value[0]) ? this._listeners = value : this._listeners = [];
-            (this._listeners.length > 0) ? this.listener = this._listeners[this._listeners.length - 1] : this.listener = {};
-            if (col) {
-                this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
+            if (value.length) {
+                this._listeners = [];
+                value.forEach(v => { 
+                    ('evt' in v && 'callback' in v) ? this._listeners.push(v) : false;
+                });
             }
+            if (col) {
+                this._listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
+            }
+            (this._listeners.length) ? this.listener = this._listeners[this._listeners.length - 1] : this.listener = {};
         }
     }
 
