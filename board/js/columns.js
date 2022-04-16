@@ -22,9 +22,9 @@ const columnListeners = [
 
 function addColumn(id, headline, color) {
     const col = new Column(id, headline, color);
-    columns.push(col);
-    col.appendTo("board");
     col.listeners = columnListeners;
+    col.appendTo("board");
+    columns.push(col);
     return columns[columns.findIndex(column => column.id == id)] || "";
 }
 
