@@ -1,13 +1,8 @@
 'use strict'
 
-import { getColumnsProperties, initColumns, addColumn, removeColumn } from "./columns.js";
+import { initColumns, addColumn, removeColumn } from "./columns.js";
 import { addTask, removeTask, showTasks } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
-import { Column } from "./column.class.js";
-
-
- //----- tested on iPhone 5s and newer as well as firefox & chromium -----
-
 
 
 //-----for debugging-----

@@ -1,5 +1,5 @@
-import { touchStartMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
-import { startDragging, stopDragging, } from "./dragdrop/mouse.js";
+import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
+import { startDragging, stopDragging, dragging} from "./dragdrop/mouse.js";
 
 
 const tasks = [];
@@ -11,11 +11,17 @@ const inCharge = ["ich", "du", "Müllers Kuh"];
 const taskListeners = [
     { evt: "dragstart", callback: startDragging },
     { evt: "dragend", callback: stopDragging },
-    { evt: "touchstart", callback: touchStartMove },
-    { evt: "touchmove", callback: touchStartMove },
+    { evt: "touchstart", callback: touchStart },
+    { evt: "touchmove", callback: touchMove },
     { evt: "touchend", callback: touchEnd },
     { evt: "touchcancel", callback: touchCancel },
+    { evt: "click", callback: taskClicked },
 ];
+
+
+function taskClicked(e, taskId) {
+    console.log("click: " + taskId);
+}
 
 
 function addTask(columnId, description, category, priority, personInCharge) {
@@ -114,6 +120,19 @@ function removeTaskFromColumn(task) {
     taskListeners.forEach(tl => taskItem.removeEventListener(tl.evt, e => tl.callback(e, task.id)));
     column.removeChild(taskItem);
 }
+
+
+// for debugging
+/*
+function logClickEvent(clickEvent){
+    const col = document.getElementById("testing") || "";
+    const test = document.getElementById("test") || "";
+    if (col) {
+        (test) ? col.removeChild(test) : false;
+        col.innerHTML += '<div id="test">' + clickEvent + '</div>';
+    }
+}
+*/
 
 
 export { tasks, priorities, inCharge, currentlyDraggedTask };

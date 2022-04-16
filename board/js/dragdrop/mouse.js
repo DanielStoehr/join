@@ -5,7 +5,10 @@ import { findTaskById, removeTaskFromColumn, moveTaskToColumn, showTasks } from 
 
 // drag & drop support
 
+
 function startDragging(e, taskId) {
+    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.setData('text/plain', 'hello');
     const task = findTaskById(taskId);
     if (task) {
         currentlyDraggedTask.id = taskId;
@@ -22,15 +25,21 @@ function stopDragging(e, taskId) {
 }
 
 
+function dragging(e, taskId) {
+    //console.log("drag");
+}
+
+
 function dragOver(e) {
     e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
     highlight(e);
 }
 
 
 function drop(e) {
+    e.preventDefault();
     if (columns.some(c => c.id == e.target.id)) {
-        // || colTest.some(c => c.id == e.target.id)) {
         const task = findTaskById(currentlyDraggedTask.id);
         removeTaskFromColumn(task);
         moveTaskToColumn(task.id, e.target.id);
@@ -44,15 +53,11 @@ function highlight(e) {
     if (columns.some(c => c.id == e.target.id) && e.target.id != currentlyDraggedTask.sourceColumn) {
         e.target.style.backgroundColor = window.getComputedStyle(e.target).borderColor;
     }
-    //if (colTest.some(c => c.id == e.target.id) && e.target.id != currentlyDraggedTask.sourceColumn) {
-    //    e.target.style.backgroundColor = window.getComputedStyle(e.target).borderColor;
-    //}
 }
 
 
 function dragLeave(e) {
     if (columns.some(c => c.id == e.target.id)) {
-    // || colTest.some(c => c.id == e.target.id)) {
         e.target.style.backgroundColor = "";
     }
 }
@@ -69,6 +74,19 @@ function removeDraggedTaskHighlighting() {
 }
 
 
+// for debugging
+/*
+function logDragEvent(dragEvent) {
+    const col = document.getElementById("testing") || "";
+    const test = document.getElementById("test") || "";
+    if (col) {
+        (test) ? col.removeChild(test) : false;
+        col.innerHTML += '<div id="test">' + dragEvent + '</div>';
+    }
+}
+*/
+
+
 export { 
-    startDragging, stopDragging, dragOver, drop, dragLeave, 
+    startDragging, stopDragging, dragOver, drop, dragLeave, dragging,
     highlightDraggedTask, removeDraggedTaskHighlighting, currentlyDraggedTask };

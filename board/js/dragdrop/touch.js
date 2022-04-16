@@ -12,10 +12,16 @@ const touch = {
     active: false,
 }
 
-const placeholder = { task: "" };
+
+function touchStart(e, taskId) {
+    currentlyDraggedTask.id = 0;
+    touch.x = parseInt(e.changedTouches[0].clientX);
+    touch.y = parseInt(e.changedTouches[0].clientY);
+    //e.preventDefault();
+}
 
 
-function touchStartMove(e, taskId) {
+function touchMove(e, taskId) {
     e.preventDefault();
     currentlyDraggedTask.id = taskId;
     currentlyDraggedTask.sourceColumn = findTaskById(taskId).columnId;
@@ -29,20 +35,22 @@ function touchStartMove(e, taskId) {
 
 
 function touchEnd(e, taskId) {
-    e.preventDefault();
-    removeTouchHighlighting();
-    removeDraggedTaskHighlighting();
-    const colId = getTouchTargetColumn() || currentlyDraggedTask.sourceColumn;
-    let task = findTaskById(taskId);
-    removeTaskFromColumn(task);
-    moveTaskToColumn(taskId, colId);
-    removePlaceholderFromColumn();
-    showTasks();
+    if (currentlyDraggedTask.id) {
+        //e.preventDefault();
+        removeTouchHighlighting();
+        removeDraggedTaskHighlighting();
+        const colId = getTouchTargetColumn() || currentlyDraggedTask.sourceColumn;
+        let task = findTaskById(taskId);
+        removeTaskFromColumn(task);
+        moveTaskToColumn(taskId, colId);
+        removePlaceholderFromColumn();
+        showTasks();
+    }
 }
 
 
 function touchCancel(e, taskId) {
-    e.preventDefault();
+    //e.preventDefault();
     removeTouchHighlighting();
     removeDraggedTaskHighlighting();
     document.getElementById(currentlyDraggedTask.id).style.position = "";
@@ -121,4 +129,17 @@ function removePlaceholderFromColumn() {
 }
 
 
-export { touch, touchStartMove, touchEnd, touchCancel };
+// for debugging
+/*
+function logTouchEvent(touchEvent) {
+    const col = document.getElementById("testing") || "";
+    const test = document.getElementById("test") || "";
+    if (col) {
+        (test) ? col.removeChild(test) : false;
+        col.innerHTML += '<div id="test">' + touchEvent + '</div>';
+    }
+}
+*/
+
+
+export { touch, touchStart, touchMove, touchEnd, touchCancel };
