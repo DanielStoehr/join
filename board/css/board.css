@@ -55,6 +55,17 @@ body {
     user-select: none;
 }
 
+.column h4 a {
+    color: unset;
+    text-decoration: none;
+}
+
+.column h4 a:hover {
+    color: unset;
+    text-decoration: none;
+    font-size: 1.05rem;
+}
+
 .task {
     border-radius: 0.5rem;
     margin: 0.5rem;
