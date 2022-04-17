@@ -3,14 +3,15 @@ import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 // fully functional on common desktops, iPhone 5s, newer i-devices
 
 class Column {
-    constructor(id, headline, color) {
+    constructor(id, title, color, minimized) {
         this.id = id;
-        this.headline = headline;
+        this.title = title;
         this.x = 0;
         this.y = 0;
         this.width = 180;
         this.height = 564;
         this.color = color;
+        this.minimized = (minimized) ? minimized : false;
         this.listeners = [
             { evt: "dragover", callback: dragOver },    // default event listeners
             { evt: "dragleave", callback: dragLeave },
@@ -33,8 +34,14 @@ class Column {
     // set accent and background color
     // apply defaults when needed
     set color(c) {
-        this._color = { accent: "rgba(30, 30, 30, 0.2)", background: "white" };
+        this._color = { title: "black", text: "black", accent: "rgba(30, 30, 30, 0.2)", background: "white" };
         if (typeof c == 'object') {
+            if ('title' in c) {
+                this._color.title = c.title;
+            }
+            if ('text' in c) {
+                this._color.text = c.text;
+            }
             if ('accent' in c) {
                 this._color.accent = c.accent;
             }
@@ -102,11 +109,15 @@ class Column {
         const par = document.getElementById(parent);
         if (par) {
             const col = document.createElement("div");
-            col.innerHTML = `<h4 style="background-color: ${this.color.accent};">${this.headline}</h4>`;
+            col.innerHTML =
+            `<h4 style="color: ${this.color.title}; background-color: ${this.color.accent};">${this.title}</h4>`;
             col.id = this.id;
             col.classList.add("column");
             col.style.border = "1px solid "+ this.color.accent;
             col.style.backgroundColor = this.color.background;
+            col.style.color = this.color.text;
+            col.style.height = (this.minimized) ? "fit-content" : "";
+            col.style.minHeight = (this.minimized) ? "fit-content" : "";
             par.appendChild(col);
             this.update();
             this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));

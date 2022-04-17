@@ -63,7 +63,7 @@ function getTouchTargetColumn() {
     let col = "";
     columns.forEach(c => {
         if (touch.x >= c.x && touch.x <= c.x + c.width && touch.y >= c.y && touch.y <= c.y + c.height) {
-            col = c.id;
+            col = (c.minimized) ? "" : c.id;
         }
     });
     return col;

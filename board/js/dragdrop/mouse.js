@@ -32,14 +32,14 @@ function dragging(e, taskId) {
 
 function dragOver(e) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+   // e.dataTransfer.dropEffect = 'copy';
     highlight(e);
 }
 
 
 function drop(e) {
     e.preventDefault();
-    if (columns.some(c => c.id == e.target.id)) {
+    if (columns.some(c => c.id == e.target.id && !c.minimized)) {
         const task = findTaskById(currentlyDraggedTask.id);
         removeTaskFromColumn(task);
         moveTaskToColumn(task.id, e.target.id);
@@ -50,7 +50,8 @@ function drop(e) {
 
 
 function highlight(e) {
-    if (columns.some(c => c.id == e.target.id) && e.target.id != currentlyDraggedTask.sourceColumn) {
+    if (columns.some(c => c.id == e.target.id && !c.minimized) && e.target.id != currentlyDraggedTask.sourceColumn) {
+        e.dataTransfer.dropEffect = 'copy';
         e.target.style.backgroundColor = window.getComputedStyle(e.target).borderColor;
     }
 }

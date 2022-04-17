@@ -55,15 +55,38 @@ body {
     user-select: none;
 }
 
-.column h4 a {
+#add-column-link {
+    display: unset;
     color: unset;
     text-decoration: none;
 }
 
-.column h4 a:hover {
+#add-column-link:hover {
     color: unset;
     text-decoration: none;
-    font-size: 1.05rem;
+    font-size: calc(var(--font-size) * 1.05);
+}
+
+#add-column-input {
+    max-width: 8.5rem;
+    border-radius: .1rem;
+    border-style: none;
+}
+
+#enter-new-column div {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: .5rem;
+    font-size: calc(var(--font-size) * .65);
+}
+
+#enter-new-column button {
+    font-size: inherit;
+    color: #2369a4;
+    background-color: white;
+    border-style: none;
+    border-radius: .1rem;
 }
 
 .task {
@@ -79,12 +102,12 @@ body {
 }
 
 .task-header h5 {
-    font-size: 0.95rem;
+    font-size: calc(var(--font-size) * .95);
     margin: 8px 5px;
 }
 
 .task-header span {
-    font-size: 0.75rem;
+    font-size: calc(var(--font-size) * .75);
     margin: 0px 5px;
     background-color: #d2d2d2;
     padding: 1px 5px;
@@ -92,12 +115,12 @@ body {
 }
 
 .task-body p {
-    font-size: 0.95rem;
+    font-size: calc(var(--font-size) * .95);
     margin: 8px 5px;
 }
 
 .task-footer span {
-    font-size: 0.7rem;
+    font-size: calc(var(--font-size) * .7);
     font-style: italic;
     margin: 0px 5px;
 }
