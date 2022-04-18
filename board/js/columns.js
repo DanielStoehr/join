@@ -6,7 +6,7 @@ import { findTasksByColumn, moveTaskToColumn } from "./tasks.js";
 const navAddColumn = `
 <a id="add-column-link" href="#">Liste hinzufügen</a>
 <div id="enter-new-column" style="display: none;">
-<input id="add-column-input" name="add-column-input" type="text" maxlength="15">
+<input id="add-column-input" name="add-column-input" type="text" maxlength="20">
 <div>
 <button id="add-column-cancel">Abbrechen</button>
 <button id="add-column-now">Hinzufügen</button>
@@ -23,7 +23,7 @@ const defaultColumns = [
     { id: "add-column", title: navAddColumn, color: { accent: "#2369a4", title: "white" }, minimized: true },
 ];
 
-const columns = []; 
+const columns = [];
 
 const columnListeners = [
     { evt: "dragover", callback: dragOver },
@@ -58,16 +58,20 @@ function initColumns() {
     defaultColumns.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false));
     window.addEventListener("resize", resizeViewportListener);
     window.addEventListener("scroll", resizeViewportListener);
-    applyAddColumnListeners();
+    attachAddColumnListeners();
 }
 
 
 function insertUserAddedColumn(newColumnId, newColumnTitle) {
-    console.log( "id: " + newColumnId + " title: " + newColumnTitle + "\n");
-    const column = columns[columns.length - 1];
-    removeColumn(column.id);
-    addColumn(newColumnId, newColumnTitle, defaultColumns[0].color, false);
-    addColumn(column.id, column.title, column.color, column.minimized || false);
+    if (!document.getElementById(newColumnId)) {
+        const column = columns[columns.length - 1];
+        detachAddColumnListeners();
+        removeColumn(column.id);
+        addColumn(newColumnId, newColumnTitle, defaultColumns[0].color, false);
+        addColumn(column.id, column.title, column.color, column.minimized || false);
+        attachAddColumnListeners();
+    }
+    console.log("id: " + newColumnId + " title: " + newColumnTitle + "\n");
 }
 
 
@@ -91,37 +95,62 @@ function findColumnsIndex(colId) {
 }
 
 
-function applyAddColumnListeners() {
+function attachAddColumnListeners() {
     const link = document.getElementById("add-column-link");
     const inputForm = document.getElementById("enter-new-column");
     const input = document.getElementById("add-column-input");
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
     if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.addEventListener("click", e => {
-            inputForm.style.display = "";
-            input.focus();
-            link.style.display = "none";
-        });
-        input.addEventListener("input", e => {
-            const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
-            e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
-            
-        });
-        cancelBtn.addEventListener("click", e => {
-            input.value = "";
-            inputForm.style.display = "none";
-            link.style.display = "";
-        });
-        applyBtn.addEventListener("click", e => {
-            const pattern = /[a-z0-9-]/gi;
-            const newColumnTitle = (input.value) ? input.value : "";
-            const newColumnId = (input.value.match(pattern) || []).toString().replaceAll(",", "");
-            inputForm.style.display = "none";
-            link.style.display = "";
-            insertUserAddedColumn(newColumnId, newColumnTitle);
-        });
-    } 
+        link.addEventListener('click', e => addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn));
+        input.addEventListener("input", e => inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+    }
+}
+
+function detachAddColumnListeners() {
+    const link = document.getElementById("add-column-link");
+    const inputForm = document.getElementById("enter-new-column");
+    const input = document.getElementById("add-column-input");
+    const cancelBtn = document.getElementById("add-column-cancel");
+    const applyBtn = document.getElementById("add-column-now");
+    if (link && inputForm && input && cancelBtn && applyBtn) {
+        link.removeEventListener('click', e => addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn));
+        input.removeEventListener("input", e => inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+    }
+}
+
+
+function addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn) {
+    inputForm.style.display = "";
+    input.focus();
+    link.style.display = "none";
+}
+
+
+function inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+    const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
+    e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
+}
+
+
+function cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+    input.value = "";
+    inputForm.style.display = "none";
+    link.style.display = "";
+}
+
+
+function applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+    const pattern = /[a-z0-9-]/gi;
+    const newColumnTitle = (input.value) ? input.value : "";
+    const newColumnId = (input.value.match(pattern) || []).toString().replaceAll(",", "");
+    inputForm.style.display = "none";
+    link.style.display = "";
+    insertUserAddedColumn(newColumnId, newColumnTitle);
 }
 
 
