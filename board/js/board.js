@@ -21,33 +21,33 @@ window.addEventListener("contextmenu", debug);
     col = addColumn("spalte", "neue Spalte", { accent: "darksalmon", background: "white"});
 
     init();
-    addTask("inprogress", "Frontend programmieren", "Entwicklung", 0, inCharge[0]);
+    addTask("inprogress", "Frontend programmieren", "Text 1", "Entwicklung", 0, inCharge[0]);
     showTasks();
 
-    task = addTask("completed", "Überbrückungshilfe beantragen", "Arbeit", 0, inCharge[0]);
+    task = addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, inCharge[0]);
     showTasks();
     setTimeout(function () {
         removeTask(task);
     }, 5500);
 
-    task1 = addTask("spalte", "Fluggerät testen", "Hobby", 1, inCharge[0]);
+    task1 = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, inCharge[0]);
     showTasks();
     //setTimeout(function () {
     //    removeTask(task1);
     //}, 7000);
 
     setTimeout(function () {
-        addTask("todo", "Büro Aufräumen", "Hausarbeit", 2, inCharge[2]);
+        addTask("todo", "Büro Aufräumen", "Text 4", "Hausarbeit", 2, inCharge[2]);
         showTasks();
     }, 1000);
 
     setTimeout(function () {
-        addTask("completed", "Tanzstunde vorbereiten", "Arbeit", 0, inCharge[0]);
+        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, inCharge[0]);
         showTasks();
     }, 2000);
 
     setTimeout(function () {
-        addTask("inprogress", "Backend programmieren", "Entwicklung", 0, inCharge[1]);
+        addTask("inprogress", "Backend programmieren", "Text 6", "Entwicklung", 0, inCharge[1]);
         showTasks();
     }, 3000);
 
