@@ -102,10 +102,11 @@ function attachAddColumnListeners() {
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
     if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.addEventListener('click', e => addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn));
-        input.addEventListener("input", e => inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn));
-        cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
-        applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        link.addEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
+        input.addEventListener("input", e => inputFieldListener(e));
+        input.addEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
+        cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
+        applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input));
     }
 }
 
@@ -116,41 +117,57 @@ function detachAddColumnListeners() {
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
     if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.removeEventListener('click', e => addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn));
-        input.removeEventListener("input", e => inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn));
-        cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
-        applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn));
+        link.removeEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
+        input.removeEventListener("input", e => inputFieldListener(e));
+        input.removeEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
+        cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
+        applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input));
     }
 }
 
 
-function addColumnLink(e, link, inputForm, input, cancelBtn, applyBtn) {
+function addColumnLinkListener(e, link, inputForm, input) {
     inputForm.style.display = "";
     input.focus();
     link.style.display = "none";
 }
 
 
-function inputFieldListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+function inputFieldListener(e) {
     const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
     e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
 }
 
 
-function cancelButtonListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+function inputFieldKeyListener(e, link, inputForm, input) {
+    if (e.keyCode == 13 || e.key == "Enter") {
+        applyButtonHit(link, inputForm, input);
+    }
+}
+
+
+function cancelButtonListener(e, link, inputForm, input) {
     input.value = "";
     inputForm.style.display = "none";
     link.style.display = "";
 }
 
 
-function applyButtonListener(e, link, inputForm, input, cancelBtn, applyBtn) {
+function applyButtonListener(e, link, inputForm, input) {
+    applyButtonHit(link, inputForm, input);
+}
+
+
+function applyButtonHit(link, inputForm, input) {
     const pattern = /[a-z0-9-]/gi;
     const newColumnTitle = (input.value) ? input.value : "";
     const newColumnId = (input.value.match(pattern) || []).toString().replaceAll(",", "");
     inputForm.style.display = "none";
     link.style.display = "";
-    insertUserAddedColumn(newColumnId, newColumnTitle);
+    input.value = "";
+    if (newColumnId) {
+        insertUserAddedColumn(newColumnId, newColumnTitle);
+    }
 }
 
 
