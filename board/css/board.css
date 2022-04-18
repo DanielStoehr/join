@@ -71,6 +71,7 @@ body {
     max-width: 8.5rem;
     border-radius: .1rem;
     border-style: none;
+    outline: none;
 }
 
 #enter-new-column div {

@@ -140,21 +140,35 @@ function inputFieldListener(e) {
 
 
 function inputFieldKeyListener(e, link, inputForm, input) {
-    if (e.keyCode == 13 || e.key == "Enter") {
-        applyButtonHit(link, inputForm, input);
+    const modifier = e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.key == "AltGraph";
+    if (!modifier) {
+        if (e.keyCode == 13 || e.key == "Enter") {
+            applyButtonHit(link, inputForm, input);
+        }
+        if (e.keyCode == 27 || e.key == "Escape") {
+            cancelButtonHit(link, inputForm, input);
+        }
     }
+    //console.log("key: " + e.key + " keyCode: " + e.keyCode);
+    //console.log("shift: ", e.shiftKey, " alt: ", e.altKey, " ctrl: ", e.ctrlKey, " cmd: ", e.metaKey, " altGr: ", e.key == "AltGraph");
+    //console.log("modifier: ", modifier);
 }
 
 
 function cancelButtonListener(e, link, inputForm, input) {
-    input.value = "";
-    inputForm.style.display = "none";
-    link.style.display = "";
+    cancelButtonHit(link, inputForm, input);
 }
 
 
 function applyButtonListener(e, link, inputForm, input) {
     applyButtonHit(link, inputForm, input);
+}
+
+
+function cancelButtonHit(link, inputForm, input) {
+    input.value = "";
+    inputForm.style.display = "none";
+    link.style.display = "";
 }
 
 

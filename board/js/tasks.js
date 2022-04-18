@@ -24,10 +24,11 @@ function taskClicked(e, taskId) {
 }
 
 
-function addTask(columnId, description, category, priority, personInCharge) {
+function addTask(columnId, title, description, category, priority, personInCharge) {
     let addedAt = Date.now();
     let task = {
         id: Date.now() + String(Math.floor(Math.random() * 1000)),
+        title: title,
         description: description,
         category: category,
         priority: priority,
@@ -85,7 +86,7 @@ function taskTemplate(task) {
         <span>${priorities[task.priority]}</span>
     </div>
     <div class="task-body">
-        <p>${task.description}</p>
+        <p>${task.title}</p>
     </div>
     <div class="task-footer">
         <span>${new Date(task.addedAt).toLocaleString()}</span>
@@ -122,6 +123,11 @@ function removeTaskFromColumn(task) {
 }
 
 
+function parseEuDate(date) {
+    return new Date(date.split(".").map((d, i) => (i == 2) ? (d.length == 1 ? "200" + d : "20" + d).slice(-4) : ("00" + d).slice(-2)).reverse().join("-")).getTime();
+}
+
+
 // for debugging
 /*
 function logClickEvent(clickEvent){
@@ -135,6 +141,6 @@ function logClickEvent(clickEvent){
 */
 
 
-export { tasks, priorities, inCharge, currentlyDraggedTask };
+export { tasks, priorities, inCharge, currentlyDraggedTask, parseEuDate };
 export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };
 export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate };
