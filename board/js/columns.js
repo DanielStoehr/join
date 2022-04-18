@@ -42,7 +42,7 @@ function addColumn(id, title, color, minimized) {
 
 
 function removeColumn(id) {
-    const colIndex = columns.findIndex(column => column.id == id);
+    const colIndex = findColumnsIndex(id);
     const toRemove = columns[colIndex] || "";
     if (toRemove) {
         toRemove.removeFrom("board");
@@ -58,6 +58,16 @@ function initColumns() {
     defaultColumns.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false));
     window.addEventListener("resize", resizeViewportListener);
     window.addEventListener("scroll", resizeViewportListener);
+    applyAddColumnListeners();
+}
+
+
+function insertUserAddedColumn(newColumnId, newColumnTitle) {
+    console.log( "id: " + newColumnId + " title: " + newColumnTitle + "\n");
+    const column = columns[columns.length - 1];
+    removeColumn(column.id);
+    addColumn(newColumnId, newColumnTitle, defaultColumns[0].color, false);
+    addColumn(column.id, column.title, column.color, column.minimized || false);
 }
 
 
@@ -71,4 +81,48 @@ function resizeViewportListener() {
 }
 
 
-export { columns, columnListeners, addColumn, removeColumn, initColumns, getColumnsProperties};
+function findColumnById(colId) {
+    return columns[columns.findIndex(column => column.id == colId)] || "";
+}
+
+
+function findColumnsIndex(colId) {
+    return columns.findIndex(column => column.id == colId);
+}
+
+
+function applyAddColumnListeners() {
+    const link = document.getElementById("add-column-link");
+    const inputForm = document.getElementById("enter-new-column");
+    const input = document.getElementById("add-column-input");
+    const cancelBtn = document.getElementById("add-column-cancel");
+    const applyBtn = document.getElementById("add-column-now");
+    if (link && inputForm && input && cancelBtn && applyBtn) {
+        link.addEventListener("click", e => {
+            inputForm.style.display = "";
+            input.focus();
+            link.style.display = "none";
+        });
+        input.addEventListener("input", e => {
+            const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
+            e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
+            
+        });
+        cancelBtn.addEventListener("click", e => {
+            input.value = "";
+            inputForm.style.display = "none";
+            link.style.display = "";
+        });
+        applyBtn.addEventListener("click", e => {
+            const pattern = /[a-z0-9-]/gi;
+            const newColumnTitle = (input.value) ? input.value : "";
+            const newColumnId = (input.value.match(pattern) || []).toString().replaceAll(",", "");
+            inputForm.style.display = "none";
+            link.style.display = "";
+            insertUserAddedColumn(newColumnId, newColumnTitle);
+        });
+    } 
+}
+
+
+export { columns, columnListeners, addColumn, removeColumn, initColumns, getColumnsProperties, findColumnById };
