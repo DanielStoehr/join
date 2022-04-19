@@ -38,7 +38,7 @@ function addTask(columnId, title, description, category, priority, deadline, per
         columnId: columnId,
     }
     tasks.push(task);
-    tasks.sort((a, b) => a.addedAt - b.addedAt);
+    tasks.sort((a, b) => a.deadline - b.deadline);
     return task.id;
 }
 
@@ -83,14 +83,16 @@ function createTaskContainer(task) {
 function taskTemplate(task) {
     return `
     <div class="task-header">
-        <h5>${task.category}</h5>
-        <span>${priorities[task.priority]}</span>
+        <h5 class="task-category">${task.category}</h5>
+        <span class="task-priority">${priorities[task.priority]}</span>
     </div>
     <div class="task-body">
-        <p>${task.title}</p>
+        <p class="task-title">${task.title}</p>
     </div>
     <div class="task-footer">
-        <span>${new Date(task.addedAt).toLocaleString()}</span>
+        <span class="task-incharge">${task.inCharge}: </span>
+        <span class="task-deadline">${new Date(task.deadline).toLocaleString().slice(0, -10)}</span>
+        <span class="task-added-at">${new Date(task.addedAt).toLocaleString()}</span>
     </div>
     `.trim();
 }

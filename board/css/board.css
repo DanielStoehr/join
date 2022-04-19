@@ -104,26 +104,48 @@ body {
 
 .task-header h5 {
     font-size: calc(var(--font-size) * .95);
-    margin: 8px 5px;
+    /*margin: 8px 5px; */
+    margin: 5px 5px 12px 5px;
 }
 
-.task-header span {
+.task-header .task-priority {
     font-size: calc(var(--font-size) * .75);
     margin: 0px 5px;
-    background-color: #d2d2d2;
+    background-color: #dedede;
     padding: 1px 5px;
     border-radius: 3px;
 }
 
-.task-body p {
-    font-size: calc(var(--font-size) * .95);
-    margin: 8px 5px;
+.task-body .task-title {
+    font-size: calc(var(--font-size) * .95);;
+    margin: 0px 5px;
 }
 
-.task-footer span {
-    font-size: calc(var(--font-size) * .7);
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .32rem;
+    align-items: last baseline;
+    margin-top: 12px;
+}
+
+.task-footer .task-added-at {
+    display: none;
+}
+
+.task-footer .task-incharge {
+    font-size: calc(var(--font-size) * .7);;
     font-style: italic;
     margin: 0px 5px;
+}
+
+.task-footer .task-deadline {
+    font-size: calc(var(--font-size) * .7);;
+    font-style: italic;
+    margin: 0px 5px;
+    background-color: #dedede;
+    border-radius: 3px;
+    padding: 1px 5px;
 }
 
 .d-none {
