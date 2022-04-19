@@ -109,8 +109,10 @@ class Column {
         const par = document.getElementById(parent);
         if (par) {
             const col = document.createElement("div");
-            col.innerHTML =
-            `<h4 style="color: ${this.color.title}; background-color: ${this.color.accent};">${this.title}</h4>`;
+            col.innerHTML = `<h4 style="color: ${this.color.title}; background-color: ${this.color.accent};">${this.title}</h4>`;
+            if (!this.minimized) {
+                col.innerHTML += `<div class="new-task" style="margin-top: auto; background-color: ${this.color.accent};">Karte hinzufügen</div>`;
+            }
             col.id = this.id;
             col.classList.add("column");
             col.style.border = "1px solid "+ this.color.accent;

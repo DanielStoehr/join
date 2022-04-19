@@ -62,7 +62,8 @@ function showTasks() {
             (taskExists) ? col.removeChild(taskExists) : false;
             const div = createTaskContainer(task);
             div.style.border = "1px solid " + window.getComputedStyle(col).borderColor;
-            col.appendChild(div);
+            col.insertBefore(div, col.lastElementChild);
+            //col.appendChild(div);
         }
     });
 }

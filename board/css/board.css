@@ -46,6 +46,15 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 1px 2px 2px 0px rgba(30, 30, 30, .2);
+    display: flex;
+    flex-direction: column;
+}
+
+.column .new-task {
+    font-size: calc(var(--font-size) * .8);
+    padding: calc(var(--font-size) * .1);
+    text-align: center;
+    cursor: pointer;
 }
 
 .column h4 {
