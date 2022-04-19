@@ -31,7 +31,7 @@ body {
     height: 100%;
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 10em;
+    grid-auto-columns: 11em;
     /* grid-template-columns: repeat(auto-fill, minmax(155px, 0.9fr)); */
     grid-gap: 1.1rem;
     padding: 0.6em 2.5em;
