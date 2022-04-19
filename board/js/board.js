@@ -1,7 +1,7 @@
 'use strict'
 
 import { initColumns, addColumn, removeColumn } from "./columns.js";
-import { addTask, removeTask, showTasks } from "./tasks.js";
+import { addTask, removeTask, showTasks, euDateToUtc } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
 
 
@@ -21,33 +21,33 @@ window.addEventListener("contextmenu", debug);
     col = addColumn("spalte", "neue Spalte", { accent: "darksalmon", background: "white"});
 
     init();
-    addTask("inprogress", "Frontend programmieren", "Text 1", "Entwicklung", 0, inCharge[0]);
+    addTask("inprogress", "Frontend programmieren", "Text 1", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
     showTasks();
 
-    task = addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, inCharge[0]);
+    task = addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
     showTasks();
     setTimeout(function () {
         removeTask(task);
     }, 5500);
 
-    task1 = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, inCharge[0]);
+    task1 = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
     showTasks();
     //setTimeout(function () {
     //    removeTask(task1);
     //}, 7000);
 
     setTimeout(function () {
-        addTask("todo", "Büro Aufräumen", "Text 4", "Hausarbeit", 2, inCharge[2]);
+        addTask("todo", "Büro Aufräumen", "Text 4", "Hausarbeit", 2, euDateToUtc("31.12.2022"), inCharge[2]);
         showTasks();
     }, 1000);
 
     setTimeout(function () {
-        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, inCharge[0]);
+        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("23.04.2022"), inCharge[0]);
         showTasks();
     }, 2000);
 
     setTimeout(function () {
-        addTask("inprogress", "Backend programmieren", "Text 6", "Entwicklung", 0, inCharge[1]);
+        addTask("inprogress", "Backend programmieren", "Text 6", "Entwicklung", 0, euDateToUtc("15.08.2022"), inCharge[1]);
         showTasks();
     }, 3000);
 
