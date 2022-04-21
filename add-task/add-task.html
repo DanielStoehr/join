@@ -9,16 +9,32 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../navigation/navigation.css">
     <link rel="stylesheet" href="add-task.css">
+    <link rel="stylesheet" href="../navigation/navigation.css">
     <title>Join</title>
-    <script src="../script.js"></script>
+    <!-- <script src="../script.js"></script> -->
     <script src="../navigation/navigation.js" defer></script>
+    <script src="../smallest_backend_ever/mini_backend.js"></script>
+    <script src="./add-task.js"></script>
+    <script src="../navigation/navigation.js"></script>
 
 </head>
 
-<body onload="includeHTML()">
+<body onload="init()">
 
     <div class="primary-container">
-        <div w3-include-html="../navigation/navigation.html"></div>
+        <div class="navigation-container">
+            <div class="navigation-top">
+                <div class="navigation-logo-container">
+                    <img src="../img/logo.png" alt="image-logo">
+                </div>
+                <a href="../index.html" class="navigation-link navigation-active" onclick="changeNavigation(this)">Board</a>
+                <a href="../backlog/backlog.html" class="navigation-link" onclick="changeNavigation(this)">Backlog</a>
+                <a href="../add-task/add-task.html" class="navigation-link" onclick="changeNavigation(this)">Add Task</a>
+                <a href="#" class="navigation-link" onclick="changeNavigation(this)">Help</a>
+            </div>
+            <img src="../img/user.svg" alt="user-image" class="navigation-user-image">
+        
+        </div>
         <div class="add-task">
             <h1 class="add-task-heading">Add Task</h1>
             <p class="add-task-slogan">Learning Management System Project</p>
@@ -29,7 +45,7 @@
                             <div class="form-title form-boxes">
                                 <label class="form-label" for="title">Title</label>
                                 <div class="form-input-outer">
-                                    <input class="form-input" type="text">
+                                    <input class="form-input" id="title" type="text">
                                 </div>
                             </div>
                             <div class="form-category form-boxes">
@@ -46,7 +62,7 @@
                             <div class="form-description form-boxes">
                                 <label class="form-label" for="description">description</label>
                                 <div class="form-input-outer">
-                                    <textarea class="form-textarea form-input" name="description"></textarea>
+                                    <textarea class="form-textarea form-input" id="description" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -54,13 +70,13 @@
                             <div class="form-date form-boxes">
                                 <label class="form-label" for="date">Due Date</label>
                                 <div class="form-input-outer">
-                                    <input class="form-input form-select" type="date">
+                                    <input class="form-input form-select" id="date" type="date">
                                 </div>
                             </div>
                             <div class="form-urgency form-boxes">
                                 <label class="form-label" for="urgency">Urgency</label>
                                 <div class="form-input-outer">
-                                    <select class="form-input form-select" name="urgency" id="urgency">
+                                    <select class="form-input form-select" id="urgency" name="urgency" id="urgency">
                                         <option class="form-option" value="low">Low</option>
                                         <option class="form-option" value="middle">Middle</option>
                                         <option class="form-option" value="High">High</option>
@@ -75,8 +91,8 @@
                                 </div>
                             </div>
                             <div class="form-button-box form-boxes">
-                                <button class="form-button form-button-cancel">Cancel</button>
-                                <button class="form-button form-button-create">Create Task</button>
+                                <button class="form-button form-button-cancel" onclick="deleteValue()">Cancel</button>
+                                <button class="form-button form-button-create" onclick="saveTask()" >Create Task</button>
                             </div>
                         </div>
                     </div>
