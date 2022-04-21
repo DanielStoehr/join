@@ -1,68 +1,53 @@
 
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
-let users = [];
+let tasks = {
+    id: '',
+    title: '',
+    description: '',
+    category: '',
+    priority: '',
+    deadline: new Date().getTime(),
+    addedAt: new Date().getTime(),
+    inCharge: '',
+    columnId: '',
+};
+
+let id = 1;
+
+//let taskload = [];
 
 async function init() {
     await downloadFromServer();
-    users = JSON.parse(backend.getItem('users')) || [];
-}
-function addUser() {
-    users.push(username.value);
-    backend.setItem('users', JSON.stringify(users));
+    id = JSON.parse(backend.getItem('id'));
+    //taskload = JSON.parse(backend.getItem('task'+id)) || [];
+    //console.log('Geladen', taskload);
 }
 
 
+function addTask() {
+    backend.setItem('task'+id, JSON.stringify(tasks));
+    backend.setItem('id', JSON.stringify(id));
+    clearInputs();
+}
 
 
-
-// let tasks = [{
-//     id: Date.now() + String(Math.floor(Math.random() * 1000)),
-//     title: '',
-//     description: '',
-//     category: '',
-//     priority: '',
-//     deadline: new Date().getTime(),
-//     addedAt: new Date().getTime(),
-//     inCharge: '',
-//     columnId: '',
-// }];
-
-// let title = document.getElementById('title');
-// let category = document.getElementById('category');
-// let description = document.getElementById('description');
-// let date = document.getElementById('date');
-// let urgency = document.getElementById('urgency');
+function saveTask(){
+    id++;
+    tasks.title = document.getElementById('title').value;
+    tasks.category = document.getElementById('category').value;
+    tasks.description = document.getElementById('description').value;
+    tasks.deadline = new Date(document.getElementById('date').value).getTime();
+    tasks.priority = document.getElementById('urgency').value;
+    tasks.id = id;
+    addTask();
+}
 
 
-// async function addTask() {
-//     await backend.setItem('tasks1', JSON.stringify(tasks));
-// }
-
-// function deleteValue(){
-//     // title.value = '';
-//     // category.value = '';
-//     // description.value = '';
-//     // date.value = '';
-//     // urgency.value = '';
-// }
-
-// function saveTask(){
-//     tasks.title = title.value;
-//     tasks.category = category.value;
-//     tasks.description = description.value;
-//     tasks.deadline = new Date().getTime();
-//     tasks.priority = urgency.value;
-//     console.log(tasks);
-//     //addTask();
-// }
-
-// let loadTask = [];
-
-
-// async function init() {
-//     await downloadFromServer();
-//     loadTask = JSON.parse(backend.getItem('tasks1')) || [];
-//     console.log(loadTask);
-//     console.log(tasks);
-// }
+function clearInputs(){
+    document.getElementById('title').value = '';
+    document.getElementById('category').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('date').value = '';
+    document.getElementById('urgency').value  = '';
+}

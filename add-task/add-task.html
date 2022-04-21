@@ -39,19 +39,19 @@
             <h1 class="add-task-heading">Add Task</h1>
             <p class="add-task-slogan">Learning Management System Project</p>
             <div class="form">
-                <form action="" class="form-form">
+                <div class="form-form">
                     <div class="form-container">
                         <div class="form-left-section">
                             <div class="form-title form-boxes">
                                 <label class="form-label" for="title">Title</label>
                                 <div class="form-input-outer">
-                                    <input class="form-input" id="title" type="text">
+                                    <input required class="form-input" id="title" type="text">
                                 </div>
                             </div>
                             <div class="form-category form-boxes">
                                 <label class="form-label" for="category">Category</label>
                                 <div class="form-input-outer">
-                                    <select class="form-input form-select" name="category" id="category">
+                                    <select required class="form-input form-select" name="category" id="category">
                                         <option class="form-option" value="Management">Management</option>
                                         <option class="form-option" value="Marketing">Marketing</option>
                                         <option class="form-option" value="Frontend">Frontend</option>
@@ -62,7 +62,7 @@
                             <div class="form-description form-boxes">
                                 <label class="form-label" for="description">description</label>
                                 <div class="form-input-outer">
-                                    <textarea class="form-textarea form-input" id="description" name="description"></textarea>
+                                    <textarea required class="form-textarea form-input" id="description" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -70,13 +70,13 @@
                             <div class="form-date form-boxes">
                                 <label class="form-label" for="date">Due Date</label>
                                 <div class="form-input-outer">
-                                    <input class="form-input form-select" id="date" type="date">
+                                    <input required class="form-input form-select" id="date" type="date">
                                 </div>
                             </div>
                             <div class="form-urgency form-boxes">
                                 <label class="form-label" for="urgency">Urgency</label>
                                 <div class="form-input-outer">
-                                    <select class="form-input form-select" id="urgency" name="urgency" id="urgency">
+                                    <select required class="form-input form-select" id="urgency" name="urgency" id="urgency">
                                         <option class="form-option" value="low">Low</option>
                                         <option class="form-option" value="middle">Middle</option>
                                         <option class="form-option" value="High">High</option>
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
