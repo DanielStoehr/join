@@ -137,6 +137,18 @@ function euDateToUtc(date) {
 }
 
 
+function addTaskListener(e) {
+    e.stopPropagation();
+    insertUserAddedTask(e);
+}
+
+
+function insertUserAddedTask(e) {
+    const col = e.target.parentNode;
+    console.log("add task to '" + col.id + "'\n");
+}
+
+
 // for debugging
 /*
 function logClickEvent(clickEvent){
@@ -153,3 +165,4 @@ function logClickEvent(clickEvent){
 export { tasks, priorities, inCharge, currentlyDraggedTask, parseEuDate, euDateToUtc };
 export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };
 export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate };
+export { addTaskListener as columnFooterClicked };

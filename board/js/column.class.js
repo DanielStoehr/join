@@ -1,4 +1,5 @@
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
+import { columnFooterClicked } from "./tasks.js";
 
 // fully functional on common desktops, iPhone 5s, newer i-devices
 
@@ -19,7 +20,7 @@ class Column {
         ];
         this.listener = {};
         (this.listeners.length > 0) ? this.listener = this.listeners[this.listeners.length - 1] : this.listener = {};
-
+        this.footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
     }
 
     /*****************************************
@@ -97,7 +98,23 @@ class Column {
             }
         }
     }
-    
+
+    // get the event listener for the column's footer 
+    get footerListener() {
+        return (!this.minimized) ? this._footerListener : {};
+    }
+
+    // set the event listener for the column's footer
+    set footerListener(value) {
+        const col = document.getElementById(this.id);
+        if (!this.minimized && col && 'evt' in this._footerListener && 'callback' in this._footerListener) {
+            col.lastElementChild.removeEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
+        }
+        (typeof value == 'object' && 'evt' in value && 'callback' in value) ? this._footerListener = value : this._footerListener = {};
+        if (!this.minimized && col && 'evt' in this._footerListener && 'callback' in this._footerListener) {
+            col.lastElementChild.addEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
+        }
+    }    
 
     /********************************
     **          methods            **
@@ -123,6 +140,9 @@ class Column {
             par.appendChild(col);
             this.update();
             this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
+            if (!this.minimized && 'evt' in this.footerListener && 'callback' in this.footerListener) {
+                col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+            }
         }
     }
     // remove column from an element
@@ -132,6 +152,9 @@ class Column {
         const col = document.getElementById(this.id);
         if (par && col && col.parentNode == par) {
             this.listeners.forEach(l => col.removeEventListener(l.evt, e => l.callback(e)));
+            if (!this.minimized && 'evt' in this.footerListener && 'callback' in this.footerListener) {
+                col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+            }
             par.removeChild(col);
         }
     }
@@ -159,10 +182,11 @@ class Column {
         (this.listeners.length > 0) ? this.listener = this.listeners[this.listeners.length - 1] : this.listener = {};
     }
     // remove all event listeners
-    // the setter (listeners) will detach them when needed
+    // the setters (listeners && footerListerner) will detach them when needed
     removeAllListeners() {
         this.listeners = [];
         this.listener = {};
+        this.footerListener = {};
     }
 
 }

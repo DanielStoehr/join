@@ -6,8 +6,8 @@ import { priorities, inCharge } from "./tasks.js";
 
 
 //-----for debugging-----
-window.debugMode = false; 
-window.addEventListener("contextmenu", debug);
+window.debugMode = true; 
+debug();
 
 //-----for reference-----
 // const priorities = ["hoch", "mittel", "niedrig"];
@@ -67,7 +67,7 @@ function init() {
 // 
 //   for debugging 
 // 
-async function debug(e) {
+async function debug() {
     if (!debugMode && 't' in window) {
         delete window.t;
         delete window.c;
