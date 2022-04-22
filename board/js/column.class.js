@@ -125,18 +125,7 @@ class Column {
     appendTo(parent) {
         const par = document.getElementById(parent);
         if (par) {
-            const col = document.createElement("div");
-            col.innerHTML = `<h4 style="color: ${this.color.title}; background-color: ${this.color.accent};">${this.title}</h4>`;
-            if (!this.minimized) {
-                col.innerHTML += `<div class="new-task" style="margin-top: auto; background-color: ${this.color.accent};">Karte hinzufügen</div>`;
-            }
-            col.id = this.id;
-            col.classList.add("column");
-            col.style.border = "1px solid "+ this.color.accent;
-            col.style.backgroundColor = this.color.background;
-            col.style.color = this.color.text;
-            col.style.height = (this.minimized) ? "fit-content" : "";
-            col.style.minHeight = (this.minimized) ? "fit-content" : "";
+            const col = Column.columnsContainerSetup(this.id, this.title, this.color, this.minimized);
             par.appendChild(col);
             this.update();
             this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
@@ -158,7 +147,8 @@ class Column {
             par.removeChild(col);
         }
     }
-    //store the screen position of the column 
+    //store the screen position of the column
+    //inside the Column's object's properties 
     update() {
         const col = document.getElementById(this.id);
         if (col) {
@@ -189,6 +179,45 @@ class Column {
         this.footerListener = {};
     }
 
+    /********************************
+    **    static helper methods    **
+    *********************************/
+
+    // create and setup the column's 
+    // container element
+    static columnsContainerSetup(id, title, color, minimized) {
+        const col = document.createElement("div");
+        col.innerHTML = this.columnsHeadTemplate(id, title, color);
+        if (!minimized) {
+            col.innerHTML += this.columnsFooterTemplate(id, title, color);
+        }
+        col.id = id;
+        col.classList.add("column");
+        col.style.border = "1px solid "+ color.accent;
+        col.style.backgroundColor = color.background;
+        col.style.color = color.text;
+        col.style.height = (minimized) ? "fit-content" : "";
+        col.style.minHeight = (minimized) ? "fit-content" : "";
+        return col;
+    }
+    // template function for 
+    // the column's title
+    static columnsHeadTemplate(id, title, color) {
+        return `
+        <h4 style="color: ${color.title}; background-color: ${color.accent};">
+            ${title}
+        </h4>
+        `.trim();
+    }
+    // template function for 
+    // the column's footer
+    static columnsFooterTemplate(id, title, color) {
+        return `
+        <div class="new-task" style="margin-top: auto; background-color: ${color.accent};">
+            Karte hinzufügen
+        </div>
+        `.trim();
+    }
 }
 
 

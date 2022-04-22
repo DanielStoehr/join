@@ -16,24 +16,23 @@ debug();
 
 
 (function main() {
-    let task, task1, col;
+    let task, col;
 
-    col = addColumn("spalte", "neue Spalte", { accent: "darksalmon", background: "white"});
+    col = addColumn("spalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white", }, "board");
 
     init();
-    addTask("inprogress", "Frontend programmieren", "Text 1", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
+    addTask("inprogress", "Frontend programmieren", "Description", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
     showTasks();
 
-    task = addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
-    showTasks();
     setTimeout(function () {
-        removeTask(task);
+        addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
+        showTasks();
     }, 5500);
 
-    task1 = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
+    task = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
     showTasks();
     //setTimeout(function () {
-    //    removeTask(task1);
+    //    removeTask(task);
     //}, 7000);
 
     setTimeout(function () {
@@ -42,12 +41,17 @@ debug();
     }, 1000);
 
     setTimeout(function () {
-        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("23.04.2022"), inCharge[0]);
+        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("15.01.22"), inCharge[0]);
+        showTasks();
+    }, 1500);
+
+    setTimeout(function () {
+        addTask("inprogress", "Tanzstunde vorbereiten", "Text 6", "Arbeit", 0, euDateToUtc("23.04.2022"), inCharge[0]);
         showTasks();
     }, 2000);
 
     setTimeout(function () {
-        addTask("inprogress", "Backend programmieren", "Text 6", "Entwicklung", 0, euDateToUtc("15.08.2022"), inCharge[1]);
+        addTask("discussing", "Backend programmieren", "Text 7", "Entwicklung", 1, euDateToUtc("15.08.2022"), inCharge[1]);
         showTasks();
     }, 3000);
 

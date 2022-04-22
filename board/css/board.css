@@ -57,6 +57,11 @@ body {
     cursor: pointer;
 }
 
+.column .new-task:hover {
+    letter-spacing: calc(var(--font-size) * .05);
+    cursor: pointer;
+}
+
 .column h4 {
     margin: 0;
     padding: calc(var(--font-size) * .5);
