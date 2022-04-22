@@ -18,7 +18,7 @@ debug();
 (function main() {
     let task, col;
 
-    col = addColumn("spalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white", }, "board");
+    col = addColumn("spalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white", }, false, "board");
 
     init();
     addTask("inprogress", "Frontend programmieren", "Description", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
