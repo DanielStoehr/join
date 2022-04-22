@@ -4,7 +4,7 @@ import { findTasksByColumn, moveTaskToColumn } from "./tasks.js";
 
 
 const userAddedColumn = `
-<a id="add-column-link" href="#">Liste hinzufügen</a>
+<div id="add-column-link">Liste hinzufügen</div>
 <div id="enter-new-column" style="display: none;">
 <input id="add-column-input" name="add-column-input" type="text" maxlength="20">
 <div>
@@ -102,7 +102,7 @@ function attachAddColumnListeners() {
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
     if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.addEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
+        link.parentNode.addEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
         input.addEventListener("input", e => inputFieldListener(e));
         input.addEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
         cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
@@ -117,7 +117,7 @@ function detachAddColumnListeners() {
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
     if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.removeEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
+        link.parentNode.removeEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
         input.removeEventListener("input", e => inputFieldListener(e));
         input.removeEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
         cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
