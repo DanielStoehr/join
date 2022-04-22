@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "icofont";
+    src: url('../fonts/icofont.woff2') format('woff2');
+    src: url('../fonts/icofont.woff') format('woff');
+    src: url('../fonts/icofont.ttf') format('truetype');
+}
 
 *, *::after, *::before {
     box-sizing: border-box;
@@ -10,6 +16,10 @@
 body {
     margin: 0;
     overflow-y: unset;
+}
+
+.icon {
+    font-family: 'icofont';
 }
 
 .board-container {
@@ -62,14 +72,34 @@ body {
     cursor: pointer;
 }
 
-.column h4 {
+.column .title {
+    font-size: calc(var(--font-size) * 1);
     margin: 0;
     padding: calc(var(--font-size) * .5);
     text-align: center;
     cursor: default;
     user-select: none;
-    font-size: calc(var(--font-size) * 1);
+}
 
+.column .title-regular {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.column .title-left,
+.column .title-right {
+    width: calc(var(--font-size) * 1.1);
+    font-size: calc(var(--font-size) * 1);
+}
+
+.column .icon {
+    cursor: pointer;
+}
+
+.column .icon:hover {
+    cursor: pointer;
+    font-size: calc(var(--font-size) * 1.1);
 }
 
 #add-column-link {
