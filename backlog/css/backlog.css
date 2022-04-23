@@ -1,9 +1,14 @@
+.d-none {
+    display: none;
+}
+
 .backlog {
     padding: 20px 20px;
     width: 100%;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    position: relative;
 }
 
 
@@ -109,17 +114,27 @@ table tr td:last-child, th:last-child {
     text-align: justify;
 }
 
-@media (max-width: 768px) {
-    table tr td:first-child, th:first-child {
-        width: unset;
-        min-width: 225px;
-    }
-    
-    table tr td:nth-child(2), th:nth-child(2) {
-        width: unset;
-    }
-    
-    table tr td:last-child, th:last-child {
-        display: none;
-    }
+.backlog-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(95, 125, 143, 0.7);
 }
+
+.overlay-container {
+    z-index: 10;
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #1E3190;
+}
+
+
