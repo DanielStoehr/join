@@ -1,0 +1,14 @@
+@media (max-width: 768px) {
+    table tr td:first-child, th:first-child {
+        width: unset;
+        min-width: 225px;
+    }
+    
+    table tr td:nth-child(2), th:nth-child(2) {
+        width: unset;
+    }
+    
+    table tr td:last-child, th:last-child {
+        display: none;
+    }
+}
