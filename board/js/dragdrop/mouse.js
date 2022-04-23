@@ -11,7 +11,7 @@ function startDragging(e, taskId) {
     e.dataTransfer.setData('text/plain', 'hello');
     const task = findTaskById(taskId);
     if (task) {
-        currentlyDraggedTask.id = taskId;
+        currentlyDraggedTask.id = task.id;
         currentlyDraggedTask.sourceColumn = task.columnId;
         highlightDraggedTask();
     }
@@ -90,4 +90,4 @@ function logDragEvent(dragEvent) {
 
 export { 
     startDragging, stopDragging, dragOver, drop, dragLeave, dragging,
-    highlightDraggedTask, removeDraggedTaskHighlighting, currentlyDraggedTask };
+    highlightDraggedTask, removeDraggedTaskHighlighting, };

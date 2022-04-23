@@ -1,5 +1,6 @@
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { columnFooterClicked } from "./tasks.js";
+import { closeColumnClicked } from "./columns.js";
 
 // fully functional on common desktops, iPhone 5s, newer i-devices
 
@@ -18,9 +19,10 @@ class Column {
             { evt: "dragleave", callback: dragLeave },
             { evt: "drop", callback: drop },
         ];
-        this.listener = {};
-        (this.listeners.length > 0) ? this.listener = this.listeners[this.listeners.length - 1] : this.listener = {};
+        //this.listener = {};
+        this.listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
         this.footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
+        this.closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};
     }
 
     /*****************************************
@@ -37,20 +39,11 @@ class Column {
     set color(c) {
         this._color = { title: "black", text: "black", accent: "rgba(30, 30, 30, 0.2)", background: "white" };
         if (typeof c == 'object') {
-            if ('title' in c) {
-                this._color.title = c.title;
-            }
-            if ('text' in c) {
-                this._color.text = c.text;
-            }
-            if ('accent' in c) {
-                this._color.accent = c.accent;
-            }
-            if ('background' in c) {
-                this._color.background = c.background;
-            }
-        }
-        
+            this._color.title = ('title' in c) ? c.title : this._color.title;
+            this._color.text = ('text' in c) ? c.text : this._color.text;
+            this._color.accent = ('accent' in c) ? c.accent : this._color.accent;
+            this._color.background = ('background' in c) ? c.background : this._color.background;
+         }       
     }
 
     // get event listeners
@@ -70,14 +63,12 @@ class Column {
             }
             if (value.length) {
                 this._listeners = [];
-                value.forEach(v => { 
-                    ('evt' in v && 'callback' in v) ? this._listeners.push(v) : false;
-                });
+                value.forEach(v => ('evt' in v && 'callback' in v) ? this._listeners.push(v) : false);
             }
             if (col) {
                 this._listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
             }
-            (this._listeners.length) ? this.listener = this._listeners[this._listeners.length - 1] : this.listener = {};
+            this.listener = (this._listeners.length) ? this._listeners[this._listeners.length - 1] : {};
         }
     }
 
@@ -107,15 +98,31 @@ class Column {
     // set the event listener for the column's footer
     set footerListener(value) {
         const col = document.getElementById(this.id);
-        if (!this.minimized && col && 'evt' in this._footerListener && 'callback' in this._footerListener) {
+        if (!this.minimized && col && Object.keys(this._footerListener).length) {
             col.lastElementChild.removeEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
         }
-        (typeof value == 'object' && 'evt' in value && 'callback' in value) ? this._footerListener = value : this._footerListener = {};
-        if (!this.minimized && col && 'evt' in this._footerListener && 'callback' in this._footerListener) {
+        this._footerListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
+        if (!this.minimized && col && Object.keys(this._footerListener).length) {
             col.lastElementChild.addEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
         }
-    }    
+    }
 
+    // get the event listener for the column's close icon 
+    get closeListener() {
+        return (!this.minimized) ? this._closeListener : {};
+    }
+
+    // set the event listener for the column's close icon
+    set closeListener(value) {
+        const closeCol = document.getElementById(this.id + "-close");
+        if (!this.minimized && closeCol && Object.keys(this._closeListener).length) {
+            closeCol.removeEventListener(this._closeListener.evt, e => this._closeListener.callback(e, this.id));
+        }
+        this._closeListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
+        if (!this.minimized && closeCol && Object.keys(this._closeListener).length) {
+            closeCol.addEventListener(this._closeListener.evt, e => this._closeListener.callback(e, this.id));
+        }
+    }    
     /********************************
     **          methods            **
     *********************************/
@@ -129,8 +136,14 @@ class Column {
             par.appendChild(col);
             this.update();
             this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
-            if (!this.minimized && 'evt' in this.footerListener && 'callback' in this.footerListener) {
-                col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+            if (!this.minimized) {
+                if (Object.keys(this.footerListener).length) {
+                    col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+                }
+                if (Object.keys(this.closeListener).length) {
+                    const colClose = document.getElementById(this.id + "-close");
+                    colClose.addEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
+                }
             }
         }
     }
@@ -141,8 +154,14 @@ class Column {
         const col = document.getElementById(this.id);
         if (par && col && col.parentNode == par) {
             this.listeners.forEach(l => col.removeEventListener(l.evt, e => l.callback(e)));
-            if (!this.minimized && 'evt' in this.footerListener && 'callback' in this.footerListener) {
-                col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+            if (!this.minimized) {
+                if (Object.keys(this.footerListener).length) {
+                    col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
+                }
+                if (Object.keys(this.closeListener).length) {
+                    const colClose = document.getElementById(this.id + "-close");
+                    colClose.removeEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
+                }
             }
             par.removeChild(col);
         }
@@ -169,14 +188,15 @@ class Column {
         if (col && listenerToRemove) {
             col.removeEventListener(listenerToRemove.evt, e => listenerToRemove.callback(e));
         }
-        (this.listeners.length > 0) ? this.listener = this.listeners[this.listeners.length - 1] : this.listener = {};
+        this.listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
     }
     // remove all event listeners
-    // the setters (listeners && footerListerner) will detach them when needed
+    // the setters (listeners && footerListerner && closeListener) will detach them when needed
     removeAllListeners() {
         this.listeners = [];
         this.listener = {};
         this.footerListener = {};
+        this.closeListener = {};
     }
 
     /********************************
@@ -204,9 +224,9 @@ class Column {
         <h4 class="title title-regular" style="color: ${color.title}; background-color: ${color.accent};">
             <span class="title-left"></span>
             <span>${title}</span>
-            <span class="title-right icon close">&#xeee1;</span>
+            <span id="${id}-close" class="title-right icon close">&#xeee1;</span>
         </h4>
-        <div class="new-task" style="margin-top: auto; background-color: ${color.accent};">
+        <div id="${id}-new-task" class="new-task" style="margin-top: auto; background-color: ${color.accent};">
             Karte hinzufügen
         </div>
         `.trim();

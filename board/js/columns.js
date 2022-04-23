@@ -1,17 +1,19 @@
 import { Column } from "./column.class.js";
-import { attachAddColumnListeners } from "./column-user-func.js";
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { findTasksByColumn, moveTaskToColumn } from "./tasks.js";
+import { attachAddColumnListeners, removeColumnRequestedByUser } from "./column-user-func.js";
+
 
 
 const userAddedColumn = `
 <div id="add-column-link">Liste hinzufügen</div>
 <div id="enter-new-column" style="display: none;">
-<input id="add-column-input" name="add-column-input" type="text" maxlength="20">
-<div>
-<button id="add-column-cancel">Abbrechen</button>
-<button id="add-column-now">Hinzufügen</button>
-</div>
+    <div id="add-column-input-bg"></div>
+    <input id="add-column-input" name="add-column-input" type="text" maxlength="20" placeholder="click to change color">
+    <div id="add-column-buttons">
+        <button id="add-column-cancel">Abbrechen</button>
+        <button id="add-column-now">Hinzufügen</button>
+    </div>
 </div>
 `.trim();
 
@@ -83,4 +85,9 @@ function findColumnsIndex(colId) {
 }
 
 
+function removeColumnListener(e, colId) {
+    removeColumnRequestedByUser(e, colId);
+}
+
 export { columns, columnListeners, addColumn, removeColumn, initColumns, getColumnsProperties, findColumnById };
+export { removeColumnListener as closeColumnClicked };

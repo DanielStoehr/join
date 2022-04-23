@@ -2,14 +2,17 @@ import { columns, addColumn, removeColumn } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
 
-const colors = [
-    { color: { accent: "rgba(30, 30, 30, .2)", background: "white", text: "black", title: "black" } },
-    { color: { accent: "rgba(255, 0, 0, .2)", background: "white", text: "black", title: "black" } },
-    { color: { accent: "rgba(0, 255, 0, .2)", background: "white", text: "black", title: "black" } },
-    { color: { accent: "rgba(0, 0, 255, .2)", background: "white", text: "black", title: "black" } },
-    { color: { accent: "rgba(128, 255, 255, .9)", background: "white", text: "black", title: "black" } },
-    { color: { accent: "darksalmon", background: "white", text: "black", title: "black" }, },
-];
+const columnColors = {
+    choice: 0,
+    colors: [
+        { accent: "rgba(30, 30, 30, .2)", background: "white", text: "black", title: "black" },
+        { accent: "rgba(255, 0, 0, .2)", background: "white", text: "black", title: "black" },
+        { accent: "rgba(0, 255, 0, .2)", background: "white", text: "black", title: "black" },
+        { accent: "rgba(0, 0, 255, .2)", background: "white", text: "black", title: "black" },
+        { accent: "rgba(128, 255, 255, .9)", background: "white", text: "black", title: "black" },
+        { accent: "darksalmon", background: "white", text: "black", title: "black" },
+    ]
+};
 
 
 function insertUserAddedColumn(newColumnId, newColumnTitle) {
@@ -17,7 +20,8 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
         const column = columns[columns.length - 1];
         detachAddColumnListeners();
         removeColumn(column.id);
-        addColumn(newColumnId, newColumnTitle, colors[Math.floor(Math.random() * colors.length)].color, false); 
+        //addColumn(newColumnId, newColumnTitle, columnColors.colors[Math.floor(Math.random() * columnColors.colors.length)], false);
+        addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false); 
         addColumn(column.id, column.title, column.color, column.minimized || false);
         attachAddColumnListeners();
         showTasks();
@@ -35,6 +39,7 @@ function attachAddColumnListeners() {
     if (link && inputForm && input && cancelBtn && applyBtn) {
         link.parentNode.addEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
         input.addEventListener("input", e => inputFieldListener(e));
+        input.addEventListener("click", e => inputFieldClicked(e));
         input.addEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
         cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
         applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input));
@@ -51,6 +56,7 @@ function detachAddColumnListeners() {
     if (link && inputForm && input && cancelBtn && applyBtn) {
         link.parentNode.removeEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
         input.removeEventListener("input", e => inputFieldListener(e));
+        input.removeEventListener("click", e => inputFieldClicked(e));
         input.removeEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
         cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
         applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input));
@@ -63,12 +69,23 @@ function addColumnLinkListener(e, link, inputForm, input) {
     inputForm.style.display = "";
     input.focus();
     link.style.display = "none";
+    columnColors.choice = 0;
+    input.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
+    input.style.color = columnColors.colors[columnColors.choice].title;
 }
 
 
 function inputFieldListener(e) {
     const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
     e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
+}
+
+
+function inputFieldClicked(e) {
+    e.stopPropagation();
+    (columnColors.choice == columnColors.colors.length -1 ) ? columnColors.choice = 0 : columnColors.choice++;
+    e.target.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
+    e.target.style.color = columnColors.colors[columnColors.choice].title;
 }
 
 
@@ -81,7 +98,15 @@ function inputFieldKeyListener(e, link, inputForm, input) {
         if (e.keyCode == 27 || e.key == "Escape") {
             cancelButtonHit(link, inputForm, input);
         }
+        if (e.keyCode == 38 || e.key == "ArrowUp") {
+            (columnColors.choice > 0) ? columnColors.choice-- : columnColors.choice = columnColors.colors.length - 1;
+        }
+        if (e.keyCode == 40 || e.key == "ArrowDown") {
+            (columnColors.choice < columnColors.colors.length - 1 ) ? columnColors.choice++ : columnColors.choice = 0;
+        }
     }
+    input.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
+    input.style.color = columnColors.colors[columnColors.choice].title;
     //console.log("key: " + e.key + " keyCode: " + e.keyCode);
     //console.log("shift: ", e.shiftKey, " alt: ", e.altKey, " ctrl: ", e.ctrlKey, " cmd: ", e.metaKey, " altGr: ", e.key == "AltGraph");
     //console.log("modifier: ", modifier);
@@ -119,4 +144,11 @@ function applyButtonHit(link, inputForm, input) {
     }
 }
 
-export { attachAddColumnListeners };
+
+function removeColumnRequestedByUser(e, colId) {
+    console.log("requested removal: '" + colId + "'\n");
+    console.log(removeColumn(colId));
+}
+
+
+export { attachAddColumnListeners, removeColumnRequestedByUser };
