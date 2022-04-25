@@ -1,3 +1,7 @@
+.navigation-container {
+    height: auto !important;
+}
+
 .add-task {
     padding: 20px 20px;
     width: 100%;
@@ -91,6 +95,7 @@
 .form-icon-box {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     padding-top: 16px;
     padding-left: 16px;
 }
@@ -98,6 +103,16 @@
 .form-icon-user {
     width: 56px;
     margin-right: 12px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.form-icon-user:active {
+    opacity: 1;
+}
+
+.form-icon-user:hover {
+    opacity: 1 !important;
 }
 
 .form-icon-plus {
@@ -117,6 +132,7 @@
     justify-content: flex-end;
     align-items: center;
     flex-grow: 1;
+    padding-top: 16px;
 }
 
 .form-button {
@@ -171,9 +187,6 @@
     }
     .form {
         padding: 12px 12px;
-    }
-    .form-button-box {
-        padding-top: 16px;
     }
 
 }

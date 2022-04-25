@@ -11,8 +11,10 @@ let task = {
     addedAt: new Date().getTime(),
     inCharge: '',
     columnId: 'backlog',
+    assignedTo: ''
 };
 
+let user;
 let id = 1;
 
 // let taskload = [];
@@ -40,6 +42,7 @@ function saveTask(){
     task.description = document.getElementById('description').value;
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.priority = document.getElementById('urgency').value;
+    task.assignedTo = user;
     task.id = id;
     addTask();
 }
@@ -51,4 +54,17 @@ function clearInputs(){
     document.getElementById('description').value = '';
     document.getElementById('date').value = '';
     document.getElementById('urgency').value  = '';
+}
+
+function setUser(number, name){
+    clearOpacity();
+    document.getElementById('user-' + number).style.opacity = '1';
+    user = name;
+}
+
+function clearOpacity(){
+    document.getElementById('user-1').style.opacity = '0.6';
+    document.getElementById('user-2').style.opacity = '0.6';
+    document.getElementById('user-3').style.opacity = '0.6';
+    document.getElementById('user-4').style.opacity = '0.6';
 }
