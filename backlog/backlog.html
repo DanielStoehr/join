@@ -41,7 +41,7 @@
                     <th>DETAILS</th>
                 </tr>
 
-                <tr class="backlog-item">
+                <tr class="backlog-item" onclick="openTask()">
                     <td class="backlog-item-image-name">
                         <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
                         <div class="name-mail-container">
@@ -66,7 +66,7 @@
                     </td>
                 </tr>
 
-                <tr class="backlog-item">
+                <tr class="backlog-item" onclick="openTask()">
                     <td class="backlog-item-image-name">
                         <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
                         <div class="name-mail-container">
@@ -92,13 +92,73 @@
                 </tr>
             </table>
 
-            <div class="backlog-overlay, d-none">
+            <div class="backlog-overlay">
                 <div class="overlay-container">
-                    <div>
-                        <div>title</div>
-                        <div>icons</div>
+                    <div class="overlay-header">
+                        <div class="form-title form-boxes">
+                            <label class="form-label" for="title">Title</label>
+                            <div class="form-input-outer">
+                                <input required="" class="form-input" id="title" type="text">
+                            </div>
+                        </div>
+                        <div class="overlay-header-icons">
+                            <button>save and send to board</button>
+                            <button>delete</button>
+                            <button>close</button>
+                        </div>
                     </div>
+                    <div class="overlay-body">
+                        <div class="form-description form-boxes">
+                            <label class="form-label" for="description">description</label>
+                            <div class="form-input-outer">
+                                <textarea required="" class="form-textarea form-input" id="description"
+                                    name="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="date-category-importance-container">
+                            <div class="form-date form-boxes">
+                                <label class="form-label" for="date">Due Date</label>
+                                <div class="form-input-outer">
+                                    <input required="" class="form-input form-select" id="date" type="date">
+                                </div>
+                            </div>
+                            <div class="form-category form-boxes">
+                                <label class="form-label" for="category">Category</label>
+                                <div class="form-input-outer">
+                                    <select required="" class="form-input form-select" name="category" id="category">
+                                        <option class="form-option" value="Management">Management</option>
+                                        <option class="form-option" value="Marketing">Marketing</option>
+                                        <option class="form-option" value="Frontend">Frontend</option>
+                                        <option class="form-option" value="Backend">Backend</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-urgency form-boxes">
+                                <label class="form-label" for="urgency">Urgency</label>
+                                <div class="form-input-outer">
+                                    <select required="" class="form-input form-select" id="urgency" name="urgency">
+                                        <option class="form-option" value="low">Low</option>
+                                        <option class="form-option" value="middle">Middle</option>
+                                        <option class="form-option" value="High">High</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-boxes form-assigned-to">
+                            <label class="form-label" for="assigned-to">Assigned To</label>
+                            <div class="form-icon-box">
+                                <img class="form-icon-user" src="../img/user.svg">
+                                <img class="form-icon-plus" src="../img/icon plus.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="save-send-container">
+                        <button class="overlay-button save-button">save</button>
+                        <button class="overlay-button send-button">send to board</button>
+                    </div>
+
                 </div>
+
             </div>
 
         </div>

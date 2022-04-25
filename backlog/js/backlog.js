@@ -15,3 +15,9 @@ async function init() {
 //     tasks.push(username.value);
 //     backend.setItem('id', JSON.stringify(tasks));
 // }
+
+
+function openTask() {
+    console.log('openTask wird korrekt aufgerufen');
+}
+
