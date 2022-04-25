@@ -1,7 +1,7 @@
 
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
-let tasks = {
+let task = {
     id: '',
     title: '',
     description: '',
@@ -15,18 +15,19 @@ let tasks = {
 
 let id = 1;
 
-//let taskload = [];
+// let taskload = [];
 
 async function init() {
     await downloadFromServer();
     id = JSON.parse(backend.getItem('id'));
-    //taskload = JSON.parse(backend.getItem('task'+id)) || [];
-    //console.log('Geladen', taskload);
+    console.log(id);
+    // taskload = JSON.parse(backend.getItem('task'+id)) || [];
+    // console.log('Geladen', taskload);
 }
 
 
 function addTask() {
-    backend.setItem('task'+id, JSON.stringify(tasks));
+    backend.setItem('task'+id, JSON.stringify(task));
     backend.setItem('id', JSON.stringify(id));
     clearInputs();
 }
@@ -34,12 +35,12 @@ function addTask() {
 
 function saveTask(){
     id++;
-    tasks.title = document.getElementById('title').value;
-    tasks.category = document.getElementById('category').value;
-    tasks.description = document.getElementById('description').value;
-    tasks.deadline = new Date(document.getElementById('date').value).getTime();
-    tasks.priority = document.getElementById('urgency').value;
-    tasks.id = id;
+    task.title = document.getElementById('title').value;
+    task.category = document.getElementById('category').value;
+    task.description = document.getElementById('description').value;
+    task.deadline = new Date(document.getElementById('date').value).getTime();
+    task.priority = document.getElementById('urgency').value;
+    task.id = id;
     addTask();
 }
 
