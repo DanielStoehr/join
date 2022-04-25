@@ -14,6 +14,7 @@
     <script src="../navigation/navigation.js"></script>
     <script src="../smallest_backend_ever/mini_backend.js"></script>
     <script src="./js/backlog.js"></script>
+    <script src="./js/templates.js"></script>
 
     <title>Join</title>
 
@@ -34,7 +35,7 @@
             <h1 class="backlog-heading">Add Task</h1>
             <p class="backlog-slogan">Learning Management System Project</p>
 
-            <table>
+            <table id="backlog-table">
                 <tr>
                     <th>ASSIGNED-TO</th>
                     <th>CATEGORY</th>
@@ -92,7 +93,7 @@
                 </tr>
             </table>
 
-            <div class="backlog-overlay">
+            <div class="backlog-overlay, d-none">
                 <div class="overlay-container">
                     <div class="overlay-header">
                         <div class="form-title form-boxes">

@@ -10,7 +10,7 @@ let task = {
     deadline: new Date().getTime(),
     addedAt: new Date().getTime(),
     inCharge: '',
-    columnId: '',
+    columnId: 'backlog',
 };
 
 let id = 1;
