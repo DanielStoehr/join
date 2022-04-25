@@ -1,4 +1,4 @@
-import { columns, addColumn, removeColumn } from "./columns.js";
+import { columns, addColumn, removeColumn, findRemovedColumnById, restoreColumn } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
 
@@ -25,7 +25,6 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
         attachAddColumnListeners();
         showTasks();
     }
-    console.log("id: " + newColumnId + " title: " + newColumnTitle + "\n");
 }
 
 
@@ -139,7 +138,7 @@ function applyButtonHit(link, inputForm, input) {
     link.style.display = "";
     input.value = "";
     if (newColumnId) {
-        insertUserAddedColumn(newColumnId, newColumnTitle);
+        findRemovedColumnById(newColumnId) ? restoreColumn() : insertUserAddedColumn(newColumnId, newColumnTitle);
     }
 }
 

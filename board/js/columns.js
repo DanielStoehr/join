@@ -61,9 +61,7 @@ function removeColumn(colId) {
 
 
 function backupRemovedColumn(column, index) {
-    removedColumns.push({index: index, column: column});
-    console.log(column.id, index);
-    console.log(removedColumns);
+    return (column.id != "add-column") ? removedColumns.push({index: index, column: column}) : false;
 }
 
 
@@ -120,9 +118,17 @@ function findColumnsIndex(colId) {
 }
 
 
+function findRemovedColumnById(colId) {
+    const rc = removedColumns.find(rc => rc.column.id == colId) || "";
+    return (rc) ? rc.column.id : "";
+}
+
+
 function removeColumnListener(e, colId) {
+    e.stopPropagation();
     removeColumnRequestedByUser(e, colId);
 }
 
-export { columns, columnListeners, addColumn, removeColumn, restoreColumn, initColumns, getColumnsProperties, findColumnById };
+export { columns, columnListeners, addColumn, removeColumn, restoreColumn };
+export { initColumns, getColumnsProperties, findColumnById, findRemovedColumnById };
 export { removeColumnListener as closeColumnClicked };
