@@ -1,6 +1,12 @@
 let tasks = [];
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
+let colorsOfUrgency = {
+    high: '#EB5A46',
+    middle: '#F2D600',
+    low: '#61BD4F',
+}
+
 async function init() {
     await downloadFromServer();
     id = JSON.parse(backend.getItem('id'));
@@ -11,9 +17,9 @@ async function init() {
 function loadAllTasks(id) {
     for (let i = 1; i <= id; i++) {
         let task = JSON.parse(backend.getItem(`task${i}`));
-        console.log(`task${i}`, task);
         tasks.push(task);
     }
+    console.log('alle heruntergeladenen Tasks: ', tasks)
 }
 
 
@@ -28,42 +34,17 @@ function loadAllTasks(id) {
 // taskx --> überschreiben --> task.title --> Änderungen auf Server überschreiben
 
 
+/**renders all backlog tasks */
 function renderBacklogTasks() {
     let backlogTable = document.getElementById('backlog-table');
-    backlogTable.innerHTML = /*html*/ `
-        <tr>
-            <th>ASSIGNED-TO</th>
-            <th>CATEGORY</th>
-            <th>DETAILS</th>
-        </tr>
-    `;
-
-    let backlogTasks = filterBacklogTasks();
+    let backlogTasks = filterBacklogTasks(); // filters all the tasks that have status backlog from the array
+    backlogTable.innerHTML = templateBacklogTableHead();
 
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
-
-        backlogTable.innerHTML += /*html*/ `
-            <tr class="backlog-item" onclick="openTask()">
-                <td class="backlog-item-image-name">
-                    <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
-                    <div class="name-mail-container">
-                        <span>Darrin S. Jones</span>
-                        <span class="email">darrin@gmail.com</span>
-                    </div>
-                </td>
-                <td>
-                    <span class="category">
-                        ${backlogTask['category']}
-                    </span>
-                </td>
-                <td>
-                    <p class="details">
-                        ${backlogTask['description']}
-                    </p>
-                </td>
-            </tr>
-        `;
+        const colorUrgency = colorsOfUrgency[backlogTask['priority']];
+        console.log(colorUrgency);
+        backlogTable.innerHTML += templateBacklogTask(backlogTask);
     }
 }
 
@@ -77,7 +58,6 @@ function filterBacklogTasks() {
     let backlogTasks = tasks.filter(tasks => tasks['columnId'].includes('backlog'));
     return backlogTasks;
 }
-
 
 
 function openTask() {
