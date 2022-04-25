@@ -14,6 +14,7 @@ class Column {
         this.height = 564;
         this.color = color;
         this.minimized = (minimized) ? minimized : false;
+        this.board = "board";
         this.listeners = [
             { evt: "dragover", callback: dragOver },    // default event listeners
             { evt: "dragleave", callback: dragLeave },
@@ -132,6 +133,7 @@ class Column {
     appendTo(parent) {
         const par = document.getElementById(parent);
         if (par) {
+            this.board = parent;
             const col = Column.columnsContainerSetup(this.id, this.title, this.color, this.minimized);
             par.appendChild(col);
             this.update();

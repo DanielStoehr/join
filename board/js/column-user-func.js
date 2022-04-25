@@ -20,7 +20,6 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
         const column = columns[columns.length - 1];
         detachAddColumnListeners();
         removeColumn(column.id);
-        //addColumn(newColumnId, newColumnTitle, columnColors.colors[Math.floor(Math.random() * columnColors.colors.length)], false);
         addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false); 
         addColumn(column.id, column.title, column.color, column.minimized || false);
         attachAddColumnListeners();
@@ -151,4 +150,4 @@ function removeColumnRequestedByUser(e, colId) {
 }
 
 
-export { attachAddColumnListeners, removeColumnRequestedByUser };
+export { attachAddColumnListeners, detachAddColumnListeners, removeColumnRequestedByUser };
