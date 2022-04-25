@@ -10,6 +10,7 @@ let colorsOfUrgency = {
 async function init() {
     await downloadFromServer();
     id = JSON.parse(backend.getItem('id'));
+    console.log(id);
     loadAllTasks(id);
     renderBacklogTasks();
 }
@@ -21,7 +22,6 @@ function loadAllTasks(id) {
     }
     console.log('alle heruntergeladenen Tasks: ', tasks)
 }
-
 
 
 // don't needet at this time 
@@ -42,9 +42,8 @@ function renderBacklogTasks() {
 
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
-        const colorUrgency = colorsOfUrgency[backlogTask['priority']];
-        console.log(colorUrgency);
-        backlogTable.innerHTML += templateBacklogTask(backlogTask);
+        const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
+        backlogTable.innerHTML += templateBacklogTask(backlogTask, colorOfUrgency);
     }
 }
 
@@ -60,7 +59,45 @@ function filterBacklogTasks() {
 }
 
 
-function openTask() {
-    console.log('openTask wird korrekt aufgerufen');
+function openTask(id) {
+    console.log('openTask korrekt aufgerufen mit ID: ', id);
+    document.getElementById('backlog-overlay').classList.remove('d-none');
+    document.getElementById('backlog-table').classList.add('d-none');
+    let task = findTask(id);
+    fillTaskWithPresets(task);
 }
 
+
+function closeTask() {
+    document.getElementById('backlog-table').classList.remove('d-none');
+    document.getElementById('backlog-overlay').classList.add('d-none');
+    //document.getElementById('overlay-container').innerHTML = ''; // delete the task in the overlay container after closing task
+}
+
+
+function findTask(id) {
+    let foundTask = tasks.find(task => task['id'] === id);
+    return foundTask;
+}
+
+
+function fillTaskWithPresets(task) {
+    document.getElementById('title').value = task.title;
+    document.getElementById('category').value = task.category;
+    document.getElementById('description').value = task.description;
+    document.getElementById('urgency').value = task.priority;
+    let deadlineTimeStamp = new Date(task.deadline);
+    let deadlineYear = deadlineTimeStamp.getFullYear();
+    let deadlineMonth = deadlineTimeStamp.getMonth();
+    let deadlineDay = deadlineTimeStamp.getDate();
+    document.getElementById('date').value = `${deadlineYear}-${('0' + deadlineMonth).slice(-2)}-${('0' + deadlineDay).slice(-2)}`;
+}
+
+
+function clearInputs() {
+    document.getElementById('title').value = '';
+    document.getElementById('category').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('date').value = '';
+    document.getElementById('urgency').value = '';
+}

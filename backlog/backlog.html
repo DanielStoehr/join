@@ -39,8 +39,8 @@
                 
             </table>
 
-            <div class="backlog-overlay, d-none">
-                <div class="overlay-container">
+            <div class="backlog-overlay, d-none" id="backlog-overlay">
+                <div class="overlay-container" id="overlay-container">
                     <div class="overlay-header">
                         <div class="form-title form-boxes">
                             <label class="form-label" for="title">Title</label>
@@ -50,8 +50,8 @@
                         </div>
                         <div class="overlay-header-icons">
                             <button>save and send to board</button>
-                            <button>delete</button>
-                            <button>close</button>
+                            <!-- <button>delete</button> -->
+                            <button onclick="closeTask()">close</button>
                         </div>
                     </div>
                     <div class="overlay-body">
