@@ -86,7 +86,7 @@ function fillTaskWithPresets(task) {
     document.getElementById('category').value = task.category;
     document.getElementById('description').value = task.description;
     document.getElementById('urgency').value = task.priority;
-    let deadlineTimeStamp = new Date(task.deadline);
+    let deadlineTimeStamp = new Date(task.deadline);;
     let deadlineYear = deadlineTimeStamp.getFullYear();
     let deadlineMonth = deadlineTimeStamp.getMonth();
     let deadlineDay = deadlineTimeStamp.getDate();
