@@ -11,4 +11,16 @@
     table tr td:last-child, th:last-child {
         display: none;
     }
+
+    .date-category-importance-container {
+        flex-direction: column;
+    }
+
+    .overlay-container {
+        width: unset;
+    }
+
+    .title-input {
+        width: 90%;
+    }
 }

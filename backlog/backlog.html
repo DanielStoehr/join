@@ -34,12 +34,14 @@
                     <img src="../img/logo.png" alt="image-logo">
                 </div>
                 <a href="../index.html" class="navigation-link" onclick="changeNavigation(this)">Board</a>
-                <a href="../backlog/backlog.html" class="navigation-link navigation-active" onclick="changeNavigation(this)">Backlog</a>
-                <a href="../add-task/add-task.html" class="navigation-link" onclick="changeNavigation(this)">Add Task</a>
+                <a href="../backlog/backlog.html" class="navigation-link navigation-active"
+                    onclick="changeNavigation(this)">Backlog</a>
+                <a href="../add-task/add-task.html" class="navigation-link" onclick="changeNavigation(this)">Add
+                    Task</a>
                 <a href="#" class="navigation-link" onclick="changeNavigation(this)">Help</a>
             </div>
             <img src="../img/user.svg" alt="user-image" class="navigation-user-image">
-        
+
         </div>
 
         <div class="backlog">
@@ -47,7 +49,7 @@
             <p class="backlog-slogan">Learning Management System Project</p>
 
             <table id="backlog-table">
-                
+
             </table>
 
             <div class="backlog-overlay, d-none" id="backlog-overlay">
@@ -56,14 +58,10 @@
                         <div class="form-title form-boxes">
                             <label class="form-label" for="title">Title</label>
                             <div class="form-input-outer">
-                                <input required="" class="form-input" id="title" type="text">
+                                <input required="" class="form-input title-input" id="title" type="text">
                             </div>
                         </div>
-                        <div class="overlay-header-icons">
-                            <button>save and send to board</button>
-                            <!-- <button>delete</button> -->
-                            <button onclick="closeTask()">close</button>
-                        </div>
+                        <img class="close-icon" src="../img/close-window-24.png" onclick="closeTask()" alt="">
                     </div>
                     <div class="overlay-body">
                         <div class="form-description form-boxes">
@@ -105,14 +103,17 @@
                         <div class="form-boxes form-assigned-to">
                             <label class="form-label" for="assigned-to">Assigned To</label>
                             <div class="form-icon-box">
-                                <img class="form-icon-user" src="../img/user.svg">
+                                <img class="form-icon-user" id="user-1" onclick="setUser(1, 'Max')" src="../img/user.svg">
+                                <img class="form-icon-user" id="user-2" onclick="setUser(2, 'Daniel')" src="../img/user_blue.svg">
+                                <img class="form-icon-user" id="user-3" onclick="setUser(3, 'Lukas')" src="../img/user_green.svg">
+                                <img class="form-icon-user" id="user-4" onclick="setUser(4, 'Wolfgang')" src="../img/user_red.svg">
                                 <img class="form-icon-plus" src="../img/icon plus.png">
                             </div>
                         </div>
                     </div>
                     <div class="save-send-container">
-                        <button class="overlay-button save-button">save</button>
-                        <button class="overlay-button send-button">send to board</button>
+                        <button class="overlay-button save-button" onclick="saveChangedTask()">save</button>
+                        <button class="overlay-button send-button" onclick="sendToBoard()">send to board</button>
                     </div>
 
                 </div>
