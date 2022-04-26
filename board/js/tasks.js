@@ -148,18 +148,6 @@ function insertUserAddedTask(e) {
 }
 
 
-// for debugging
-/*
-function logClickEvent(clickEvent){
-    const col = document.getElementById("testing") || "";
-    const test = document.getElementById("test") || "";
-    if (col) {
-        (test) ? col.removeChild(test) : false;
-        col.innerHTML += '<div id="test">' + clickEvent + '</div>';
-    }
-}
-*/
-
 
 export { tasks, priorities, inCharge, currentlyDraggedTask, parseEuDate, euDateToUtc };
 export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };

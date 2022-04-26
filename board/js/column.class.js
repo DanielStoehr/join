@@ -2,25 +2,28 @@ import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { columnFooterClicked } from "./tasks.js";
 import { closeColumnClicked } from "./columns.js";
 
+
 // fully functional on common desktops, iPhone 5s, newer i-devices
 
 class Column {
+    id;
+    title;
+    board;
+    x = 0;
+    y = 0;
+    width = 180;
+    height = 564;
+
     constructor(id, title, color, minimized) {
         this.id = id;
         this.title = title;
-        this.x = 0;
-        this.y = 0;
-        this.width = 180;
-        this.height = 564;
         this.color = color;
         this.minimized = (minimized) ? minimized : false;
-        this.board = "board";
         this.listeners = [
             { evt: "dragover", callback: dragOver },    // default event listeners
             { evt: "dragleave", callback: dragLeave },
             { evt: "drop", callback: drop },
         ];
-        //this.listener = {};
         this.listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
         this.footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
         this.closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};

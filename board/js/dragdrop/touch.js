@@ -97,7 +97,7 @@ function removeTouchHighlighting() {
 function positionTouchedTaskFreely() {
     const task = document.getElementById(currentlyDraggedTask.id);
     const pos = task.getBoundingClientRect();
-    task.style.position = "absolute";
+    task.style.position = "fixed";
     task.style.left = touch.x - (pos.width / 2) + "px";
     task.style.top = touch.y - (pos.height / 2) + "px";
 }
