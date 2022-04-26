@@ -14,7 +14,7 @@ function templateBacklogTask(backlogTask, colorOfUrgency) {
         <td class="backlog-item-image-name">
             <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
             <div class="name-mail-container">
-                <span>Darrin S. Jones</span>
+                <span>${backlogTask['assignedTo']}</span>
                 <span class="email">darrin@gmail.com</span>
             </div>
         </td>
