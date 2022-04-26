@@ -71,7 +71,7 @@ function openTask(id) {
 function closeTask() {
     document.getElementById('backlog-table').classList.remove('d-none');
     document.getElementById('backlog-overlay').classList.add('d-none');
-    //document.getElementById('overlay-container').innerHTML = ''; // delete the task in the overlay container after closing task
+    clearInputs();  
 }
 
 

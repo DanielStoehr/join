@@ -28,8 +28,19 @@
 
     <div class="primary-container">
 
-        <!---------Navigationsbar----------->
-        <div w3-include-html="../navigation/navigation.html"></div>
+        <div class="navigation-container">
+            <div class="navigation-top">
+                <div class="navigation-logo-container">
+                    <img src="../img/logo.png" alt="image-logo">
+                </div>
+                <a href="../index.html" class="navigation-link" onclick="changeNavigation(this)">Board</a>
+                <a href="../backlog/backlog.html" class="navigation-link navigation-active" onclick="changeNavigation(this)">Backlog</a>
+                <a href="../add-task/add-task.html" class="navigation-link" onclick="changeNavigation(this)">Add Task</a>
+                <a href="#" class="navigation-link" onclick="changeNavigation(this)">Help</a>
+            </div>
+            <img src="../img/user.svg" alt="user-image" class="navigation-user-image">
+        
+        </div>
 
         <div class="backlog">
             <h1 class="backlog-heading">Add Task</h1>
