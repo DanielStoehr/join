@@ -25,9 +25,11 @@ async function init() {
     tasks = [];
     await downloadFromServer();
     id = JSON.parse(backend.getItem('id'));
+    console.log('heruntergeladene ID: ' + id)
     loadAllTasks(id);
     renderBacklogTasks();
 }
+
 
 function loadAllTasks(id) {
     for (let i = 1; i <= id; i++) {
@@ -127,9 +129,16 @@ function clearInputs() {
     document.getElementById('description').value = '';
     document.getElementById('date').value = '';
     document.getElementById('urgency').value = '';
+    clearOpacity();
 }
 
 
+/**
+ * 
+ * 
+ * @param {integer} number every user has a personal number, for example Daniel is number 2
+ * @param {string} name of the user that the task is assigned to
+ */
 function setUser(number, name) {
     clearOpacity();
     document.getElementById('user-' + number).style.opacity = '1';
@@ -145,31 +154,31 @@ function clearOpacity() {
 }
 
 
-function saveChangedTask() {
+/**saves all input-values in the task */
+async function saveChangedTask() {
     task.title = document.getElementById('title').value;
     task.description = document.getElementById('description').value;
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.category = document.getElementById('category').value;
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user;
-    backend.setItem('task' + task.id, JSON.stringify(task));
+    await pushTaskToBackend();
     closeTask();
     init();
 }
 
 
-function sendToBoard() {
-    // task.columnId = 'todo';
-    saveChangedTask();
+/**changes the data of the task in backlog */
+async function pushTaskToBackend() {
+    await backend.setItem('task' + task.id, JSON.stringify(task));
+}
+
+
+/**changes the columnId of the task - so it won't be rendered anymore in backlog */
+async function sendToBoard() {
+    task.columnId = 'todo';
+    await saveChangedTask();
     clearInputs();
 }
 
 
-function clearInputs() {
-    document.getElementById('title').value = '';
-    document.getElementById('category').value = '';
-    document.getElementById('description').value = '';
-    document.getElementById('date').value = '';
-    document.getElementById('urgency').value = '';
-    clearOpacity();
-}
