@@ -1,4 +1,4 @@
-let tasks = [];
+let tasks = []; //TODO bevor neue reingeladen werden löschen!!
 
 let task = {
     id: '',
@@ -22,6 +22,7 @@ let colorsOfUrgency = {
 }
 
 async function init() {
+    tasks = [];
     await downloadFromServer();
     id = JSON.parse(backend.getItem('id'));
     loadAllTasks(id);
@@ -41,6 +42,7 @@ function loadAllTasks(id) {
 function renderBacklogTasks() {
     let backlogTable = document.getElementById('backlog-table');
     let backlogTasks = filterBacklogTasks(); // filters all the tasks that have status backlog from the array
+    backlogTable.innerHTML = '';
     backlogTable.innerHTML = templateBacklogTableHead();
 
     for (let i = 0; i < backlogTasks.length; i++) {
@@ -150,7 +152,7 @@ function saveChangedTask() {
     task.category = document.getElementById('category').value;
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user;
-    backend.setItem('task' + id, JSON.stringify(task));
+    backend.setItem('task' + task.id, JSON.stringify(task));
     closeTask();
     init();
 }
