@@ -1,15 +1,18 @@
 @media (max-width: 768px) {
-    table tr td:first-child, th:first-child {
-        width: unset;
-        min-width: 225px;
-    }
-    
-    table tr td:nth-child(2), th:nth-child(2) {
-        width: unset;
-    }
-    
-    table tr td:last-child, th:last-child {
+    table tr {
         display: none;
+    }
+
+    .backlog-item {
+        flex-direction: column;
+    }
+
+    table tr td:last-child, th:last-child {
+        width: 100%;
+    }
+
+    .backlog-item-image-name {
+        flex-direction: column;
     }
 
     .date-category-importance-container {
