@@ -50,7 +50,7 @@ startBackend();
     showTasks();
 
     setTimeout(function () {
-        addTask("completed", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
+        addTask("complete", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
         showTasks();
     }, 5500);
 
@@ -66,7 +66,7 @@ startBackend();
     }, 1000);
 
     setTimeout(function () {
-        addTask("completed", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("15.01.22"), inCharge[0]);
+        addTask("complete", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("15.01.22"), inCharge[0]);
         showTasks();
     }, 1500);
 
