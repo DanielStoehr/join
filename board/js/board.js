@@ -1,28 +1,52 @@
 'use strict'
 
 import { initColumns, addColumn, removeColumn } from "./columns.js";
-import { addTask, removeTask, showTasks, euDateToUtc } from "./tasks.js";
+import { addTask, removeTask, showTasks, euDateToUtc, tasks } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
+import { backend, setURL, downloadFromServer } from "../smallest_backend_ever/mini_backend_module.js";
 
 
 //-----for debugging-----
 window.debugMode = true; 
 debug();
 
+
+//-----for educational purpose-----
+let data = "", index = 1;
+setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
+
+async function startBackend() {
+    console.log("backend start \n");
+    await downloadFromServer();
+    while (data = JSON.parse(backend.getItem('task' + index))) {
+        data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
+        (data.priority == "high") ? data.priority = 0 : false;
+        (data.priority == "middle") ? data.priority = 1 : false;
+        (isNaN(data.priority)) ? data.priority = 2 : false;
+        data.id = "t" + data.id;
+        tasks.push(data);
+        console.log("data: ", data, "\n");
+        index++;
+    };
+};
+
+startBackend();
+
+
+
 //-----for reference-----
 // const priorities = ["hoch", "mittel", "niedrig"];
 // const inCharge = ["ich", "du", "Müllers Kuh"];
 
 
-
 (function main() {
     let task, col;
 
-    col = addColumn("spalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white" }, false, "board");
+    col = addColumn("neuespalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white" }, false, "board");
 
     init();
 
-    addTask("inprogress", "Frontend programmieren", "Description", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
+    addTask("inprogress", "Frontend programmieren", "description Beschreibung details bla bla bla", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
     showTasks();
 
     setTimeout(function () {
@@ -30,7 +54,7 @@ debug();
         showTasks();
     }, 5500);
 
-    task = addTask("spalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
+    task = addTask("neuespalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
     showTasks();
     //setTimeout(function () {
     //    removeTask(task);
@@ -57,7 +81,7 @@ debug();
     }, 3000);
 
     setTimeout(function () {
-        console.log(removeColumn("spalte"));
+        console.log(removeColumn("neuespalte"));
     }, 10000);
 
 })();

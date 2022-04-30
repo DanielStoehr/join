@@ -133,12 +133,13 @@ class Column {
 
     // append column to an element in the DOM
     // attach event listeners if present
-    appendTo(parent) {
+    appendTo(parent, beforeCol) {
         const par = document.getElementById(parent);
+        const before = document.getElementById(beforeCol);
         if (par) {
             this.board = parent;
             const col = Column.columnsContainerSetup(this.id, this.title, this.color, this.minimized);
-            par.appendChild(col);
+            (before) ? par.insertBefore(col, before) : par.appendChild(col);
             this.update();
             this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
             if (!this.minimized) {

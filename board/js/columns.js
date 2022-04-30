@@ -1,7 +1,7 @@
 import { Column } from "./column.class.js";
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { findTasksByColumn, moveTaskToColumn, showTasks } from "./tasks.js";
-import { attachAddColumnListeners, detachAddColumnListeners, removeColumnRequestedByUser } from "./column-user-func.js";
+import { attachAddColumnListeners } from "./column-user-func.js";
 
 
 
@@ -21,9 +21,9 @@ const defaultColumns = [
     { id: "todo", title: "to-do", color: { accent: "rgba(30, 30, 30, .2)" }, },
     { id: "inprogress", title: "in progress", color: { accent: "rgba(255, 0, 0, .2)" }, },
     { id: "testing", title: "testing", color: { accent: "rgba(0, 255, 0, .2)" }, },
-    { id: "completed", title: "complete", color: { accent: "rgba(0, 0, 255, .2)" }, },
+    { id: "complete", title: "complete", color: { accent: "rgba(0, 0, 255, .2)" }, },
     { id: "discussing", title: "discussing", color: { accent: "rgba(128, 255, 255, .9)" }, },
-    { id: "add-column", title: userAddedColumn, color: { accent: "#2369a4", title: "white" }, minimized: true,  board: "board" },
+    { id: "add-column", title: userAddedColumn, color: { accent: "#2369a4", title: "white" }, minimized: true, board: "board" },
 ];
 
 const columns = [];
@@ -36,11 +36,10 @@ const columnListeners = [
 ];
 
 
-
-function addColumn(colId, title, color, minimized, boardId) {
+function addColumn(colId, title, color, minimized, boardId, beforeCol) {
     const col = new Column(colId, title, color, minimized);
     col.listeners = columnListeners;
-    col.appendTo(boardId || "board");
+    col.appendTo(boardId || "board", beforeCol);
     columns.push(col);
     return columns[columns.findIndex(column => column.id == colId)] || "";
 }
@@ -61,20 +60,20 @@ function removeColumn(colId) {
 
 
 function backupRemovedColumn(column, index) {
-    return (column.id != "add-column") ? removedColumns.push({index: index, column: column}) : false;
+    return (column.id != "add-column") ? removedColumns.push({ index: index, column: column }) : false;
 }
 
 
-function restoreColumn() {
+function restoreColumn(e, index) {
     if (removedColumns.length) {
-        detachAddColumnListeners();
-        let toRestore = removedColumns.pop();
-        columns.forEach(column => column.removeFrom(column.board));
-        columns.splice(toRestore.index, 0, toRestore.column);
-        columns.forEach(column => column.appendTo(column.board));
-        attachAddColumnListeners();
-        showTasks();
-        getColumnsProperties();
+        const toRestore = (index < 0) ? removedColumns.pop() : removedColumns.splice(index, 1)[0];
+        if (!document.getElementById(toRestore.id)) {
+            const beforeColumn = columns[(toRestore.index < columns.length) ? toRestore.index : columns.length - 1].id;
+            toRestore.column.appendTo(toRestore.column.board, beforeColumn);
+            columns.splice(toRestore.index, 0, toRestore.column);
+            showTasks();
+            getColumnsProperties();
+        }
     }
 }
 
@@ -94,7 +93,7 @@ function setupUndoIcon() {
     undo.id = "undo";
     undo.innerHTML = "&#xee0b;"
     parent.appendChild(undo);
-    undo.addEventListener("click", restoreColumn);
+    undo.addEventListener("click", e => restoreColumn(e, -1));
 }
 
 
@@ -124,11 +123,18 @@ function findRemovedColumnById(colId) {
 }
 
 
+function findRemovedColumnsIndex(colId) {
+    return removedColumns.findIndex(rc => rc.column.id == colId);
+}
+
+
 function removeColumnListener(e, colId) {
     e.stopPropagation();
-    removeColumnRequestedByUser(e, colId);
+    const tasks = removeColumn(colId);
+    console.log("requested remove col: '" + colId + "'\n");
+    console.log("tasks in removed col: '", tasks, "'\n");
 }
 
 export { columns, columnListeners, addColumn, removeColumn, restoreColumn };
-export { initColumns, getColumnsProperties, findColumnById, findRemovedColumnById };
+export { initColumns, getColumnsProperties, findColumnById, findRemovedColumnById, findRemovedColumnsIndex };
 export { removeColumnListener as closeColumnClicked };

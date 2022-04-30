@@ -208,6 +208,11 @@ body {
     margin: 0px calc(var(--font-size) * .3);
 }
 
+.task-body .task-description {
+    font-size: calc(var(--font-size) * .95);;
+    margin: calc(var(--font-size) * .3) calc(var(--font-size) * .3) calc(var(--font-size) * .0) calc(var(--font-size) * .3);
+}
+
 .task-footer {
     display: flex;
     justify-content: space-between;

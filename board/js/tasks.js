@@ -1,5 +1,5 @@
 import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
-import { startDragging, stopDragging, dragging} from "./dragdrop/mouse.js";
+import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
 
 
 const tasks = [];
@@ -16,18 +16,68 @@ const taskListeners = [
     { evt: "touchend", callback: touchEnd },
     { evt: "touchcancel", callback: touchCancel },
     { evt: "click", callback: taskClicked },
+    { evt: "focusout", callback: taskOutOfFocus },
 ];
 
 
+function taskOutOfFocus(e, taskId) {
+    const taskIndex = findTasksIndex(taskId);
+    const taskElement = getTaskElement(taskId);
+    if (e.target == taskElement.category || e.target == taskElement.title || e.target == taskElement.details) {
+        taskNonEditable(taskElement);
+        setEditedTasksValues(taskElement, taskIndex);
+    }
+}
+
+
 function taskClicked(e, taskId) {
-    console.log("click: " + taskId);
+    const te = getTaskElement(taskId);
+    (e.target == te.category || e.target == te.title || e.target == te.details) ? taskEditable(e, te) : te.details.style.display = "none";
+}
+
+
+function taskEditable(e, taskElement) {
+    taskElement.task.style.cursor = "text";
+    taskElement.details.style.display = "block";
+    taskElement.task.draggable = false;
+    taskElement.category.contentEditable = true;
+    taskElement.title.contentEditable = true;
+    taskElement.details.contentEditable = true;
+    e.target.focus();
+}
+
+
+function taskNonEditable(taskElement) {
+    window.getSelection().removeAllRanges();
+    taskElement.category.contentEditable = false;
+    taskElement.title.contentEditable = false;
+    taskElement.details.contentEditable = false;
+    taskElement.task.draggable = true;
+    taskElement.task.style.cursor = "grab";
+}
+
+
+function setEditedTasksValues(taskElement, taskIndex) {
+    tasks[taskIndex].category = taskElement.category.textContent;
+    tasks[taskIndex].title = taskElement.title.textContent;
+    tasks[taskIndex].description = taskElement.details.textContent;
+}
+
+
+function getTaskElement(taskId) {
+    return {
+        task: document.querySelector(`#${taskId}`),
+        category: document.querySelector(`#${taskId} .task-category`),
+        title: document.querySelector(`#${taskId} .task-title`),
+        details: document.querySelector(`#${taskId} .task-description`),
+    }
 }
 
 
 function addTask(columnId, title, description, category, priority, deadline, personInCharge) {
     let addedAt = Date.now();
     let task = {
-        id: Date.now() + String(Math.floor(Math.random() * 1000)),
+        id: 't' + Date.now() + String(Math.floor(Math.random() * 1000)),
         title: title,
         description: description,
         category: category,
@@ -88,6 +138,7 @@ function taskTemplate(task) {
     </div>
     <div class="task-body">
         <p class="task-title">${task.title}</p>
+        <p class="task-description" style="display: none;">${task.description}</p>
     </div>
     <div class="task-footer">
         <span class="task-incharge">${task.inCharge}: </span>
@@ -145,11 +196,13 @@ function addTaskListener(e) {
 function insertUserAddedTask(e) {
     const col = e.target.parentNode;
     console.log("add task to '" + col.id + "'\n");
+    addTask(col.id, "neue Aufgabe", "Beschreibung", "allgemein", 1, euDateToUtc(new Date().toLocaleString().slice(0, -10)), inCharge[0]);
+    showTasks();
 }
 
 
 
 export { tasks, priorities, inCharge, currentlyDraggedTask, parseEuDate, euDateToUtc };
 export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };
-export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate };
+export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate, taskClicked };
 export { addTaskListener as columnFooterClicked };

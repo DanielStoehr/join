@@ -129,17 +129,4 @@ function removePlaceholderFromColumn() {
 }
 
 
-// for debugging
-/*
-function logTouchEvent(touchEvent) {
-    const col = document.getElementById("testing") || "";
-    const test = document.getElementById("test") || "";
-    if (col) {
-        (test) ? col.removeChild(test) : false;
-        col.innerHTML += '<div id="test">' + touchEvent + '</div>';
-    }
-}
-*/
-
-
 export { touch, touchStart, touchMove, touchEnd, touchCancel };

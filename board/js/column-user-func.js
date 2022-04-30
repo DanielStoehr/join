@@ -1,4 +1,4 @@
-import { columns, addColumn, removeColumn, findRemovedColumnById, restoreColumn } from "./columns.js";
+import { columns, addColumn, removeColumn, findRemovedColumnById, findRemovedColumnsIndex, restoreColumn } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
 
@@ -18,11 +18,7 @@ const columnColors = {
 function insertUserAddedColumn(newColumnId, newColumnTitle) {
     if (!document.getElementById(newColumnId)) {
         const column = columns[columns.length - 1];
-        detachAddColumnListeners();
-        removeColumn(column.id);
-        addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false); 
-        addColumn(column.id, column.title, column.color, column.minimized || false);
-        attachAddColumnListeners();
+        addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false, column.board, "add-column"); 
         showTasks();
     }
 }
@@ -45,6 +41,7 @@ function attachAddColumnListeners() {
 }
 
 
+/*
 function detachAddColumnListeners() {
     const link = document.getElementById("add-column-link");
     const inputForm = document.getElementById("enter-new-column");
@@ -60,6 +57,7 @@ function detachAddColumnListeners() {
         applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input));
     }
 }
+*/
 
 
 function addColumnLinkListener(e, link, inputForm, input) {
@@ -133,20 +131,15 @@ function cancelButtonHit(link, inputForm, input) {
 function applyButtonHit(link, inputForm, input) {
     const pattern = /[a-z0-9-]/gi;
     const newColumnTitle = (input.value) ? input.value : "";
-    const newColumnId = (input.value.match(pattern) || []).toString().replaceAll(",", "");
+    const newColumnId = (input.value.match(pattern) || []).join("").replaceAll("-", "").toLowerCase();
     inputForm.style.display = "none";
     link.style.display = "";
     input.value = "";
     if (newColumnId) {
-        findRemovedColumnById(newColumnId) ? restoreColumn() : insertUserAddedColumn(newColumnId, newColumnTitle);
+        const index = findRemovedColumnsIndex(newColumnId);
+        (index < 0) ? insertUserAddedColumn(newColumnId, newColumnTitle) : restoreColumn({}, index);
     }
 }
 
 
-function removeColumnRequestedByUser(e, colId) {
-    console.log("requested removal: '" + colId + "'\n");
-    console.log(removeColumn(colId));
-}
-
-
-export { attachAddColumnListeners, detachAddColumnListeners, removeColumnRequestedByUser };
+export { attachAddColumnListeners };
