@@ -80,6 +80,7 @@ function closeTask() {
 }
 
 
+// TODO: muss umgebaut werden
 function findTask(id) {
     let foundTask = tasks.find(task => task['id'] === id);
     return foundTask;
@@ -107,13 +108,13 @@ function fillTaskWithPresets(task) {
 function findUrgencyString(urgencyValue) {
     switch(urgencyValue) {
         case '0':
-            return 'Low';
+            return 'low';
             break;
         case '1':
-            return 'Middle';
+            return 'middle';
             break;
         case '2':
-            return 'High';
+            return 'high';
             break;
     }
 }
