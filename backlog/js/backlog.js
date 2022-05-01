@@ -1,4 +1,4 @@
-let tasks = []; //TODO bevor neue reingeladen werden löschen!!
+let tasks = []; 
 
 let task = {
     id: '',
@@ -22,22 +22,21 @@ let colorsOfUrgency = {
 }
 
 async function init() {
-    tasks = [];
     await downloadFromServer();
-    id = JSON.parse(backend.getItem('id'));
-    console.log('heruntergeladene ID: ' + id)
-    loadAllTasks(id);
+    tasks = JSON.parse(backend.getItem('tasks'));
+    console.log('heruntergeladene tasks: ' + tasks)
+    // loadAllTasks(id);
     renderBacklogTasks();
 }
 
 
-function loadAllTasks(id) {
-    for (let i = 1; i <= id; i++) {
-        task = JSON.parse(backend.getItem(`task${i}`));
-        tasks.push(task);
-    }
-    console.log('alle heruntergeladenen Tasks: ', tasks)
-}
+// function loadAllTasks(id) {
+//     for (let i = 1; i <= id; i++) {
+//         task = JSON.parse(backend.getItem(`task${i}`));
+//         tasks.push(task);
+//     }
+//     console.log('alle heruntergeladenen Tasks: ', tasks)
+// }
 
 
 /**renders all backlog tasks */
@@ -91,7 +90,7 @@ function fillTaskWithPresets(task) {
     document.getElementById('title').value = task.title;
     document.getElementById('category').value = task.category;
     document.getElementById('description').value = task.description;
-    document.getElementById('urgency').value = task.priority;
+    document.getElementById('urgency').value = findUrgencyString(task.priority);
     
     let deadlineTimeStamp = new Date(task.deadline);;
     let deadlineYear = deadlineTimeStamp.getFullYear();
@@ -102,6 +101,21 @@ function fillTaskWithPresets(task) {
     let name = task.assignedTo;
     let number = findUserNumber(name);
     setUser(number, name);
+}
+
+
+function findUrgencyString(urgencyValue) {
+    switch(urgencyValue) {
+        case '0':
+            return 'Low';
+            break;
+        case '1':
+            return 'Middle';
+            break;
+        case '2':
+            return 'High';
+            break;
+    }
 }
 
 
