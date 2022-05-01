@@ -25,19 +25,8 @@ async function init() {
     await downloadFromServer();
     tasks = JSON.parse(backend.getItem('tasks'));
     console.log('heruntergeladene tasks: ' + tasks)
-    // loadAllTasks(id);
     renderBacklogTasks();
 }
-
-
-// function loadAllTasks(id) {
-//     for (let i = 1; i <= id; i++) {
-//         task = JSON.parse(backend.getItem(`task${i}`));
-//         tasks.push(task);
-//     }
-//     console.log('alle heruntergeladenen Tasks: ', tasks)
-// }
-
 
 /**renders all backlog tasks */
 function renderBacklogTasks() {
@@ -49,7 +38,7 @@ function renderBacklogTasks() {
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
         const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
-        backlogTable.innerHTML += templateBacklogTask(backlogTask, colorOfUrgency);
+        backlogTable.innerHTML += templateBacklogTask(i, backlogTask, colorOfUrgency);
     }
 }
 
@@ -65,10 +54,10 @@ function filterBacklogTasks() {
 }
 
 
-function openTask(id) {
+function openTask(i) {
     document.getElementById('backlog-overlay').classList.remove('d-none');
     document.getElementById('backlog-table').classList.add('d-none');
-    task = findTask(id);
+    task = tasks[i];
     fillTaskWithPresets(task);
 }
 
@@ -77,13 +66,6 @@ function closeTask() {
     document.getElementById('backlog-table').classList.remove('d-none');
     document.getElementById('backlog-overlay').classList.add('d-none');
     clearInputs();
-}
-
-
-// TODO: muss umgebaut werden
-function findTask(id) {
-    let foundTask = tasks.find(task => task['id'] === id);
-    return foundTask;
 }
 
 
@@ -183,6 +165,7 @@ async function saveChangedTask() {
 }
 
 
+//todo: muss umgeschrieben werden
 /**changes the data of the task in backlog */
 async function pushTaskToBackend() {
     await backend.setItem('task' + task.id, JSON.stringify(task));
@@ -191,7 +174,7 @@ async function pushTaskToBackend() {
 
 /**changes the columnId of the task - so it won't be rendered anymore in backlog */
 async function sendToBoard() {
-    task.columnId = 'todo';
+    tasks[i].columnId = 'todo';
     await saveChangedTask();
     clearInputs();
 }

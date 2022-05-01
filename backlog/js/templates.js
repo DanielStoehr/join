@@ -8,9 +8,9 @@ function templateBacklogTableHead() {
 `;
 }
 
-function templateBacklogTask(backlogTask, colorOfUrgency) {
+function templateBacklogTask(i, backlogTask, colorOfUrgency) {
     return /*html*/ `
-    <tr class="backlog-item" onclick="openTask(${backlogTask['id']})" style="border-left: 10px solid ${colorOfUrgency}">
+    <tr class="backlog-item" onclick="openTask(${i})" style="border-left: 10px solid ${colorOfUrgency}">
         <td class="backlog-item-image-name">
             <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
             <div class="name-mail-container">
