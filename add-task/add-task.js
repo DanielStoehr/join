@@ -2,7 +2,6 @@
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 let task = {
-    id: '',
     title: '',
     description: '',
     category: '',
@@ -14,36 +13,35 @@ let task = {
     assignedTo: ''
 };
 
+let tasks = [];
+
 let user;
-let id = 1;
 
 // let taskload = [];
 
 async function init() {
     await downloadFromServer();
-    id = JSON.parse(backend.getItem('id'));
-    console.log(id);
+    tasks = await JSON.parse(backend.getItem('tasks')) || [];
+    console.log(tasks);
     // taskload = JSON.parse(backend.getItem('task'+id)) || [];
     // console.log('Geladen', taskload);
 }
 
 
 function addTask() {
-    backend.setItem('task' + id, JSON.stringify(task));
-    backend.setItem('id', JSON.stringify(id));
+    tasks.push(task);
+    backend.setItem('tasks', JSON.stringify(tasks));
     clearInputs();
 }
 
 
 function saveTask() {
-    id++;
     task.title = document.getElementById('title').value;
     task.category = document.getElementById('category').value;
     task.description = document.getElementById('description').value;
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user;
-    task.id = id;
     addTask();
 }
 
