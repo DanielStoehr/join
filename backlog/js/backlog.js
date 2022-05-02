@@ -38,6 +38,7 @@ function renderBacklogTasks() {
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
         const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
+        console.log(backlogTask['assignedTo']);
         backlogTable.innerHTML += templateBacklogTask(backlogTask, colorOfUrgency);
     }
 }
@@ -63,7 +64,7 @@ function openTask(addedAt) {
     document.getElementById('backlog-overlay').classList.remove('d-none');
     document.getElementById('backlog-table').classList.add('d-none');
     task = findTaskByAddTime(addedAt);
-    fillTaskWithPresets(task);
+    fillTaskWithPresets();
 }
 
 
@@ -74,8 +75,8 @@ function openTask(addedAt) {
  * @returns {object} returns the task which was created at the input time
  */
 function findTaskByAddTime(addedAt) {
-    let task = tasks.find((task) => task.addedAt === addedAt);
-    return task;
+    let foundTask = tasks.find((task) => task.addedAt === addedAt);
+    return foundTask;
 }
 
 
@@ -86,7 +87,8 @@ function closeTask() {
 }
 
 
-function fillTaskWithPresets(task) {
+/**fills the tasks with the values received from the backend */
+function fillTaskWithPresets() {
     document.getElementById('title').value = task.title;
     document.getElementById('category').value = task.category;
     document.getElementById('description').value = task.description;
@@ -96,7 +98,9 @@ function fillTaskWithPresets(task) {
 
     let name = task.assignedTo;
     let number = findUserNumber(name);
-    setUser(number, name);
+    if (name) { // only if user is given -> set user
+        setUser(number, name);
+    }
 }
 
 
@@ -160,22 +164,11 @@ function clearOpacity() {
 
 /**saves all input-values in the task */
 async function saveChangedTask() {
-    task.title = document.getElementById('title').value;
-    task.category = document.getElementById('category').value;
-    task.description = document.getElementById('description').value;
-    task.deadline = new Date(document.getElementById('date').value).getTime();
-    task.priority = document.getElementById('urgency').value;
-    task.assignedTo = user;
-
-    console.log(task);
+    updateTaskVariable();
 
     let indexOfTask = findIndexOfTask(task);
-
-    console.log(indexOfTask);
-
     tasks.splice(indexOfTask, 1, task); // removes old task from the array and gives in the new saved task
 
-    console.log(tasks);
     await backend.setItem('tasks', JSON.stringify(tasks));
     closeTask();
     init();
@@ -185,6 +178,17 @@ async function saveChangedTask() {
 function findIndexOfTask(task) {
     let index = tasks.indexOf(task);
     return index;
+}
+
+
+/**updates the task-variable by values of input-fields */
+function updateTaskVariable() {
+    task.title = document.getElementById('title').value;
+    task.category = document.getElementById('category').value;
+    task.description = document.getElementById('description').value;
+    task.deadline = new Date(document.getElementById('date').value).getTime();
+    task.priority = document.getElementById('urgency').value;
+    task.assignedTo = user;
 }
 
 
