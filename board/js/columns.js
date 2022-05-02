@@ -1,7 +1,7 @@
 import { Column } from "./column.class.js";
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { findTasksByColumn, moveTaskToColumn, showTasks } from "./tasks.js";
-import { backend, setURL, downloadFromServer, jsonFromServer } from "../smallest_backend_ever/mini_backend_module.js";
+import { backend, setURL, downloadFromServer, jsonFromServer } from "../../smallest_backend_ever/mini_backend_module.js";
 import { attachAddColumnListeners } from "./column-user-func.js";
 
 

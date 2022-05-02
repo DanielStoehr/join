@@ -1,6 +1,6 @@
 import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
 import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
-import { backend, setURL, downloadFromServer, jsonFromServer } from "../smallest_backend_ever/mini_backend_module.js";
+import { backend, setURL, downloadFromServer, jsonFromServer } from "../../smallest_backend_ever/mini_backend_module.js";
 
 
 

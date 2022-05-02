@@ -3,7 +3,7 @@
 import { initColumns, addColumn, removeColumn, readAllColumnsFromBackend } from "./columns.js";
 import { addTask, removeTask, showTasks, euDateToUtc, tasks, readAllTasksFromBackend } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
-import { backend, setURL, downloadFromServer } from "../smallest_backend_ever/mini_backend_module.js";
+import { backend, setURL, downloadFromServer } from "../../smallest_backend_ever.js";
 
 
 //-----for debugging-----
@@ -12,7 +12,7 @@ debug();
 
 
 //-----backend for educational purpose-----
-setURL('http://wolfgang-siebert.developerakademie.net/kanban/refactor-this/smallest_backend_ever');
+setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 
 //-----for reference-----
