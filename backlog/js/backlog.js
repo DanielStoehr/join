@@ -1,4 +1,4 @@
-let tasks = []; 
+let tasks = [];
 
 let task = {
     id: '',
@@ -16,9 +16,9 @@ let task = {
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 let colorsOfUrgency = {
-    high: '#EB5A46',
-    middle: '#F2D600',
-    low: '#61BD4F',
+    0: '#61BD4F',
+    1: '#F2D600',
+    2: '#EB5A46',
 }
 
 async function init() {
@@ -38,7 +38,7 @@ function renderBacklogTasks() {
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
         const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
-        backlogTable.innerHTML += templateBacklogTask(i, backlogTask, colorOfUrgency);
+        backlogTable.innerHTML += templateBacklogTask(backlogTask, colorOfUrgency);
     }
 }
 
@@ -54,11 +54,28 @@ function filterBacklogTasks() {
 }
 
 
-function openTask(i) {
+/**
+ * opens a task in a detail view
+ * 
+ * @param {integer} addedAt includes the unix time stamp from first saving the task
+ */
+function openTask(addedAt) {
     document.getElementById('backlog-overlay').classList.remove('d-none');
     document.getElementById('backlog-table').classList.add('d-none');
-    task = tasks[i];
+    task = findTaskByAddTime(addedAt);
     fillTaskWithPresets(task);
+}
+
+
+/**
+ * finds a task by the add-time-stamp
+ * 
+ * @param {integer} addedAt includes the unix time stamp from first saving the task
+ * @returns {object} returns the task which was created at the input time
+ */
+function findTaskByAddTime(addedAt) {
+    let task = tasks.find((task) => task.addedAt === addedAt);
+    return task;
 }
 
 
@@ -73,32 +90,13 @@ function fillTaskWithPresets(task) {
     document.getElementById('title').value = task.title;
     document.getElementById('category').value = task.category;
     document.getElementById('description').value = task.description;
-    document.getElementById('urgency').value = findUrgencyString(task.priority);
-    
-    let deadlineTimeStamp = new Date(task.deadline);;
-    let deadlineYear = deadlineTimeStamp.getFullYear();
-    let deadlineMonth = deadlineTimeStamp.getMonth();
-    let deadlineDay = deadlineTimeStamp.getDate();
-    document.getElementById('date').value = `${deadlineYear}-${('0' + deadlineMonth).slice(-2)}-${('0' + deadlineDay).slice(-2)}`;
-    
+    document.getElementById('urgency').value = task.priority;
+
+    fillDateInput();
+
     let name = task.assignedTo;
     let number = findUserNumber(name);
     setUser(number, name);
-}
-
-
-function findUrgencyString(urgencyValue) {
-    switch(urgencyValue) {
-        case '0':
-            return 'low';
-            break;
-        case '1':
-            return 'middle';
-            break;
-        case '2':
-            return 'high';
-            break;
-    }
 }
 
 
@@ -117,6 +115,15 @@ function findUserNumber(user) {
             return 4;
             break;
     }
+}
+
+
+function fillDateInput() {
+    let deadlineTimeStamp = new Date(task.deadline);;
+    let deadlineYear = deadlineTimeStamp.getFullYear();
+    let deadlineMonth = deadlineTimeStamp.getMonth() + 1; // january gives 0!
+    let deadlineDay = deadlineTimeStamp.getDate();
+    document.getElementById('date').value = `${deadlineYear}-${('0' + deadlineMonth).slice(-2)}-${('0' + deadlineDay).slice(-2)}`;
 }
 
 
@@ -154,29 +161,37 @@ function clearOpacity() {
 /**saves all input-values in the task */
 async function saveChangedTask() {
     task.title = document.getElementById('title').value;
+    task.category = document.getElementById('category').value;
     task.description = document.getElementById('description').value;
     task.deadline = new Date(document.getElementById('date').value).getTime();
-    task.category = document.getElementById('category').value;
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user;
-    await pushTaskToBackend();
+
+    console.log(task);
+
+    let indexOfTask = findIndexOfTask(task);
+
+    console.log(indexOfTask);
+
+    tasks.splice(indexOfTask, 1, task); // removes old task from the array and gives in the new saved task
+
+    console.log(tasks);
+    await backend.setItem('tasks', JSON.stringify(tasks));
     closeTask();
     init();
 }
 
 
-//todo: muss umgeschrieben werden
-/**changes the data of the task in backlog */
-async function pushTaskToBackend() {
-    await backend.setItem('task' + task.id, JSON.stringify(task));
+function findIndexOfTask(task) {
+    let index = tasks.indexOf(task);
+    return index;
 }
 
 
 /**changes the columnId of the task - so it won't be rendered anymore in backlog */
 async function sendToBoard() {
-    tasks[i].columnId = 'todo';
+    task.columnId = 'todo';
     await saveChangedTask();
     clearInputs();
 }
-
 
