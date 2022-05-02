@@ -38,7 +38,6 @@ function renderBacklogTasks() {
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
         const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
-        console.log(backlogTask['assignedTo']);
         backlogTable.innerHTML += templateBacklogTask(backlogTask, colorOfUrgency);
     }
 }
