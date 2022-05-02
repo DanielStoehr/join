@@ -1,32 +1,34 @@
 let jsonFromServer = {};
 let BASE_SERVER_URL;
 
-//window.onload = async function() {
-//}
+//window.onload = async function() {    // bei mir nicht nötig, weil ES6-Module immer
+//}                                     // warten, bis das Dokument geladen wurde
 
-export const backend = {
-    setItem: function(key, item) {
-        jsonFromServer[key] = item;
-        return saveJSONToServer();
+
+export const backend = {                // hier wird das komplette JSON
+    setItem: function(key, item) {      // inkl. aller Schlüssel geschrieben
+        jsonFromServer[key] = item;     // nachdem ein Schlüssel hinzugefügt
+        return saveJSONToServer();      // oder aktualisiert wurde
     },
-    getItem: function(key) {
-        if (!jsonFromServer[key]) {
-            return null;
+    getItem: function(key) {            // hier wird einfach nur auf ein
+        if (!jsonFromServer[key]) {     // Element im JSON zugegriffen
+            return null;                // -> kein Server-Zugriff
         }
         return jsonFromServer[key];
     },
-    deleteItem: function(key) {
-        delete jsonFromServer[key];
-        return saveJSONToServer();
+    deleteItem: function(key) {         // hier wird das komplette JSON inkl. aller
+        delete jsonFromServer[key];     // Schlüssel geschrieben nachdem ein Schlüssel
+        return saveJSONToServer();      // aus dem JSON gelöscht wurde
     }
 };
 
 
 export async function downloadFromServer() {
-    let result = await loadJSONFromServer();
+    let result = await loadJSONFromServer();    // funktion für download aller Daten
     jsonFromServer = JSON.parse(result);
-    console.log('Loaded', result);
+    console.log(Object.keys(jsonFromServer).length + ' keys Loaded\n');
 }
+
 
 export function setURL(url) {
     BASE_SERVER_URL = url;
@@ -64,7 +66,7 @@ function saveJSONToServer() {
         };
 
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhttp.send(JSON.stringify(jsonFromServer));
+        xhttp.send(JSON.stringify(jsonFromServer));         // hier werden alle Daten geschrieben
 
     });
 }
@@ -73,3 +75,5 @@ function saveJSONToServer() {
 function determineProxySettings() {
     return '';
 }
+
+export { jsonFromServer };

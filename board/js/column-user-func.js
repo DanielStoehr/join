@@ -1,4 +1,5 @@
 import { columns, addColumn, removeColumn, findRemovedColumnById, findRemovedColumnsIndex, restoreColumn } from "./columns.js";
+import { writeAllColumnsToBackend, readAllColumnsFromBackend } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
 
@@ -19,6 +20,7 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
     if (!document.getElementById(newColumnId)) {
         const column = columns[columns.length - 1];
         addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false, column.board, "add-column"); 
+        writeAllColumnsToBackend();
         showTasks();
     }
 }
@@ -39,25 +41,6 @@ function attachAddColumnListeners() {
         applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input));
     }
 }
-
-
-/*
-function detachAddColumnListeners() {
-    const link = document.getElementById("add-column-link");
-    const inputForm = document.getElementById("enter-new-column");
-    const input = document.getElementById("add-column-input");
-    const cancelBtn = document.getElementById("add-column-cancel");
-    const applyBtn = document.getElementById("add-column-now");
-    if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.parentNode.removeEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
-        input.removeEventListener("input", e => inputFieldListener(e));
-        input.removeEventListener("click", e => inputFieldClicked(e));
-        input.removeEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
-        cancelBtn.removeEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
-        applyBtn.removeEventListener("click", e => applyButtonListener(e, link, inputForm, input));
-    }
-}
-*/
 
 
 function addColumnLinkListener(e, link, inputForm, input) {

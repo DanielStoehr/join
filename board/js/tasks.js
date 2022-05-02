@@ -1,5 +1,7 @@
 import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
 import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
+import { backend, setURL, downloadFromServer, jsonFromServer } from "../smallest_backend_ever/mini_backend_module.js";
+
 
 
 const tasks = [];
@@ -61,6 +63,7 @@ function setEditedTasksValues(taskElement, taskIndex) {
     tasks[taskIndex].category = taskElement.category.textContent;
     tasks[taskIndex].title = taskElement.title.textContent;
     tasks[taskIndex].description = taskElement.details.textContent;
+    writeAllTasksToBackend();
 }
 
 
@@ -89,6 +92,7 @@ function addTask(columnId, title, description, category, priority, deadline, per
     }
     tasks.push(task);
     tasks.sort((a, b) => a.deadline - b.deadline);
+    writeAllTasksToBackend();
     return task.id;
 }
 
@@ -100,6 +104,7 @@ function removeTask(taskId) {
         taskListeners.forEach(tl => taskExists.removeEventListener(tl.evt, e => tl.callback(e, tasks[i].id)));
         document.getElementById(tasks[i].columnId).removeChild(taskExists);
         tasks.splice(i, 1);
+        writeAllTasksToBackend();
     }
 }
 
@@ -166,6 +171,7 @@ function findTasksIndex(taskId) {
 
 function moveTaskToColumn(taskId, columnId) {
     tasks[findTasksIndex(taskId)].columnId = columnId;
+    writeAllTasksToBackend();
 }
 
 
@@ -201,8 +207,39 @@ function insertUserAddedTask(e) {
 }
 
 
+function readAllTasksFromBackend() {
+    const tasksData = JSON.parse(backend.getItem('tasks')) || [];
+    tasksData.forEach(task => {
+        const taskData = convertForeignData(task);
+        const tasksIndex = findTasksIndex(taskData.id);
+        (tasksIndex < 0) ? tasks.push(taskData) : tasks.splice(tasksIndex, 1, taskData);
+    });
+    showTasks();
+}
+
+
+async function writeAllTasksToBackend() {
+    tasks.forEach(task => task.assignedTo = task.inCharge); 
+    backend.setItem('tasks', JSON.stringify(tasks));
+}
+
+
+function convertForeignData(data) {
+    data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
+    (data.priority == "high") ? data.priority = 0 : false;
+    (data.priority == "middle") ? data.priority = 1 : false;
+    (isNaN(data.priority)) ? data.priority = 2 : false;
+    data.assignedTo = data.inCharge;
+    data.id = (data.id.startsWith("t")) ? data.id : "t" + data.id;
+    data.id = (data.id.length != 17) ? 't' + Date.now() + String(Math.floor(Math.random() * 1000)) : data.id;
+    console.log("task data: ", data, "\n");
+    return data;
+}
+
+
 
 export { tasks, priorities, inCharge, currentlyDraggedTask, parseEuDate, euDateToUtc };
 export { findTaskById, findTasksIndex, findTasksByColumn, removeTaskFromColumn };
 export { moveTaskToColumn, showTasks, addTask, removeTask, taskTemplate, taskClicked };
+export { readAllTasksFromBackend, writeAllTasksToBackend };
 export { addTaskListener as columnFooterClicked };

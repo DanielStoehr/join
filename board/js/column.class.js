@@ -9,6 +9,8 @@ class Column {
     id;
     title;
     board;
+    color;
+    minimized;
     x = 0;
     y = 0;
     width = 180;
@@ -17,16 +19,16 @@ class Column {
     constructor(id, title, color, minimized) {
         this.id = id;
         this.title = title;
-        this.color = color;
+        this._color = color;
         this.minimized = (minimized) ? minimized : false;
         this.listeners = [
             { evt: "dragover", callback: dragOver },    // default event listeners
             { evt: "dragleave", callback: dragLeave },
             { evt: "drop", callback: drop },
         ];
-        this.listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
-        this.footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
-        this.closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};
+        this._listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
+        this._footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
+        this._closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};
     }
 
     /*****************************************
@@ -34,19 +36,19 @@ class Column {
     *****************************************/
 
     // get accent and background color
-    get color() {
-        return this._color;
+    get _color() {
+        return this.color;
     }
 
     // set accent and background color
     // apply defaults when needed
-    set color(c) {
-        this._color = { title: "black", text: "black", accent: "rgba(30, 30, 30, 0.2)", background: "white" };
+    set _color(c) {
+        this.color = { title: "black", text: "black", accent: "rgba(30, 30, 30, 0.2)", background: "white" };
         if (typeof c == 'object') {
-            this._color.title = ('title' in c) ? c.title : this._color.title;
-            this._color.text = ('text' in c) ? c.text : this._color.text;
-            this._color.accent = ('accent' in c) ? c.accent : this._color.accent;
-            this._color.background = ('background' in c) ? c.background : this._color.background;
+            this.color.title = ('title' in c) ? c.title : this.color.title;
+            this.color.text = ('text' in c) ? c.text : this.color.text;
+            this.color.accent = ('accent' in c) ? c.accent : this.color.accent;
+            this.color.background = ('background' in c) ? c.background : this.color.background;
          }       
     }
 
@@ -77,16 +79,16 @@ class Column {
     }
 
     // get the last added event listener
-    get listener() {
-        return this._listener;
+    get _listener() {
+        return this.listener;
     }
 
     // add a single event listener
-    set listener(value) {
-        this._listener = { evt: "", callback: null };
+    set _listener(value) {
+        this.listener = { evt: "", callback: null };
         if (!document.getElementById(this.id) && typeof value == 'object') {
             if ('evt' in value && 'callback' in value) {
-                this._listener = value;
+                this.listener = value;
                 if (this.listeners.findIndex(li => li.evt == value.evt) < 0) {
                     this.listeners.push(value);
                 }
@@ -95,36 +97,36 @@ class Column {
     }
 
     // get the event listener for the column's footer 
-    get footerListener() {
-        return (!this.minimized) ? this._footerListener : {};
+    get _footerListener() {
+        return (!this.minimized) ? this.footerListener : {};
     }
 
     // set the event listener for the column's footer
-    set footerListener(value) {
+    set _footerListener(value) {
         const col = document.getElementById(this.id);
-        if (!this.minimized && col && Object.keys(this._footerListener).length) {
-            col.lastElementChild.removeEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
+        if (!this.minimized && col && Object.keys(this.footerListener).length) {
+            col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
         }
-        this._footerListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
-        if (!this.minimized && col && Object.keys(this._footerListener).length) {
-            col.lastElementChild.addEventListener(this._footerListener.evt, e => this._footerListener.callback(e));
+        this.footerListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
+        if (!this.minimized && col && Object.keys(this.footerListener).length) {
+            col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
         }
     }
 
     // get the event listener for the column's close icon 
-    get closeListener() {
-        return (!this.minimized) ? this._closeListener : {};
+    get _closeListener() {
+        return (!this.minimized) ? this.closeListener : {};
     }
 
     // set the event listener for the column's close icon
-    set closeListener(value) {
+    set _closeListener(value) {
         const closeCol = document.getElementById(this.id + "-close");
-        if (!this.minimized && closeCol && Object.keys(this._closeListener).length) {
-            closeCol.removeEventListener(this._closeListener.evt, e => this._closeListener.callback(e, this.id));
+        if (!this.minimized && closeCol && Object.keys(this.closeListener).length) {
+            closeCol.removeEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
         }
-        this._closeListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
-        if (!this.minimized && closeCol && Object.keys(this._closeListener).length) {
-            closeCol.addEventListener(this._closeListener.evt, e => this._closeListener.callback(e, this.id));
+        this.closeListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
+        if (!this.minimized && closeCol && Object.keys(this.closeListener).length) {
+            closeCol.addEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
         }
     }    
     /********************************

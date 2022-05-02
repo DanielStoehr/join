@@ -1,7 +1,7 @@
 'use strict'
 
-import { initColumns, addColumn, removeColumn } from "./columns.js";
-import { addTask, removeTask, showTasks, euDateToUtc, tasks } from "./tasks.js";
+import { initColumns, addColumn, removeColumn, readAllColumnsFromBackend } from "./columns.js";
+import { addTask, removeTask, showTasks, euDateToUtc, tasks, readAllTasksFromBackend } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
 import { backend, setURL, downloadFromServer } from "../smallest_backend_ever/mini_backend_module.js";
 
@@ -11,27 +11,8 @@ window.debugMode = true;
 debug();
 
 
-//-----for educational purpose-----
-let data = "", index = 1;
-setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
-
-async function startBackend() {
-    console.log("backend start \n");
-    await downloadFromServer();
-    while (data = JSON.parse(backend.getItem('task' + index))) {
-        data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
-        (data.priority == "high") ? data.priority = 0 : false;
-        (data.priority == "middle") ? data.priority = 1 : false;
-        (isNaN(data.priority)) ? data.priority = 2 : false;
-        data.id = "t" + data.id;
-        tasks.push(data);
-        console.log("data: ", data, "\n");
-        index++;
-    };
-};
-
-startBackend();
-
+//-----backend for educational purpose-----
+setURL('http://wolfgang-siebert.developerakademie.net/kanban/refactor-this/smallest_backend_ever');
 
 
 //-----for reference-----
@@ -40,55 +21,46 @@ startBackend();
 
 
 (function main() {
-    let task, col;
-
-    col = addColumn("neuespalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white" }, false, "board");
 
     init();
 
-    addTask("inprogress", "Frontend programmieren", "description Beschreibung details bla bla bla", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
+
+    /***************************
+     **      examples         **
+     *************************** 
+    
+    let task, col;
+    col = addColumn("neuespalte", "neue Spalte", { title: "black", accent: "darksalmon", text: "black", background: "white" }, false, "board");
+    task = addTask("todo", "Büro Aufräumen", "Text 4", "Hausarbeit", 2, euDateToUtc("31.12.2022"), inCharge[2]);
+    addTask("neuespalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
+
     showTasks();
 
     setTimeout(function () {
-        addTask("complete", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
-        showTasks();
-    }, 5500);
-
-    task = addTask("neuespalte", "Fluggerät testen", "Text 3", "Hobby", 1, euDateToUtc("15.05.2022"), inCharge[0]);
-    showTasks();
-    //setTimeout(function () {
-    //    removeTask(task);
-    //}, 7000);
-
-    setTimeout(function () {
-        addTask("todo", "Büro Aufräumen", "Text 4", "Hausarbeit", 2, euDateToUtc("31.12.2022"), inCharge[2]);
-        showTasks();
-    }, 1000);
-
-    setTimeout(function () {
-        addTask("complete", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("15.01.22"), inCharge[0]);
-        showTasks();
-    }, 1500);
-
-    setTimeout(function () {
-        addTask("inprogress", "Tanzstunde vorbereiten", "Text 6", "Arbeit", 0, euDateToUtc("23.04.2022"), inCharge[0]);
-        showTasks();
-    }, 2000);
-
-    setTimeout(function () {
-        addTask("discussing", "Backend programmieren", "Text 7", "Entwicklung", 1, euDateToUtc("15.08.2022"), inCharge[1]);
-        showTasks();
-    }, 3000);
+        removeTask(task);
+    }, 7000);
 
     setTimeout(function () {
         console.log(removeColumn("neuespalte"));
     }, 10000);
 
+    addTask("inprogress", "Frontend programmieren", "Task's description goes here", "Entwicklung", 0, euDateToUtc("30.04.2022"), inCharge[0]);
+    addTask("complete", "Überbrückungshilfe beantragen", "Text 2", "Arbeit", 0, euDateToUtc("25.03.2022"), inCharge[0]);
+    addTask("complete", "Tanzstunde vorbereiten", "Text 5", "Arbeit", 0, euDateToUtc("15.01.22"), inCharge[0]);
+    addTask("inprogress", "Tanzstunde vorbereiten", "Text 6", "Arbeit", 0, euDateToUtc("23.04.2022"), inCharge[0]);
+    addTask("discussing", "Backend programmieren", "Text 7", "Entwicklung", 1, euDateToUtc("15.08.2022"), inCharge[1]);
+
+    showTasks();
+*/
+
 })();
 
 
-function init() {
+async function init() {
+    await downloadFromServer();
+    readAllTasksFromBackend();
     initColumns();
+    showTasks();
 }
 
 
@@ -112,10 +84,3 @@ async function debug() {
         console.log("prefix c assigned to columns.js");
     }
 }
-
-
-//let targetColumns = columns;
-//targetColumns.splice(targetColumns.indexOf(tasks[findTasksIndex(currentlyDraggedTaskId)].columnId), 1);
-//console.log(targetColumns);
-//
-//document.addEventListener("DOMContentLoaded", function () { ... });

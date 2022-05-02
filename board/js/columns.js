@@ -1,6 +1,7 @@
 import { Column } from "./column.class.js";
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { findTasksByColumn, moveTaskToColumn, showTasks } from "./tasks.js";
+import { backend, setURL, downloadFromServer, jsonFromServer } from "../smallest_backend_ever/mini_backend_module.js";
 import { attachAddColumnListeners } from "./column-user-func.js";
 
 
@@ -40,7 +41,7 @@ function addColumn(colId, title, color, minimized, boardId, beforeCol) {
     const col = new Column(colId, title, color, minimized);
     col.listeners = columnListeners;
     col.appendTo(boardId || "board", beforeCol);
-    columns.push(col);
+    (columns.length && columns[columns.length - 1].id == "add-column") ? columns.splice(columns.length -1, 0, col) : columns.push(col);
     return columns[columns.findIndex(column => column.id == colId)] || "";
 }
 
@@ -60,6 +61,7 @@ function removeColumn(colId) {
 
 
 function backupRemovedColumn(column, index) {
+    document.getElementById("undo").style.color = "black";
     return (column.id != "add-column") ? removedColumns.push({ index: index, column: column }) : false;
 }
 
@@ -73,13 +75,19 @@ function restoreColumn(e, index) {
             columns.splice(toRestore.index, 0, toRestore.column);
             showTasks();
             getColumnsProperties();
+            writeAllColumnsToBackend();
         }
     }
+    (!removedColumns.length) ? document.getElementById("undo").style.color = "grey" : false;
+
+
 }
 
 
 function initColumns() {
-    defaultColumns.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false, column.board || "board"));
+    const columnsData = readAllColumnsFromBackend() || defaultColumns;
+    columnsData.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false, column.board || "board"));
+    readRemovedColumnsFromBackend();
     window.addEventListener("resize", resizeViewportListener);
     window.addEventListener("scroll", resizeViewportListener);
     attachAddColumnListeners();
@@ -91,7 +99,8 @@ function setupUndoIcon() {
     const parent = document.getElementById("board-container");
     const undo = document.createElement("div");
     undo.id = "undo";
-    undo.innerHTML = "&#xee0b;"
+    undo.innerHTML = "&#xee0b;";
+    (removedColumns.length) ? undo.style.color = "black" : undo.style.color = "grey";
     parent.appendChild(undo);
     undo.addEventListener("click", e => restoreColumn(e, -1));
 }
@@ -131,10 +140,33 @@ function findRemovedColumnsIndex(colId) {
 function removeColumnListener(e, colId) {
     e.stopPropagation();
     const tasks = removeColumn(colId);
-    console.log("requested remove col: '" + colId + "'\n");
-    console.log("tasks in removed col: '", tasks, "'\n");
+    writeAllColumnsToBackend();
 }
 
-export { columns, columnListeners, addColumn, removeColumn, restoreColumn };
-export { initColumns, getColumnsProperties, findColumnById, findRemovedColumnById, findRemovedColumnsIndex };
+
+function readAllColumnsFromBackend() {
+    return JSON.parse(backend.getItem('columns'));
+}
+
+
+function readRemovedColumnsFromBackend() {
+    const removedCols = JSON.parse(backend.getItem('removedColumns')) || [];
+    removedCols.forEach(rc => {
+        const col = new Column(rc.column.id, rc.column.title, rc.column.color, rc.column.minimized);
+        col.listeners = columnListeners;
+        col.board = rc.column.board;
+        removedColumns.push({ index: rc.index, column: col });
+    });
+}
+
+
+async function writeAllColumnsToBackend() {
+    await backend.setItem('columns', JSON.stringify(columns));
+    await backend.setItem('removedColumns', JSON.stringify(removedColumns));
+}
+
+
+export { columns, columnListeners, initColumns, addColumn, removeColumn, restoreColumn };
+export { getColumnsProperties, findColumnById, findRemovedColumnById, findRemovedColumnsIndex };
+export { readAllColumnsFromBackend, writeAllColumnsToBackend }
 export { removeColumnListener as closeColumnClicked };
