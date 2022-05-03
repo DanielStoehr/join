@@ -6,7 +6,7 @@ import { backend, setURL, downloadFromServer, jsonFromServer } from "../../small
 const tasks = [];
 const currentlyDraggedTask = { id: 0, sourceColumn: "" };
 
-const priorities = ["niedrig", "mittel", "hoch"];
+const priorities = ["hoch", "mittel", "niedrig"];
 const inCharge = ["Max", "Daniel", "Lukas", "wolfgang"];
 
 const taskListeners = [
