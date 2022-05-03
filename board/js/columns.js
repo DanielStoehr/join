@@ -79,8 +79,6 @@ function restoreColumn(e, index) {
         }
     }
     (!removedColumns.length) ? document.getElementById("undo").style.color = "grey" : false;
-
-
 }
 
 
