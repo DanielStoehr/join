@@ -41,7 +41,7 @@ function saveTask() {
     task.description = document.getElementById('description').value;
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.priority = document.getElementById('urgency').value;
-    task.assignedTo = user;
+    task.assignedTo = user || '';
     addTask();
 }
 
