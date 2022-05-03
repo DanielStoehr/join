@@ -27,18 +27,27 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
 
 
 function attachAddColumnListeners() {
+    const v = validateAddColumnListenerTargets();
+    if (v.valid) {
+        v.link.parentNode.addEventListener('click', e => addColumnLinkListener(e, v.link, v.inputForm, v.input));
+        v.input.addEventListener("input", e => inputFieldListener(e));
+        v.input.addEventListener("click", e => inputFieldClicked(e));
+        v.input.addEventListener("keyup", e => inputFieldKeyListener(e, v.link, v.inputForm, v.input));
+        v.cancelBtn.addEventListener("click", e => cancelButtonListener(e, v.link, v.inputForm, v.input));
+        v.applyBtn.addEventListener("click", e => applyButtonListener(e, v.link, v.inputForm, v.input));
+    }
+}
+
+
+function validateAddColumnListenerTargets() {
     const link = document.getElementById("add-column-link");
     const inputForm = document.getElementById("enter-new-column");
     const input = document.getElementById("add-column-input");
     const cancelBtn = document.getElementById("add-column-cancel");
     const applyBtn = document.getElementById("add-column-now");
-    if (link && inputForm && input && cancelBtn && applyBtn) {
-        link.parentNode.addEventListener('click', e => addColumnLinkListener(e, link, inputForm, input));
-        input.addEventListener("input", e => inputFieldListener(e));
-        input.addEventListener("click", e => inputFieldClicked(e));
-        input.addEventListener("keyup", e => inputFieldKeyListener(e, link, inputForm, input));
-        cancelBtn.addEventListener("click", e => cancelButtonListener(e, link, inputForm, input));
-        applyBtn.addEventListener("click", e => applyButtonListener(e, link, inputForm, input));
+    return { 
+        valid: link && inputForm && input && cancelBtn && applyBtn,
+        link: link, inputForm: inputForm, input: input, cancelBtn: cancelBtn, applyBtn: applyBtn
     }
 }
 
@@ -62,33 +71,40 @@ function inputFieldListener(e) {
 
 function inputFieldClicked(e) {
     e.stopPropagation();
-    (columnColors.choice == columnColors.colors.length -1 ) ? columnColors.choice = 0 : columnColors.choice++;
+    nextColumnColor();
     e.target.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
     e.target.style.color = columnColors.colors[columnColors.choice].title;
 }
 
 
 function inputFieldKeyListener(e, link, inputForm, input) {
+    const keyCodeActions = setKeyCodeActions();
     const modifier = e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.key == "AltGraph";
     if (!modifier) {
-        if (e.keyCode == 13 || e.key == "Enter") {
-            applyButtonHit(link, inputForm, input);
-        }
-        if (e.keyCode == 27 || e.key == "Escape") {
-            cancelButtonHit(link, inputForm, input);
-        }
-        if (e.keyCode == 38 || e.key == "ArrowUp") {
-            (columnColors.choice > 0) ? columnColors.choice-- : columnColors.choice = columnColors.colors.length - 1;
-        }
-        if (e.keyCode == 40 || e.key == "ArrowDown") {
-            (columnColors.choice < columnColors.colors.length - 1 ) ? columnColors.choice++ : columnColors.choice = 0;
-        }
-    }
+        keyCodeActions.forEach(k => (e.keyCode == k.keyCode || e.key == k.key) ? k.callback(link, inputForm, input) : false);
+    } 
     input.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
     input.style.color = columnColors.colors[columnColors.choice].title;
-    //console.log("key: " + e.key + " keyCode: " + e.keyCode);
-    //console.log("shift: ", e.shiftKey, " alt: ", e.altKey, " ctrl: ", e.ctrlKey, " cmd: ", e.metaKey, " altGr: ", e.key == "AltGraph");
-    //console.log("modifier: ", modifier);
+}
+
+
+function setKeyCodeActions() {
+    return [
+        { keyCode: 13, key: "Enter", callback: applyButtonHit },
+        { keyCode: 27, key: "Escape", callback: cancelButtonHit },
+        { keyCode: 38, key: "ArrowUp", callback: previousColumnColor },
+        { keyCode: 40, key: "ArrowDown", callback: nextColumnColor },
+    ];
+}
+
+
+function previousColumnColor() {
+    (columnColors.choice > 0) ? columnColors.choice-- : columnColors.choice = columnColors.colors.length - 1;
+}
+
+
+function nextColumnColor() {
+    (columnColors.choice < columnColors.colors.length - 1 ) ? columnColors.choice++ : columnColors.choice = 0;
 }
 
 

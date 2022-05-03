@@ -15,17 +15,17 @@ class Column {
     y = 0;
     width = 180;
     height = 564;
+    listeners = [
+        { evt: "dragover", callback: dragOver },    // default event listeners
+        { evt: "dragleave", callback: dragLeave },
+        { evt: "drop", callback: drop },
+    ];
 
     constructor(id, title, color, minimized) {
         this.id = id;
         this.title = title;
         this._color = color;
         this.minimized = (minimized) ? minimized : false;
-        this.listeners = [
-            { evt: "dragover", callback: dragOver },    // default event listeners
-            { evt: "dragleave", callback: dragLeave },
-            { evt: "drop", callback: drop },
-        ];
         this._listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
         this._footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
         this._closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};
@@ -53,28 +53,20 @@ class Column {
     }
 
     // get event listeners
-    get listeners() {  
-        return this._listeners;
+    get _listeners() {  
+        return this.listeners;
     }
 
     // set event listeners, if column is present in DOM: 
     // detach whats removed, attach whats new
-    set listeners(value) {
+    set _listeners(value) {
         if (typeof value == 'object' && Array.isArray(value) ) {
             const col = document.getElementById(this.id);
-            if (col && this._listeners.length) {
-                this._listeners.forEach(l => {
-                    ('evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e)) : false;
-                });
-            }
-            if (value.length) {
-                this._listeners = [];
-                value.forEach(v => ('evt' in v && 'callback' in v) ? this._listeners.push(v) : false);
-            }
-            if (col) {
-                this._listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
-            }
-            this.listener = (this._listeners.length) ? this._listeners[this._listeners.length - 1] : {};
+            Column.removeEventListeners(col, this.listeners || [], this.footerListener, this.closeListener, this.minimized);
+            this.listeners = (value.length) ? [] : this.listeners;
+            value.forEach(v => ('evt' in v && 'callback' in v) ? this.listeners.push(v) : false);
+            Column.addEventListeners(col, this.listeners || [], this.footerListener, this.closeListener, this.minimized);
+            this.listener = (this.listeners.length) ? this.listeners[this.listeners.length - 1] : {};
         }
     }
 
@@ -104,13 +96,9 @@ class Column {
     // set the event listener for the column's footer
     set _footerListener(value) {
         const col = document.getElementById(this.id);
-        if (!this.minimized && col && Object.keys(this.footerListener).length) {
-            col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
-        }
+        Column.removeEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
         this.footerListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
-        if (!this.minimized && col && Object.keys(this.footerListener).length) {
-            col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
-        }
+        Column.addEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
     }
 
     // get the event listener for the column's close icon 
@@ -120,15 +108,12 @@ class Column {
 
     // set the event listener for the column's close icon
     set _closeListener(value) {
-        const closeCol = document.getElementById(this.id + "-close");
-        if (!this.minimized && closeCol && Object.keys(this.closeListener).length) {
-            closeCol.removeEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
-        }
+        const col = document.getElementById(this.id);
+        Column.removeEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
         this.closeListener = (typeof value == 'object' && 'evt' in value && 'callback' in value) ? value : {};
-        if (!this.minimized && closeCol && Object.keys(this.closeListener).length) {
-            closeCol.addEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
-        }
+        Column.addEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
     }    
+
     /********************************
     **          methods            **
     *********************************/
@@ -137,43 +122,26 @@ class Column {
     // attach event listeners if present
     appendTo(parent, beforeCol) {
         const par = document.getElementById(parent);
-        const before = document.getElementById(beforeCol);
         if (par) {
-            this.board = parent;
+            this.board = par.id;
             const col = Column.columnsContainerSetup(this.id, this.title, this.color, this.minimized);
-            (before) ? par.insertBefore(col, before) : par.appendChild(col);
+            Column.addToDom(par, col, beforeCol);
+            Column.addEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
             this.update();
-            this.listeners.forEach(l => col.addEventListener(l.evt, e => l.callback(e)));
-            if (!this.minimized) {
-                if (Object.keys(this.footerListener).length) {
-                    col.lastElementChild.addEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
-                }
-                if (Object.keys(this.closeListener).length) {
-                    const colClose = document.getElementById(this.id + "-close");
-                    colClose.addEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
-                }
-            }
         }
     }
+
     // remove column from an element
     // detach event listeners if needed
     removeFrom(parent) {
         const par = document.getElementById(parent);
         const col = document.getElementById(this.id);
         if (par && col && col.parentNode == par) {
-            this.listeners.forEach(l => col.removeEventListener(l.evt, e => l.callback(e)));
-            if (!this.minimized) {
-                if (Object.keys(this.footerListener).length) {
-                    col.lastElementChild.removeEventListener(this.footerListener.evt, e => this.footerListener.callback(e));
-                }
-                if (Object.keys(this.closeListener).length) {
-                    const colClose = document.getElementById(this.id + "-close");
-                    colClose.removeEventListener(this.closeListener.evt, e => this.closeListener.callback(e, this.id));
-                }
-            }
+            Column.removeEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
             par.removeChild(col);
         }
     }
+
     //store the screen position of the column
     //inside the Column's object's properties 
     update() {
@@ -186,18 +154,20 @@ class Column {
             this.height = Math.floor(pos.height);
         }
     }
+
     // remove a single event listener,
     // detach it if it was attached before
     removeListener(value) {
         const col = document.getElementById(this.id);
-        let i = this.listeners.findIndex(l => l.evt == value);
-        let listenerToRemove = this.listeners[i] || "";
-        (listenerToRemove) ? this.listeners.splice(i, 1) : this.listeners;
-        if (col && listenerToRemove) {
-            col.removeEventListener(listenerToRemove.evt, e => listenerToRemove.callback(e));
+        const listenerToRemove = this.listeners[this.listeners.findIndex(l => l.evt == value)] || "";
+        if (listenerToRemove) {
+            Column.removeEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
+            this.listeners.splice(i, 1);
+            Column.addEventListeners(col, this.listeners, this.footerListener, this.closeListener, this.minimized);
         }
         this.listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
     }
+
     // remove all event listeners
     // the setters (listeners && footerListerner && closeListener) will detach them when needed
     removeAllListeners() {
@@ -215,16 +185,23 @@ class Column {
     // container element
     static columnsContainerSetup(id, title, color, minimized) {
         const col = document.createElement("div");
-        col.innerHTML = (minimized) ? this.minimizedColumnsTemplate(id, title, color) : this.regularColumnsTemplate(id, title, color);
+        col.innerHTML = (minimized) ? Column.minimizedColumnsTemplate(id, title, color) : Column.regularColumnsTemplate(id, title, color);
         col.id = id;
         col.classList.add("column");
+        Column.columnsContainerApplyStyles(col, color, minimized);
+        return col;
+    }
+
+    // apply styles to column's
+    // container element
+    static columnsContainerApplyStyles(col, color, minimized) {
         col.style.border = "1px solid "+ color.accent;
         col.style.backgroundColor = color.background;
         col.style.color = color.text;
         col.style.height = (minimized) ? "fit-content" : "";
         col.style.minHeight = (minimized) ? "fit-content" : "";
-        return col;
     }
+
     // template function for 
     // the column's title
     static regularColumnsTemplate(id, title, color) {
@@ -239,6 +216,7 @@ class Column {
         </div>
         `.trim();
     }
+
     // template function for 
     // the column's footer
     static minimizedColumnsTemplate(id, title, color) {
@@ -247,6 +225,43 @@ class Column {
             ${title}
         </h4>
         `.trim();
+    }
+
+    // attach all the event listeners to the
+    // newly created column's DOM element
+    static addEventListeners(col, listeners, footerListener, closeListener, minimized) {
+        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.addEventListener(l.evt, e => l.callback(e)) : false);
+        if (!minimized) {
+            if (col && Object.keys(footerListener).length) {
+                col.lastElementChild.addEventListener(footerListener.evt, e => footerListener.callback(e));
+            }
+            if (col && Object.keys(closeListener).length) {
+                const closeCol = document.getElementById(col.id + "-close");
+                (closeCol) ? closeCol.addEventListener(closeListener.evt, e => closeListener.callback(e, col.id)) : false;
+            }
+        }
+    }
+
+    // remove event listeners from
+    // the column's DOM element
+    static removeEventListeners(col, listeners, footerListener, closeListener, minimized) {
+        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e)) : false);
+        if (!minimized) {
+            if (col && Object.keys(footerListener).length) {
+                col.lastElementChild.removeEventListener(footerListener.evt, e => footerListener.callback(e));
+            }
+            if (col && Object.keys(closeListener).length) {
+                const closeCol = document.getElementById(col.id + "-close");
+                (closeCol) ? closeCol.removeEventListener(closeListener.evt, e => closeListener.callback(e, col.id)) : false;
+            }
+        }
+    }
+
+    // add column to the DOM, either append it
+    // or insert it before an existing column
+    static addToDom(parent, column, beforeColumn) {
+        const before = document.getElementById(beforeColumn);
+        (before) ? parent.insertBefore(column, before) : parent.appendChild(column);
     }
 }
 
