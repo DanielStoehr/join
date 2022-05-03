@@ -159,8 +159,10 @@ function readRemovedColumnsFromBackend() {
 
 
 async function writeAllColumnsToBackend() {
-    await backend.setItem('columns', JSON.stringify(columns));
-    await backend.setItem('removedColumns', JSON.stringify(removedColumns));
+    await Promise.all([
+        backend.setItem('columns', JSON.stringify(columns)),
+        backend.setItem('removedColumns', JSON.stringify(removedColumns))
+    ]);
 }
 
 

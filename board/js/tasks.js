@@ -6,8 +6,10 @@ import { backend, setURL, downloadFromServer, jsonFromServer } from "../../small
 const tasks = [];
 const currentlyDraggedTask = { id: 0, sourceColumn: "" };
 
-const priorities = ["niedrig", "mittel", "hoch"];
-const inCharge = ["Max", "Daniel", "Lukas", "wolfgang"];
+const defaultPriorities = ["niedrig", "mittel", "hoch"];
+const priorities = [];
+const defaultPersons = ["Max", "Daniel", "Lukas", "wolfgang"];
+const inCharge = [];
 
 const taskListeners = [
     { evt: "dragstart", callback: startDragging },
@@ -228,6 +230,7 @@ function setEditedTasksValues(taskElement, taskIndex) {
 
 
 function readAllTasksFromBackend() {
+    readTaskSettingsFromBackend();
     const tasksData = JSON.parse(backend.getItem('tasks')) || [];
     tasksData.forEach(task => {
         const taskData = convertForeignData(task);
@@ -237,18 +240,32 @@ function readAllTasksFromBackend() {
     showTasks();
 }
 
+function readTaskSettingsFromBackend() {
+    const priorityData = JSON.parse(backend.getItem('priorities')) || (defaultPriorities);
+    const personsData = JSON.parse(backend.getItem('inCharge')) || (defaultPersons);
+    priorityData.forEach(p => priorities.push(p));
+    personsData.forEach(p => inCharge.push(p));
+    writeTaskSettingsToBackend();
+}
+
 
 async function writeAllTasksToBackend() {
     tasks.forEach(task => task.assignedTo = task.inCharge); 
-    backend.setItem('tasks', JSON.stringify(tasks));
+    await backend.setItem('tasks', JSON.stringify(tasks));
+    writeTaskSettingsToBackend();
+}
+
+
+async function writeTaskSettingsToBackend() {
+    await Promise.all([
+        backend.setItem('priorities', JSON.stringify(priorities)),
+        backend.setItem('inCharge', JSON.stringify(inCharge))
+    ]);
 }
 
 
 function convertForeignData(data) {
     data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
-    //(data.priority == "high") ? data.priority = 2 : false;
-    //(data.priority == "middle") ? data.priority = 1 : false;
-    //(isNaN(data.priority)) ? data.priority = 0 : false;
     data.assignedTo = data.inCharge;
     data.id = (data.id.startsWith("t")) ? data.id : "t" + data.id;
     data.id = (data.id.length != 17) ? 't' + Date.now() + String(Math.floor(Math.random() * 1000)) : data.id;
