@@ -6,7 +6,7 @@ import { backend, setURL, downloadFromServer, jsonFromServer } from "../../small
 const tasks = [];
 const currentlyDraggedTask = { id: 0, sourceColumn: "" };
 
-const priorities = ["hoch", "mittel", "niedrig"];
+const priorities = ["niedrig", "mittel", "hoch"];
 const inCharge = ["Max", "Daniel", "Lukas", "wolfgang"];
 
 const taskListeners = [
@@ -246,9 +246,9 @@ async function writeAllTasksToBackend() {
 
 function convertForeignData(data) {
     data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
-    (data.priority == "high") ? data.priority = 2 : false;
-    (data.priority == "middle") ? data.priority = 1 : false;
-    (isNaN(data.priority)) ? data.priority = 0 : false;
+    //(data.priority == "high") ? data.priority = 2 : false;
+    //(data.priority == "middle") ? data.priority = 1 : false;
+    //(isNaN(data.priority)) ? data.priority = 0 : false;
     data.assignedTo = data.inCharge;
     data.id = (data.id.startsWith("t")) ? data.id : "t" + data.id;
     data.id = (data.id.length != 17) ? 't' + Date.now() + String(Math.floor(Math.random() * 1000)) : data.id;
