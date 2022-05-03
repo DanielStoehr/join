@@ -100,6 +100,9 @@ function fillTaskWithPresets() {
     if (name) { // only if user is given -> set user
         setUser(number, name);
     }
+    else {
+        user = ''
+    }
 }
 
 
