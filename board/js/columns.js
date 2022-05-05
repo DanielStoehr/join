@@ -75,15 +75,16 @@ function restoreColumn(e, index) {
             columns.splice(toRestore.index, 0, toRestore.column);
             showTasks();
             getColumnsProperties();
-            writeAllColumnsToBackend();
         }
+        writeAllColumnsToBackend();
     }
     (!removedColumns.length) ? document.getElementById("undo").style.color = "grey" : false;
 }
 
 
 function initColumns() {
-    const columnsData = readAllColumnsFromBackend() || defaultColumns;
+    const columnsData = readColumnsFromBackend() || defaultColumns;
+    console.log("columns read from backend");
     columnsData.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false, column.board || "board"));
     readRemovedColumnsFromBackend();
     window.addEventListener("resize", resizeViewportListener);
@@ -142,7 +143,12 @@ function removeColumnListener(e, colId) {
 }
 
 
-function readAllColumnsFromBackend() {
+/******************************
+**       backend stuff       **
+******************************/
+
+
+function readColumnsFromBackend() {
     return JSON.parse(backend.getItem('columns'));
 }
 
@@ -155,18 +161,19 @@ function readRemovedColumnsFromBackend() {
         col.board = rc.column.board;
         removedColumns.push({ index: rc.index, column: col });
     });
+    console.log("removed columns read from backend");
 }
 
 
 async function writeAllColumnsToBackend() {
-    await Promise.all([
-        backend.setItem('columns', JSON.stringify(columns)),
-        backend.setItem('removedColumns', JSON.stringify(removedColumns))
-    ]);
+    await backend.setItem('columns', JSON.stringify(columns));
+    await backend.setItem('removedColumns', JSON.stringify(removedColumns));
+    console.log("columns written to backend");
 }
+
 
 
 export { columns, columnListeners, initColumns, addColumn, removeColumn, restoreColumn };
 export { getColumnsProperties, findColumnById, findRemovedColumnById, findRemovedColumnsIndex };
-export { readAllColumnsFromBackend, writeAllColumnsToBackend }
+export { readColumnsFromBackend, writeAllColumnsToBackend }
 export { removeColumnListener as closeColumnClicked };

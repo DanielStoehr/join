@@ -1,6 +1,6 @@
 'use strict'
 
-import { initColumns, addColumn, removeColumn, readAllColumnsFromBackend } from "./columns.js";
+import { initColumns, addColumn, removeColumn, readColumnsFromBackend } from "./columns.js";
 import { addTask, removeTask, showTasks, euDateToUtc, tasks, readAllTasksFromBackend } from "./tasks.js";
 import { priorities, inCharge } from "./tasks.js";
 import { backend, setURL, downloadFromServer } from "../../smallest_backend_ever/mini_backend_module.js";

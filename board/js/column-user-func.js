@@ -1,5 +1,5 @@
 import { columns, addColumn, removeColumn, findRemovedColumnById, findRemovedColumnsIndex, restoreColumn } from "./columns.js";
-import { writeAllColumnsToBackend, readAllColumnsFromBackend } from "./columns.js";
+import { writeAllColumnsToBackend, readColumnsFromBackend } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
 
@@ -27,14 +27,14 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
 
 
 function attachAddColumnListeners() {
-    const v = validateAddColumnListenerTargets();
-    if (v.valid) {
-        v.link.parentNode.addEventListener('click', e => addColumnLinkListener(e, v.link, v.inputForm, v.input));
-        v.input.addEventListener("input", e => inputFieldListener(e));
-        v.input.addEventListener("click", e => inputFieldClicked(e));
-        v.input.addEventListener("keyup", e => inputFieldKeyListener(e, v.link, v.inputForm, v.input));
-        v.cancelBtn.addEventListener("click", e => cancelButtonListener(e, v.link, v.inputForm, v.input));
-        v.applyBtn.addEventListener("click", e => applyButtonListener(e, v.link, v.inputForm, v.input));
+    const lt = validateAddColumnListenerTargets();
+    if (lt.valid) {
+        lt.link.parentNode.addEventListener('click', e => addColumnLinkListener(e, lt.link, lt.inputForm, lt.input));
+        lt.input.addEventListener("input", e => inputFieldListener(e));
+        lt.input.addEventListener("click", e => inputFieldClicked(e));
+        lt.input.addEventListener("keyup", e => inputFieldKeyListener(e, lt.link, lt.inputForm, lt.input));
+        lt.cancelBtn.addEventListener("click", e => cancelButtonListener(e, lt.link, lt.inputForm, lt.input));
+        lt.applyBtn.addEventListener("click", e => applyButtonListener(e, lt.link, lt.inputForm, lt.input));
     }
 }
 

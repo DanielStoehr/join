@@ -237,6 +237,7 @@ function readAllTasksFromBackend() {
         const tasksIndex = findTasksIndex(taskData.id);
         (tasksIndex < 0) ? tasks.push(taskData) : tasks.splice(tasksIndex, 1, taskData);
     });
+    console.log("tasks read from backend");
     showTasks();
 }
 
@@ -245,6 +246,7 @@ function readTaskSettingsFromBackend() {
     const personsData = JSON.parse(backend.getItem('inCharge')) || (defaultPersons);
     priorityData.forEach(p => priorities.push(p));
     personsData.forEach(p => inCharge.push(p));
+    console.log("tasks settings read from backend");
     writeTaskSettingsToBackend();
 }
 
@@ -252,15 +254,15 @@ function readTaskSettingsFromBackend() {
 async function writeAllTasksToBackend() {
     tasks.forEach(task => task.assignedTo = task.inCharge); 
     await backend.setItem('tasks', JSON.stringify(tasks));
+    console.log("tasks written to backend");
     writeTaskSettingsToBackend();
 }
 
 
 async function writeTaskSettingsToBackend() {
-    await Promise.all([
-        backend.setItem('priorities', JSON.stringify(priorities)),
-        backend.setItem('inCharge', JSON.stringify(inCharge))
-    ]);
+    await backend.setItem('priorities', JSON.stringify(priorities));
+    await backend.setItem('inCharge', JSON.stringify(inCharge));
+    console.log("tasks settings written to backend");
 }
 
 

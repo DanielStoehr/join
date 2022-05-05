@@ -20,6 +20,9 @@ class Column {
         { evt: "dragleave", callback: dragLeave },
         { evt: "drop", callback: drop },
     ];
+    listener;
+    footerListener = { evt: "click", callback: columnFooterClicked };
+    closeListener = { evt: "click", callback: closeColumnClicked };
 
     constructor(id, title, color, minimized) {
         this.id = id;
@@ -27,8 +30,8 @@ class Column {
         this._color = color;
         this.minimized = (minimized) ? minimized : false;
         this._listener = (this.listeners.length > 0) ? this.listeners[this.listeners.length - 1] : {};
-        this._footerListener = (!this.minimized) ? { evt: "click", callback: columnFooterClicked } : {};
-        this._closeListener = (!this.minimized) ? { evt: "click", callback: closeColumnClicked } : {};
+        this._footerListener = (!this.minimized) ? this._footerListener : {};
+        this._closeListener = (!this.minimized) ? this._closeListener : {};
     }
 
     /*****************************************
@@ -231,11 +234,11 @@ class Column {
     // newly created column's DOM element
     static addEventListeners(col, listeners, footerListener, closeListener, minimized) {
         listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.addEventListener(l.evt, e => l.callback(e)) : false);
-        if (!minimized) {
-            if (col && Object.keys(footerListener).length) {
+        if (col && !minimized) {
+            if ('evt' in footerListener && 'callback' in footerListener) {
                 col.lastElementChild.addEventListener(footerListener.evt, e => footerListener.callback(e));
             }
-            if (col && Object.keys(closeListener).length) {
+            if ('evt' in closeListener && 'callback' in closeListener) {
                 const closeCol = document.getElementById(col.id + "-close");
                 (closeCol) ? closeCol.addEventListener(closeListener.evt, e => closeListener.callback(e, col.id)) : false;
             }
@@ -246,11 +249,11 @@ class Column {
     // the column's DOM element
     static removeEventListeners(col, listeners, footerListener, closeListener, minimized) {
         listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e)) : false);
-        if (!minimized) {
-            if (col && Object.keys(footerListener).length) {
+        if (col && !minimized) {
+            if ('evt' in footerListener && 'callback' in footerListener) {
                 col.lastElementChild.removeEventListener(footerListener.evt, e => footerListener.callback(e));
             }
-            if (col && Object.keys(closeListener).length) {
+            if ('evt' in closeListener && 'callback' in closeListener) {
                 const closeCol = document.getElementById(col.id + "-close");
                 (closeCol) ? closeCol.removeEventListener(closeListener.evt, e => closeListener.callback(e, col.id)) : false;
             }
