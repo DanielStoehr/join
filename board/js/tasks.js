@@ -42,7 +42,7 @@ function addTask(columnId, title, description, category, priority, deadline, per
         columnId: columnId,
     }
     tasks.push(task);
-    tasks.sort((a, b) => a.deadline - b.deadline);
+    tasks.sort((a, b) => b.deadline - a.deadline);
     writeAllTasksToBackend();
     return task.id;
 }
