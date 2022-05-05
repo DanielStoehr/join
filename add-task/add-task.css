@@ -100,9 +100,16 @@
     padding-left: 16px;
 }
 
+.form-icon-box-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 12px;
+    font-size: 13px;
+}
+
 .form-icon-user {
     width: 56px;
-    margin-right: 12px;
     cursor: pointer;
     opacity: 0.6;
 }
@@ -163,6 +170,20 @@
     background-color: #3145ab;
 }
 
+.button-animation {
+    animation: changeColor 500ms 1 both;
+}
+
+@keyframes changeColor {
+    from {
+        background-color: #3145ab;
+    }
+    to {
+        background-color: #31ab3b;
+    }
+    
+}
+
 @media (max-width: 768px) {
 
     .form-container {
@@ -182,6 +203,15 @@
 }
 
 @media (max-width: 576px) {
+    .add-task{
+        padding: 12px 0;
+    }
+    .add-task-heading {
+        padding-left: 12px;
+    }
+    .add-task-slogan {
+        padding-left: 12px;
+    }
     .form-button {
         font-size: 12px;
     }
@@ -189,4 +219,8 @@
         padding: 12px 12px;
     }
 
+}
+
+.d-none {
+    display: none;
 }

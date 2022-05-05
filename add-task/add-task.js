@@ -37,6 +37,9 @@ function addTask() {
 
 
 function saveTask() {
+    
+    buttonAnimation();
+    
     task.title = document.getElementById('title').value;
     task.category = document.getElementById('category').value;
     task.description = document.getElementById('description').value;
@@ -45,6 +48,18 @@ function saveTask() {
     task.assignedTo = user || '';
     task.inCharge = user || '';
     addTask();
+}
+
+
+function buttonAnimation(){
+    document.getElementById('button-createTask').classList.add('d-none');
+    document.getElementById('button-successfullyCreated').classList.remove('d-none');
+    document.getElementById('button').classList.add('button-animation');
+    setTimeout(()=> {
+        document.getElementById('button-createTask').classList.remove('d-none');
+        document.getElementById('button-successfullyCreated').classList.add('d-none');
+        document.getElementById('button').classList.remove('button-animation');
+    }, 1000)
 }
 
 
