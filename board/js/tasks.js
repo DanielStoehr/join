@@ -42,7 +42,6 @@ function addTask(columnId, title, description, category, priority, deadline, per
         columnId: columnId,
     }
     tasks.push(task);
-    tasks.sort((a, b) => b.deadline - a.deadline);
     writeAllTasksToBackend();
     return task.id;
 }
@@ -61,6 +60,7 @@ function removeTask(taskId) {
 
 
 function showTasks() {
+    tasks.sort((a, b) => a.deadline - b.deadline);
     tasks.forEach(task => {
         const col = document.getElementById(task.columnId);
         if (col) {
