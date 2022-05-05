@@ -55,6 +55,7 @@ body {
     }
     .primary-container{
         margin: 0;
+        flex-direction: column;
     }
 }
 
