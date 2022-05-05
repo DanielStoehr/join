@@ -191,8 +191,9 @@ function updateTaskVariable() {
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user;
-    task.id = 15; // number >0 and <16
-}
+    task.inCharge = user;
+    task.id = 't' + Date.now() + String(Math.floor(Math.random() * 1000));   // 't' + timestamp + random number -> 't' + 9(16)
+}                                                                            // sorry fuer's dran rumfummeln. Wolfgang
 
 
 /**changes the columnId of the task - so it won't be rendered anymore in backlog */

@@ -2,6 +2,7 @@
 setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 let task = {
+    id: 't' + Date.now() + String(Math.floor(Math.random() * 1000)),  // Die ID wird gebraucht, Import geht sonst schief. Wolfgang
     title: '',
     description: '',
     category: '',
@@ -42,6 +43,7 @@ function saveTask() {
     task.deadline = new Date(document.getElementById('date').value).getTime();
     task.priority = document.getElementById('urgency').value;
     task.assignedTo = user || '';
+    task.inCharge = user || '';
     addTask();
 }
 
