@@ -30,36 +30,37 @@ function dragging(e, taskId) {
 }
 
 
-function dragOver(e) {
+function dragOver(e, colId) {
     e.preventDefault();
-   // e.dataTransfer.dropEffect = 'copy';
-    highlight(e);
+    // e.dataTransfer.dropEffect = 'copy';
+    highlight(e, colId);
 }
 
 
-function drop(e) {
+function drop(e, colId) {
     e.preventDefault();
-    if (columns.some(c => c.id == e.target.id && !c.minimized)) {
+    if (columns.some(c => c.id == colId && !c.minimized)) {
         const task = findTaskById(currentlyDraggedTask.id);
         removeTaskFromColumn(task);
-        moveTaskToColumn(task.id, e.target.id);
-        e.target.style.backgroundColor = "";
+        moveTaskToColumn(task.id, colId);
+        document.getElementById(colId).style.backgroundColor = "";
         showTasks();
     }
 }
 
 
-function highlight(e) {
-    if (columns.some(c => c.id == e.target.id && !c.minimized) && e.target.id != currentlyDraggedTask.sourceColumn) {
+function highlight(e, colId) {
+    if (columns.some(c => c.id == colId && !c.minimized) && colId != currentlyDraggedTask.sourceColumn) {
         e.dataTransfer.dropEffect = 'copy';
-        e.target.style.backgroundColor = window.getComputedStyle(e.target).borderColor;
+        const col = document.getElementById(colId);
+        col.style.backgroundColor = window.getComputedStyle(col).borderColor;
     }
 }
 
 
-function dragLeave(e) {
-    if (columns.some(c => c.id == e.target.id)) {
-        e.target.style.backgroundColor = "";
+function dragLeave(e, colId) {
+    if (columns.some(c => c.id == colId)) {
+        document.getElementById(colId).style.backgroundColor = "";
     }
 }
 

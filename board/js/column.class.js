@@ -233,7 +233,7 @@ class Column {
     // attach all the event listeners to the
     // newly created column's DOM element
     static addEventListeners(col, listeners, footerListener, closeListener, minimized) {
-        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.addEventListener(l.evt, e => l.callback(e)) : false);
+        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.addEventListener(l.evt, e => l.callback(e, col.id)) : false);
         if (col && !minimized) {
             if ('evt' in footerListener && 'callback' in footerListener) {
                 col.lastElementChild.addEventListener(footerListener.evt, e => footerListener.callback(e));
@@ -248,7 +248,7 @@ class Column {
     // remove event listeners from
     // the column's DOM element
     static removeEventListeners(col, listeners, footerListener, closeListener, minimized) {
-        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e)) : false);
+        listeners.forEach(l => (col && 'evt' in l && 'callback' in l) ? col.removeEventListener(l.evt, e => l.callback(e, col.id)) : false);
         if (col && !minimized) {
             if ('evt' in footerListener && 'callback' in footerListener) {
                 col.lastElementChild.removeEventListener(footerListener.evt, e => footerListener.callback(e));
