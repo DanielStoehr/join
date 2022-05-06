@@ -40,7 +40,7 @@ body {
 
 #undo {
     font-family: 'IcoFont';
-    padding: calc(var(--font-size) * 1.1) calc(var(--font-size) * .0) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1);
+    padding: calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1);
     margin-bottom: auto;
     cursor: pointer;
     user-select: none;
