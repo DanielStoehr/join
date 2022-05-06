@@ -22,7 +22,7 @@
 
 body {
     margin: 0;
-    overflow-y: unset;
+    overflow-x: hidden;
 }
 
 .main-page {
@@ -41,33 +41,36 @@ body {
 
 #undo {
     font-family: 'IcoFont';
-    padding: calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1);
+    padding: calc(var(--font-size) * .5) calc(var(--font-size) * 1.0);
     margin-bottom: auto;
     cursor: pointer;
     user-select: none;
 }
 
-.board-container {
-    width: fit-content;
-    height: 100vh;
-    /*min-height: inherit; */
+#board-container {
+    position: relative;
+    width: 100vw;
+    /*height: 100vh; */
+    max-width: 100vw;
+    min-height: 100vh;
+    /*max-height: 100vh; */
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    flex-direction: row-reverse;
+    justify-content: center;
     background-color: aliceblue;
-    overflow: hidden;
+    padding-top: calc(var(--font-size) * 1.0);
+    padding-bottom: calc(var(--font-size) * 1.0);
 }
 
 .board {
-    width: fit-content;
-    height: 100%;
+    width: 95%;
+    /*height: 95%; */
+    min-height: 88vh;
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: calc(var(--font-size) * 11.5);
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--font-size) * 10), 1fr));
     grid-gap: calc(var(--font-size) * 1.1);
-    padding: calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 1.1) calc(var(--font-size) * 0.0);
-    overflow-x: scroll;
+    margin-left: calc(var(--font-size) * 1.1);
+    overflow-x: hidden;
 }
 
 .column {
@@ -78,6 +81,7 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 1px 2px 2px 0px rgba(30, 30, 30, .2);
+    user-select: none;
     display: flex;
     flex-direction: column;
 }
@@ -203,7 +207,7 @@ body {
 
 .task-header .task-priority {
     font-size: calc(var(--font-size) * .75);
-    margin: 0px calc(var(--font-size) * .3);;
+    margin: 0px calc(var(--font-size) * .3);
     background-color: #dedede;
     padding: calc(var(--font-size) * .05) calc(var(--font-size) * .3);
     border-radius: calc(var(--font-size) * .2);
@@ -244,8 +248,4 @@ body {
     background-color: #dedede;
     border-radius: calc(var(--font-size) * .2);
     padding: calc(var(--font-size) * .05) calc(var(--font-size) * .3);
-}
-
-.d-none {
-    display: none;
 }
