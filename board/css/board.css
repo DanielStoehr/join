@@ -33,6 +33,7 @@ body {
     margin: 0em;
     max-width: none;
     flex-direction: row;
+    height: auto;
 }
 
 .icon {
@@ -74,7 +75,8 @@ body {
 }
 
 .column {
-    min-height: 30vh;
+    min-height: 28vh;
+    max-height: 88vh;
     min-width: auto;
     background-color: white;
     border-radius: calc(var(--font-size) * .5);
