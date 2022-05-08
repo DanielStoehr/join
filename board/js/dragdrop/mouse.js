@@ -1,4 +1,5 @@
-import { columns } from "../columns.js";
+import { columns, currentlyDraggedColumn, moveColumn } from "../columns.js";
+import { findColumnById, findColumnsIndex } from "../columns.js";
 import { currentlyDraggedTask } from "../tasks.js";
 import { findTaskById, removeTaskFromColumn, moveTaskToColumn, showTasks } from "../tasks.js";
 
@@ -6,21 +7,36 @@ import { findTaskById, removeTaskFromColumn, moveTaskToColumn, showTasks } from 
 // drag & drop support
 
 
-function startDragging(e, taskId) {
+function startDragging(e, id) {
+    e.stopPropagation();
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.setData('text/plain', 'hello');
-    const task = findTaskById(taskId);
+    e.target.classList.contains("task") ? startDraggingTask(id) : startDraggingColumn(id);
+}
+
+
+function startDraggingTask(id) {
+    const task = findTaskById(id);
     if (task) {
         currentlyDraggedTask.id = task.id;
         currentlyDraggedTask.sourceColumn = task.columnId;
         highlightDraggedTask();
     }
+    currentlyDraggedColumn.id = "";
+}
+
+
+function startDraggingColumn(id) {
+    currentlyDraggedTask.id = "";
+    currentlyDraggedColumn.id = id;
 }
 
 
 function stopDragging(e, taskId) {
     if (findTaskById(currentlyDraggedTask.id)) {
         removeDraggedTaskHighlighting();
+        currentlyDraggedTask.id = "";
+        currentlyDraggedColumn.id = "";
     }
 }
 
@@ -40,10 +56,15 @@ function dragOver(e, colId) {
 function drop(e, colId) {
     e.preventDefault();
     if (columns.some(c => c.id == colId && !c.minimized)) {
-        const task = findTaskById(currentlyDraggedTask.id);
-        removeTaskFromColumn(task);
-        moveTaskToColumn(task.id, colId);
+        if (currentlyDraggedTask.id) {
+            const task = findTaskById(currentlyDraggedTask.id);
+            removeTaskFromColumn(task);
+            moveTaskToColumn(task.id, colId);
+        }
+        moveColumn(currentlyDraggedColumn.id, colId);
         document.getElementById(colId).style.backgroundColor = "";
+        currentlyDraggedTask.id = "";
+        currentlyDraggedColumn.id = "";
         showTasks();
     }
 }
@@ -89,6 +110,7 @@ function logDragEvent(dragEvent) {
 */
 
 
-export { 
+export {
     startDragging, stopDragging, dragOver, drop, dragLeave, dragging,
-    highlightDraggedTask, removeDraggedTaskHighlighting, };
+    highlightDraggedTask, removeDraggedTaskHighlighting,
+};

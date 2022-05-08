@@ -115,10 +115,19 @@ body {
     align-items: center;
 }
 
+.column .title-regular:hover {
+    cursor: grab;
+}
+
 .column .title-left,
 .column .title-right {
     width: calc(var(--font-size) * 1.1);
     font-size: calc(var(--font-size) * 1);
+}
+
+.column .title .title-regular:hover > .title-mid {
+    letter-spacing: calc(var(--font-size) * .06);
+    text-shadow: 0px 0px 1px;
 }
 
 .column .icon {

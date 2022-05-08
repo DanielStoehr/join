@@ -4,7 +4,7 @@ import { backend, setURL, downloadFromServer, jsonFromServer } from "../../small
 
 
 const tasks = [];
-const currentlyDraggedTask = { id: 0, sourceColumn: "" };
+const currentlyDraggedTask = { id: "", sourceColumn: "" };
 
 const defaultPriorities = ["niedrig", "mittel", "hoch"];
 const priorities = [];

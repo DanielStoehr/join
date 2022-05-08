@@ -1,4 +1,5 @@
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
+import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
 import { columnFooterClicked } from "./tasks.js";
 import { closeColumnClicked } from "./columns.js";
 
@@ -191,6 +192,7 @@ class Column {
         col.innerHTML = (minimized) ? Column.minimizedColumnsTemplate(id, title, color) : Column.regularColumnsTemplate(id, title, color);
         col.id = id;
         col.classList.add("column");
+        (minimized) ? col.setAttribute("draggable", false) : col.setAttribute("draggable", true);
         Column.columnsContainerApplyStyles(col, color, minimized);
         return col;
     }
@@ -211,7 +213,7 @@ class Column {
         return `
         <h4 class="title title-regular" style="color: ${color.title}; background-color: ${color.accent};">
             <span class="title-left"></span>
-            <span>${title}</span>
+            <span class="title-mid">${title}</span>
             <span id="${id}-close" class="title-right icon close">&#xeee1;</span>
         </h4>
         <div id="${id}-new-task" class="new-task" style="margin-top: auto; background-color: ${color.accent};">

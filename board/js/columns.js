@@ -1,5 +1,7 @@
 import { Column } from "./column.class.js";
 import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
+import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
+import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
 import { findTasksByColumn, moveTaskToColumn, showTasks } from "./tasks.js";
 import { backend, setURL, downloadFromServer, jsonFromServer } from "../../smallest_backend_ever/mini_backend_module.js";
 import { attachAddColumnListeners } from "./column-user-func.js";
@@ -29,11 +31,18 @@ const defaultColumns = [
 
 const columns = [];
 const removedColumns = [];
+const currentlyDraggedColumn = { id: "", placeholder: {} };
 
 const columnListeners = [
     { evt: "dragover", callback: dragOver },
     { evt: "dragleave", callback: dragLeave },
     { evt: "drop", callback: drop },
+    { evt: "dragstart", callback: startDragging },
+    { evt: "dragend", callback: stopDragging },
+    { evt: "touchstart", callback: touchStart },
+    { evt: "touchmove", callback: touchMove },
+    { evt: "touchend", callback: touchEnd },
+    { evt: "touchcancel", callback: touchCancel },
 ];
 
 
@@ -79,6 +88,18 @@ function restoreColumn(e, index) {
         writeAllColumnsToBackend();
     }
     (!removedColumns.length) ? document.getElementById("undo").style.color = "grey" : false;
+}
+
+
+function moveColumn(sourceColumn, targetColumn) {
+    if (sourceColumn && targetColumn && targetColumn != sourceColumn) {
+        const column = columns.splice(findColumnsIndex(sourceColumn), 1)[0];
+        column.removeFrom(column.board);
+        column.appendTo(column.board, targetColumn);
+        columns.splice(findColumnsIndex(targetColumn), 0, column);
+        writeAllColumnsToBackend();
+        console.log("dropped " + sourceColumn + " onto " + targetColumn);
+    }
 }
 
 
@@ -173,7 +194,8 @@ async function writeAllColumnsToBackend() {
 
 
 
-export { columns, columnListeners, initColumns, addColumn, removeColumn, restoreColumn };
-export { getColumnsProperties, findColumnById, findRemovedColumnById, findRemovedColumnsIndex };
+export { columns, columnListeners, currentlyDraggedColumn,};
+export { initColumns, addColumn, removeColumn, restoreColumn, moveColumn };
+export { getColumnsProperties, findColumnById, findColumnsIndex, findRemovedColumnById, findRemovedColumnsIndex };
 export { readColumnsFromBackend, writeAllColumnsToBackend }
 export { removeColumnListener as closeColumnClicked };

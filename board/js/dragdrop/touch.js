@@ -1,4 +1,6 @@
-import { columns } from "../columns.js";
+import { Column } from "../column.class.js";
+import { columns, currentlyDraggedColumn } from "../columns.js";
+import { getColumnsProperties, findColumnById, moveColumn } from "../columns.js";
 import { currentlyDraggedTask, taskTemplate } from "../tasks.js";
 import { findTaskById, moveTaskToColumn, removeTaskFromColumn, showTasks } from "../tasks.js";
 import { highlightDraggedTask, removeDraggedTaskHighlighting, } from "./mouse.js";
@@ -13,20 +15,30 @@ const touch = {
 }
 
 
-function touchStart(e, taskId) {
-    currentlyDraggedTask.id = 0;
+function touchStart(e, id) {
+    e.stopPropagation();
+    currentlyDraggedTask.id = "";
+    currentlyDraggedColumn.id = "";
     touch.x = parseInt(e.changedTouches[0].clientX);
     touch.y = parseInt(e.changedTouches[0].clientY);
     //e.preventDefault();
 }
 
 
-function touchMove(e, taskId) {
+function touchMove(e, id) {
     e.preventDefault();
-    currentlyDraggedTask.id = taskId;
-    currentlyDraggedTask.sourceColumn = findTaskById(taskId).columnId;
+    e.stopPropagation();
     touch.x = parseInt(e.changedTouches[0].clientX);
     touch.y = parseInt(e.changedTouches[0].clientY);
+    const touchedElement = document.getElementById(id);
+    (touchedElement.classList.contains("task")) ? touchMoveTask(e, id) : touchMoveColumn(e, id);
+}
+
+
+function touchMoveTask(e, id) {
+    currentlyDraggedTask.id = id;
+    currentlyDraggedColumn.id = "";
+    currentlyDraggedTask.sourceColumn = findTaskById(id).columnId;
     addPlaceholderToColumn();
     highlightDraggedTask();
     highlightTouchedColumn();
@@ -34,27 +46,53 @@ function touchMove(e, taskId) {
 }
 
 
-function touchEnd(e, taskId) {
+function touchMoveColumn(e, id) {
+    if (id != "add-column") {
+        currentlyDraggedTask.id = "";
+        currentlyDraggedColumn.id = id;
+        addPlaceholderColumn();
+        highlightTouchedColumn();
+        positionTouchedColumnFreely();
+    }
+}
+
+
+function touchEnd(e, id) {
+    e.stopPropagation();
     if (currentlyDraggedTask.id) {
-        //e.preventDefault();
         removeTouchHighlighting();
         removeDraggedTaskHighlighting();
         const colId = getTouchTargetColumn() || currentlyDraggedTask.sourceColumn;
-        let task = findTaskById(taskId);
+        let task = findTaskById(currentlyDraggedTask.id);
         removeTaskFromColumn(task);
-        moveTaskToColumn(taskId, colId);
+        moveTaskToColumn(currentlyDraggedTask.id, colId);
         removePlaceholderFromColumn();
+        showTasks();
+    }
+    if (currentlyDraggedColumn.id) {
+        removeTouchHighlighting();
+        document.getElementById(currentlyDraggedColumn.id).style.position = "";
+        removePlaceholderColumn();
+        getColumnsProperties();
+        moveColumn(currentlyDraggedColumn.id, getTouchTargetColumn());
         showTasks();
     }
 }
 
 
-function touchCancel(e, taskId) {
-    //e.preventDefault();
+function touchCancel(e, id) {
+    e.stopPropagation();
     removeTouchHighlighting();
-    removeDraggedTaskHighlighting();
-    document.getElementById(currentlyDraggedTask.id).style.position = "";
-    removePlaceholderFromColumn();
+    if (currentlyDraggedTask.id) {
+        removeDraggedTaskHighlighting();
+        document.getElementById(currentlyDraggedTask.id).style.position = "";
+        removePlaceholderFromColumn();
+    }
+    if (currentlyDraggedColumn.id) {
+        document.getElementById(currentlyDraggedColumn.id).style.position = "";
+        removePlaceholderColumn();
+        getColumnsProperties();
+    }
     showTasks();
 }
 
@@ -103,10 +141,20 @@ function positionTouchedTaskFreely() {
 }
 
 
+function positionTouchedColumnFreely() {
+    const col = document.getElementById(currentlyDraggedColumn.id);
+    col.style.position = "fixed";
+    getColumnsProperties();
+    const pos = col.getBoundingClientRect();
+    col.style.left = touch.x - (pos.width / 2) + "px";
+    col.style.top = touch.y - (pos.height / 2) + "px";
+}
+
+
 function addPlaceholderToColumn() {
     if (!touch.active) {
         touch.active = true;
-        let task = findTaskById(currentlyDraggedTask.id);
+        const task = findTaskById(currentlyDraggedTask.id);
         const taskItem = document.getElementById(task.id);
         const column = document.getElementById(currentlyDraggedTask.sourceColumn);
         const div = document.createElement("div");
@@ -122,11 +170,38 @@ function addPlaceholderToColumn() {
 
 
 function removePlaceholderFromColumn() {
-    touch.active = false;
-    const column = document.getElementById(currentlyDraggedTask.sourceColumn);
-    const placeholder = document.getElementById("touched");
-    column.removeChild(placeholder);
+    if (touch.active) {
+        touch.active = false;
+        const column = document.getElementById(currentlyDraggedTask.sourceColumn);
+        const placeholder = document.getElementById("touched");
+        column.removeChild(placeholder);
+    }
 }
+
+
+function addPlaceholderColumn() {
+    if (!touch.active) {
+        touch.active = true;
+        const column = findColumnById(currentlyDraggedColumn.id);
+        const placeholder = new Column("touched-col", column.title, column.color, false);
+        currentlyDraggedColumn.placeholder = placeholder;
+        placeholder.listeners = [];
+        placeholder.footerListener = {};
+        placeholder.closeListener = {};
+        placeholder.color.background = column.color.accent;
+        placeholder.appendTo(column.board || "board", currentlyDraggedColumn.id);
+    }
+}
+
+
+function removePlaceholderColumn() {
+    if (touch.active) {
+        touch.active = false;
+        currentlyDraggedColumn.placeholder.removeFrom(currentlyDraggedColumn.placeholder.board);
+        currentlyDraggedColumn.placeholder = {};
+    }
+}
+
 
 
 export { touch, touchStart, touchMove, touchEnd, touchCancel };
