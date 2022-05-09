@@ -30,9 +30,8 @@ body {
 }
 
 .primary-container {
-    margin: 0em;
-    max-width: none;
-    flex-direction: row;
+    /*margin: 0em; */
+    /*max-width: none; */
     height: auto;
 }
 
