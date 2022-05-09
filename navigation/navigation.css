@@ -1,53 +1,95 @@
 .navigation-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: #1E3190;
-    min-width: 100px;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e3190;
+  min-width: 100px;
+  justify-content: space-between;
 }
 
 .navigation-top {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .navigation-logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px;
 }
 
 .navigation-container img {
-    height: 50px;
-    object-fit: contain;
+  height: 50px;
+  object-fit: contain;
 }
 
 .navigation-link {
-    color: #B1B4C8;
-    text-decoration: none;
-    border-left:5px solid transparent;
-    padding-left: 20px;
-    margin-bottom: 15px;
-    transition: all 250ms ease-in-out;
+  color: #b1b4c8;
+  text-decoration: none;
+  border-left: 5px solid transparent;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  transition: all 250ms ease-in-out;
 }
 
 .navigation-link:hover {
-    color: white;
-    border-left-color: white;
+  color: white;
+  border-left-color: white;
 }
 
 .navigation-active {
-    color: white;
-    border-left-color: white;
+  color: white;
+  border-left-color: white;
 }
 
 .navigation-user-image {
-    height: 50px;
-    width: 50px;
-    object-fit: contain;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+.navigation-link-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e3190;
+  min-width: 100px;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.navigation-menu-image {
+  display: none;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .navigation-link-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    height: auto;
+  }
+
+  .navigation-user-image {
+    display: none;
+  }
+
+  .navigation-menu-image {
+    display: block;
+  }
+
+  .navigation-logo-container {
+    justify-content: flex-start;
+  }
+
+  .navigation-container img {
+    height: 30px;
+  }
 }
