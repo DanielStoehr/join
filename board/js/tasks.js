@@ -67,7 +67,6 @@ function showTasks() {
         const col = document.getElementById(task.columnId);
         if (col) {
             const taskExists = document.getElementById(task.id);
-            console.log("taskExists: ", taskExists, col);
             (taskExists) ? col.removeChild(taskExists) : false;
             const div = createTaskContainer(task);
             div.style.border = "1px solid " + window.getComputedStyle(col).borderColor;
@@ -248,7 +247,6 @@ function nextPersonInCharge(taskId, te) {
 function taskOutOfFocus(e, taskId) {
     const taskIndex = findTasksIndex(taskId);
     const taskElement = getTaskElement(taskId);
-    console.log(e.target);
     if (e.target == taskElement.category || e.target == taskElement.title || e.target == taskElement.details || e.target == taskElement.inputDeadline) {
         taskNonEditable(taskElement);
         setEditedTasksValues(taskElement, taskIndex);
