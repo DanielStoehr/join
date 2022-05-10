@@ -112,9 +112,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.column .title-regular:hover {
     cursor: grab;
 }
 
@@ -122,11 +119,6 @@ body {
 .column .title-right {
     width: calc(var(--font-size) * 1.1);
     font-size: calc(var(--font-size) * 1);
-}
-
-.column .title .title-regular:hover > .title-mid {
-    letter-spacing: calc(var(--font-size) * .06);
-    text-shadow: 0px 0px 1px;
 }
 
 .column .icon {
@@ -137,6 +129,16 @@ body {
     cursor: pointer;
     font-size: calc(var(--font-size) * 1.1);
 }
+
+/*.column .title.title-regular:hover > .title-mid {*/
+.column .title-regular .title-mid:active {
+    letter-spacing: calc(var(--font-size) * .06);
+    text-shadow: 0px 0px 1px;
+}
+
+/*.column .title-regular:hover {
+    cursor: grab;
+} */
 
 #add-column-link {
     display: unset;
@@ -195,12 +197,29 @@ body {
     border-radius: calc(var(--font-size) * .1);
     width: calc(var(--font-size) * 4.25);
     height: calc(var(--font-size) * 1.5);
+        cursor: pointer;
 }
 
 .task {
     border-radius: calc(var(--font-size) * .5);
     margin: calc(var(--font-size) * .5);
     user-select: none;
+}
+
+.task-menu {
+    font-family: 'IcoFont';
+    height: calc(var(--font-size) * 1.5);
+    display: none;
+}
+
+.task-menu .close-task {
+    cursor: pointer;
+    margin-left: auto;
+    padding: calc(var(--font-size) * .2) calc(var(--font-size) * .3);
+}
+
+.task-menu .close-task:hover {
+    font-size: calc(var(--font-size) * 1.1);
 }
 
 .task-header {
@@ -221,6 +240,7 @@ body {
     background-color: #dedede;
     padding: calc(var(--font-size) * .05) calc(var(--font-size) * .3);
     border-radius: calc(var(--font-size) * .2);
+    cursor: pointer;
 }
 
 .task-body .task-title {
@@ -249,13 +269,30 @@ body {
     font-size: calc(var(--font-size) * .7);;
     font-style: italic;
     margin: 0px calc(var(--font-size) * .3);
+    min-width: 8ch;
+    cursor: pointer;
 }
 
-.task-footer .task-deadline {
+.task-footer .task-deadline,
+.task-footer .task-added-at {
     font-size: calc(var(--font-size) * .7);;
     font-style: italic;
     margin: 0px calc(var(--font-size) * .3);
     background-color: #dedede;
     border-radius: calc(var(--font-size) * .2);
     padding: calc(var(--font-size) * .05) calc(var(--font-size) * .3);
+    cursor: pointer;
+}
+
+.task-footer .input-task-deadline {
+    font-size: calc(var(--font-size) * .55);;
+    font-style: italic;
+    margin: 0px calc(var(--font-size) * .3);
+    background-color: #dedede;
+    border-radius: calc(var(--font-size) * .2);
+    max-width: 18ch;
+    padding: calc(var(--font-size) * .15) calc(var(--font-size) * .3);
+    outline: none;
+    border: none;
+    display: none;
 }

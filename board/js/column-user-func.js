@@ -56,6 +56,7 @@ function addColumnLinkListener(e, link, inputForm, input) {
     e.stopPropagation();
     inputForm.style.display = "";
     input.focus();
+    link.parentElement.style.cursor = "auto";
     link.style.display = "none";
     columnColors.choice = 0;
     input.style.backgroundColor = columnColors.colors[columnColors.choice].accent;
@@ -124,6 +125,7 @@ function cancelButtonHit(link, inputForm, input) {
     input.value = "";
     inputForm.style.display = "none";
     link.style.display = "";
+    link.parentElement.style.cursor = "pointer";
 }
 
 
@@ -133,6 +135,7 @@ function applyButtonHit(link, inputForm, input) {
     const newColumnId = (input.value.match(pattern) || []).join("").replaceAll("-", "").toLowerCase();
     inputForm.style.display = "none";
     link.style.display = "";
+    link.parentElement.style.cursor = "pointer";
     input.value = "";
     if (newColumnId) {
         const index = findRemovedColumnsIndex(newColumnId);

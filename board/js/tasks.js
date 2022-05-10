@@ -10,6 +10,8 @@ const defaultPriorities = ["niedrig", "mittel", "hoch"];
 const priorities = [];
 const defaultPersons = ["Max", "Daniel", "Lukas", "wolfgang"];
 const inCharge = [];
+const defaultCategories = ["Management", "Marketing", "Frontend", "Backend", "Entwicklung", "Arbeit", "Hobby"];
+const categories = [];
 
 const taskListeners = [
     { evt: "dragstart", callback: startDragging },
@@ -65,6 +67,7 @@ function showTasks() {
         const col = document.getElementById(task.columnId);
         if (col) {
             const taskExists = document.getElementById(task.id);
+            console.log("taskExists: ", taskExists, col);
             (taskExists) ? col.removeChild(taskExists) : false;
             const div = createTaskContainer(task);
             div.style.border = "1px solid " + window.getComputedStyle(col).borderColor;
@@ -88,6 +91,7 @@ function createTaskContainer(task) {
 
 function taskTemplate(task) {
     return `
+    <div class="task-menu"><span class="close-task">&#xeee1;</span></div>
     <div class="task-header">
         <h5 class="task-category">${task.category}</h5>
         <span class="task-priority">${priorities[task.priority]}</span>
@@ -99,6 +103,7 @@ function taskTemplate(task) {
     <div class="task-footer">
         <span class="task-incharge">${task.inCharge}: </span>
         <span class="task-deadline">${new Date(task.deadline).toLocaleString().slice(0, -10)}</span>
+        <input class="input-task-deadline" type="date" value="${euDateToUtc(new Date(task.deadline).toLocaleString().slice(0, -10))}">
         <span class="task-added-at">${new Date(task.addedAt).toLocaleString()}</span>
     </div>
     `.trim();
@@ -171,7 +176,22 @@ function insertUserAddedTask(e) {
 
 function taskClicked(e, taskId) {
     const te = getTaskElement(taskId);
-    (e.target == te.category || e.target == te.title || e.target == te.details) ? taskEditable(e, te) : te.details.style.display = "none";
+    te.taskMenu.style.display = "";
+    te.details.style.display = "none";
+    (e.target == te.category || e.target == te.title || e.target == te.details || e.target == te.deadline) ? taskEditable(e, te) : false;
+    (e.target == te.priority) ? nextPriority(taskId, te) : false;
+    (e.target == te.inCharge) ? nextPersonInCharge(taskId, te) : false;
+    if (e.target.classList.contains("close-task")) {
+        const task = findTaskById(taskId);
+        (task.columnId == "trash") ? removeTask(taskId) : moveTaskToTrash(task);
+        showTasks();
+    }
+}
+
+
+function moveTaskToTrash(task) {
+    removeTaskFromColumn(task);
+    moveTaskToColumn(task.id, "trash");
 }
 
 
@@ -179,8 +199,14 @@ function getTaskElement(taskId) {
     return {
         task: document.querySelector(`#${taskId}`),
         category: document.querySelector(`#${taskId} .task-category`),
+        priority: document.querySelector(`#${taskId} .task-priority`),
+        inCharge: document.querySelector(`#${taskId} .task-incharge`),
         title: document.querySelector(`#${taskId} .task-title`),
         details: document.querySelector(`#${taskId} .task-description`),
+        deadline: document.querySelector(`#${taskId} .task-deadline`),
+        inputDeadline: document.querySelector(`#${taskId} .input-task-deadline`),
+        taskMenu: document.querySelector(`#${taskId} .task-menu`),
+        column: document.querySelector(`#${taskId}`).parentElement,
     }
 }
 
@@ -188,18 +214,42 @@ function getTaskElement(taskId) {
 function taskEditable(e, taskElement) {
     taskElement.task.style.cursor = "text";
     taskElement.details.style.display = "block";
+    taskElement.inputDeadline.style.display = "block";
+    taskElement.taskMenu.style.display = "flex";
+    taskElement.deadline.style.display = "none";
     taskElement.task.draggable = false;
+    taskElement.column.draggable = false;
     taskElement.category.contentEditable = true;
     taskElement.title.contentEditable = true;
     taskElement.details.contentEditable = true;
-    e.target.focus();
+    (e.target.classList == "task-deadline") ? taskElement.inputDeadline.focus() : e.target.focus();
+    //taskElement.column.firstElementChild.style.cursor = "default";
+}
+
+
+function nextPriority(taskId, te) {
+    const tasksIndex = findTasksIndex(taskId);
+    (tasks[tasksIndex].priority < priorities.length - 1 ) ? tasks[tasksIndex].priority++ : tasks[tasksIndex].priority = 0;
+    te.priority.textContent = priorities[tasks[tasksIndex].priority];
+    writeAllTasksToBackend();
+}
+
+
+function nextPersonInCharge(taskId, te) {
+    const tasksIndex = findTasksIndex(taskId);
+    const personsIndex = inCharge.findIndex(person => person == te.inCharge.textContent.slice(0, -1));
+    te.inCharge.textContent = (personsIndex < inCharge.length - 1 ) ? inCharge[personsIndex + 1] : inCharge[0];
+    tasks[tasksIndex].inCharge = te.inCharge.textContent;
+    te.inCharge.textContent += ":";
+    writeAllTasksToBackend();
 }
 
 
 function taskOutOfFocus(e, taskId) {
     const taskIndex = findTasksIndex(taskId);
     const taskElement = getTaskElement(taskId);
-    if (e.target == taskElement.category || e.target == taskElement.title || e.target == taskElement.details) {
+    console.log(e.target);
+    if (e.target == taskElement.category || e.target == taskElement.title || e.target == taskElement.details || e.target == taskElement.inputDeadline) {
         taskNonEditable(taskElement);
         setEditedTasksValues(taskElement, taskIndex);
     }
@@ -208,11 +258,16 @@ function taskOutOfFocus(e, taskId) {
 
 function taskNonEditable(taskElement) {
     window.getSelection().removeAllRanges();
+    taskElement.inputDeadline.style.display = "none";
+    taskElement.deadline.style.display = "";
     taskElement.category.contentEditable = false;
     taskElement.title.contentEditable = false;
     taskElement.details.contentEditable = false;
     taskElement.task.draggable = true;
+    taskElement.column.draggable = true;
     taskElement.task.style.cursor = "grab";
+    taskElement.deadline.textContent = new Date(taskElement.inputDeadline.value).toLocaleString().slice(0, -10)
+    //taskElement.column.firstElementChild.style.cursor = "grab";
 }
 
 
@@ -220,6 +275,7 @@ function setEditedTasksValues(taskElement, taskIndex) {
     tasks[taskIndex].category = taskElement.category.textContent;
     tasks[taskIndex].title = taskElement.title.textContent;
     tasks[taskIndex].description = taskElement.details.textContent;
+    tasks[taskIndex].deadline = new Date(taskElement.inputDeadline.value).getTime();
     writeAllTasksToBackend();
 }
 
@@ -251,17 +307,19 @@ function readTaskSettingsFromBackend() {
 }
 
 
-async function writeAllTasksToBackend() {
-    tasks.forEach(task => task.assignedTo = task.inCharge); 
-    await backend.setItem('tasks', JSON.stringify(tasks));
+function writeAllTasksToBackend() {
+    tasks.forEach(task => task.assignedTo = task.inCharge);
+    backend.startTransaction(); 
+    backend.setItem('tasks', JSON.stringify(tasks));
     console.log("tasks written to backend");
     writeTaskSettingsToBackend();
 }
 
 
 async function writeTaskSettingsToBackend() {
-    await backend.setItem('priorities', JSON.stringify(priorities));
-    await backend.setItem('inCharge', JSON.stringify(inCharge));
+    backend.setItem('priorities', JSON.stringify(priorities));
+    backend.setItem('inCharge', JSON.stringify(inCharge));
+    await backend.commit();
     console.log("tasks settings written to backend");
 }
 
