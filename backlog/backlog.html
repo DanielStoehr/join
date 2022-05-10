@@ -52,7 +52,7 @@
 
             </table>
 
-            <div class="backlog-overlay, d-none" id="backlog-overlay">
+            <div class="backlog-overlay d-none" id="backlog-overlay">
                 <div class="overlay-container" id="overlay-container">
                     <div class="overlay-header">
                         <div class="form-title form-boxes">
@@ -106,13 +106,24 @@
                         <div class="form-boxes form-assigned-to">
                             <label class="form-label" for="assigned-to">Assigned To</label>
                             <div class="form-icon-box">
-                                <img class="form-icon-user" id="user-1" onclick="setUser(1, 'Max')" src="../img/user.svg">
-                                <img class="form-icon-user" id="user-2" onclick="setUser(2, 'Daniel')" src="../img/user_blue.svg">
-                                <img class="form-icon-user" id="user-3" onclick="setUser(3, 'Lukas')" src="../img/user_green.svg">
-                                <img class="form-icon-user" id="user-4" onclick="setUser(4, 'Wolfgang')" src="../img/user_red.svg">
+                                <div class="form-icon-box-inner">
+                                    <span>Max</span>
+                                    <img class="form-icon-user" id="user-1" onclick="setUser(1, 'Max')" src="../img/user.svg">
+                                </div>
+                                <div class="form-icon-box-inner">
+                                    <span>Daniel</span>
+                                    <img class="form-icon-user" id="user-2" onclick="setUser(2, 'Daniel')" src="../img/user_blue.svg">
+                                </div>
+                                <div class="form-icon-box-inner">
+                                    <span>Lukas</span>
+                                    <img class="form-icon-user" id="user-3" onclick="setUser(3, 'Lukas')" src="../img/user_green.svg">
+                                </div>
+                                <div class="form-icon-box-inner">
+                                    <span>Wolfgang</span>
+                                    <img class="form-icon-user" id="user-4" onclick="setUser(4, 'Wolfgang')" src="../img/user_red.svg">
+                                </div>
                                 <img class="form-icon-plus" src="../img/icon plus.png">
                             </div>
-                        </div>
                     </div>
                     <div class="save-send-container">
                         <button class="overlay-button save-button" onclick="saveChangedTask()">save</button>

@@ -1,5 +1,5 @@
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 .navigation-container {
@@ -9,9 +9,10 @@
 .backlog {
     padding: 20px 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     margin-left: auto;
     margin-right: auto;
-    position: relative;
 }
 
 
@@ -121,13 +122,12 @@ table tr td:last-child, th:last-child {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(95, 125, 143, 0.7);
-    max-width: 800px;
+    width: 100%;
 }
 
 .overlay-container {
     z-index: 10;
-    width: 500px;
+    width: 600px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -216,9 +216,16 @@ table tr td:last-child, th:last-child {
     padding-left: 16px;
 }
 
+.form-icon-box-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 12px;
+    font-size: 13px;
+}
+
 .form-icon-user {
     width: 56px;
-    margin-right: 12px;
     cursor: pointer;
     opacity: 0.6;
 }
