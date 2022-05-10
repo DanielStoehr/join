@@ -90,7 +90,10 @@ function createTaskContainer(task) {
 
 function taskTemplate(task) {
     return `
-    <div class="task-menu"><span class="close-task">&#xeee1;</span></div>
+    <div class="task-menu">
+        <span class="delete-task">&#xf2ed;</span>
+        <span class="close-task">&#xeee1;</span>
+    </div>
     <div class="task-header">
         <h5 class="task-category">${task.category}</h5>
         <span class="task-priority">${priorities[task.priority]}</span>
@@ -175,12 +178,16 @@ function insertUserAddedTask(e) {
 
 function taskClicked(e, taskId) {
     const te = getTaskElement(taskId);
-    te.taskMenu.style.display = "";
-    te.details.style.display = "none";
+    te.taskMenu.style.display = "flex";
+    te.details.style.display = "block";
     (e.target == te.category || e.target == te.title || e.target == te.details || e.target == te.deadline) ? taskEditable(e, te) : false;
     (e.target == te.priority) ? nextPriority(taskId, te) : false;
     (e.target == te.inCharge) ? nextPersonInCharge(taskId, te) : false;
     if (e.target.classList.contains("close-task")) {
+        te.details.style.display = "none";
+        te.taskMenu.style.display = "";
+    }
+    if (e.target.classList.contains("delete-task")) {
         const task = findTaskById(taskId);
         (task.columnId == "trash") ? removeTask(taskId) : moveTaskToTrash(task);
         showTasks();
@@ -211,10 +218,10 @@ function getTaskElement(taskId) {
 
 
 function taskEditable(e, taskElement) {
-    taskElement.task.style.cursor = "text";
     taskElement.details.style.display = "block";
-    taskElement.inputDeadline.style.display = "block";
     taskElement.taskMenu.style.display = "flex";
+    taskElement.task.style.cursor = "text";
+    taskElement.inputDeadline.style.display = "block";
     taskElement.deadline.style.display = "none";
     taskElement.task.draggable = false;
     taskElement.column.draggable = false;

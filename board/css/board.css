@@ -11,6 +11,22 @@
     src: url('../fonts/icofont.woff') format('woff'); 
     src: url('../fonts/icofont.ttf') format('truetype');
 }
+/*! 
+* @package LineAwesome version 1.3.0 
+* @author icons8 https://icons8.com/line-awesome 
+* @license - free to use
+* please link to icons8 somewhere on your page
+*/
+@font-face{
+    font-family: LineAwesome;
+    font-weight: 400;
+    src: url("../fonts/la-regular-400.eot");
+    src: url("../fonts/la-regular-400.eot?#iefix") format("embedded-opentype");
+    src: url('../fonts/la-regular-400.woff2') format('woff2');
+    src: url('../fonts/la-regular-400.woff') format('woff');
+    src: url('../fonts/la-regular-400.ttf') format('truetype');
+    src: url("../fonts/la-regular-400.svg#la-regular-400") format("svg");
+}
 
 *, *::after, *::before {
     box-sizing: border-box;
@@ -210,6 +226,7 @@ body {
     font-family: 'IcoFont';
     height: calc(var(--font-size) * 1.5);
     display: none;
+    align-items: center;
 }
 
 .task-menu .close-task {
@@ -220,6 +237,18 @@ body {
 
 .task-menu .close-task:hover {
     font-size: calc(var(--font-size) * 1.1);
+}
+
+.task-menu .delete-task {
+    font-family: 'LineAwesome';
+    cursor: pointer;
+    /*margin-left: auto; */
+    font-size: calc(var(--font-size) * 1.1);
+    padding: calc(var(--font-size) * .2) calc(var(--font-size) * .3);
+}
+
+.task-menu .delete-task:hover {
+    font-size: calc(var(--font-size) * 1.2);
 }
 
 .task-header {
