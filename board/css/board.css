@@ -20,12 +20,9 @@
 @font-face{
     font-family: LineAwesome;
     font-weight: 400;
-    src: url("../fonts/la-regular-400.eot");
-    src: url("../fonts/la-regular-400.eot?#iefix") format("embedded-opentype");
     src: url('../fonts/la-regular-400.woff2') format('woff2');
     src: url('../fonts/la-regular-400.woff') format('woff');
     src: url('../fonts/la-regular-400.ttf') format('truetype');
-    src: url("../fonts/la-regular-400.svg#la-regular-400") format("svg");
 }
 
 *, *::after, *::before {
