@@ -1,29 +1,40 @@
 let jsonFromServer = {};
+let transactionStarted = false;
 let BASE_SERVER_URL;
 
 //window.onload = async function() {    // bei mir nicht nötig, weil ES6-Module immer
 //}                                     // warten, bis das Dokument geladen wurde
 
 
-export const backend = {                // hier wird das komplette JSON
-    setItem: function(key, item) {      // inkl. aller Schlüssel geschrieben
-        jsonFromServer[key] = item;     // nachdem ein Schlüssel hinzugefügt
-        return saveJSONToServer();      // oder aktualisiert wurde
+export const backend = {
+    startTransaction: function() {               // start transaction processing. The data will be written to the server if
+        return transactionStarted = true;        // a commit is issued or restored from the server in case of a rollback 
     },
-    getItem: function(key) {            // hier wird einfach nur auf ein
-        if (!jsonFromServer[key]) {     // Element im JSON zugegriffen
-            return null;                // -> kein Server-Zugriff
+    commit: function() {                                            // write data to the server
+        return (transactionStarted) ? saveJSONToServer() : false;   // and stop transaction processing
+    },
+    rollback: function() {                                          // restore the data from the server
+        return (transactionStarted) ? downloadFromServer() : false; // and stop transaction processing
+    },
+    setItem: function(key, item) {                                  // hier wird das komplette JSON inkl. aller Schlüssel
+        jsonFromServer[key] = item;                                 // geschrieben, nachdem ein Schlüssel hinzugefügt
+        return (transactionStarted) ? true : saveJSONToServer();    // oder aktualisiert wurde
+    },
+    getItem: function(key) {                                        // hier wird einfach nur auf ein
+        if (!jsonFromServer[key]) {                                 // Element im JSON zugegriffen
+            return null;                                            // -> kein Server-Zugriff
         }
         return jsonFromServer[key];
     },
-    deleteItem: function(key) {         // hier wird das komplette JSON inkl. aller
-        delete jsonFromServer[key];     // Schlüssel geschrieben nachdem ein Schlüssel
-        return saveJSONToServer();      // aus dem JSON gelöscht wurde
+    deleteItem: function(key) {                                     // hier wird das komplette JSON inkl. aller
+        delete jsonFromServer[key];                                 // Schlüssel geschrieben nachdem ein Schlüssel
+        return (transactionStarted) ? true:  saveJSONToServer();    // aus dem JSON gelöscht wurde
     }
 };
 
 
 export async function downloadFromServer() {
+    transactionStarted = false;
     let result = await loadJSONFromServer();    // funktion für download aller Daten
     jsonFromServer = JSON.parse(result);
     console.log(Object.keys(jsonFromServer).length + ' keys Loaded\n');
@@ -49,6 +60,7 @@ async function loadJSONFromServer() {
  * Saves a JSON or JSON Array to the Server
  */
 function saveJSONToServer() {
+    transactionStarted = false; 
     return new Promise(function(resolve, reject) {
         let xhttp = new XMLHttpRequest();
         let proxy = determineProxySettings();
