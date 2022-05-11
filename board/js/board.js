@@ -57,10 +57,7 @@ setURL('https://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 
 async function init() {
-    console.log("begin download");
     await downloadFromServer();
-    console.log("end download");
-
     readAllTasksFromBackend();
     initColumns();
     showTasks();
