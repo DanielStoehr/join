@@ -13,7 +13,7 @@ let task = {
     assignedTo: ''
 };
 
-setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
+setURL('https://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 let colorsOfUrgency = {
     0: '#61BD4F',

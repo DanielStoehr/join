@@ -1,5 +1,5 @@
 
-setURL('http://gruppe-223.developerakademie.net/smallest_backend_ever');
+setURL('https://gruppe-223.developerakademie.net/smallest_backend_ever');
 
 let task = {
     id: 't' + Date.now() + String(Math.floor(Math.random() * 1000)),  // Die ID wird gebraucht, Import geht sonst schief. Wolfgang
