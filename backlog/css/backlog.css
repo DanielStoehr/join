@@ -82,7 +82,8 @@ table tr td:last-child, th:last-child {
 
 .backlog-item-image-name {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 10px;
     margin: 0;
     padding: 0;
 }
