@@ -35,6 +35,10 @@ function renderBacklogTasks() {
     backlogTable.innerHTML = '';
     backlogTable.innerHTML = templateBacklogTableHead();
 
+    if (backlogTasks.length == 0) {
+        backlogTable.innerHTML = 'Keine Tasks vorhanden. Bitte bei Add Task einen Task hinzufügen.';
+    }
+
     for (let i = 0; i < backlogTasks.length; i++) {
         const backlogTask = backlogTasks[i];
         const colorOfUrgency = colorsOfUrgency[backlogTask['priority']];
