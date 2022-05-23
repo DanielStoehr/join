@@ -52,6 +52,10 @@
     width: 50%;
 }
 
+input, select {
+    height: 44px;
+}
+
 .form-boxes {
     display: flex;
     flex-direction: column;
