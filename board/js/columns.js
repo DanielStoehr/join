@@ -3,7 +3,7 @@ import { dragOver, dragLeave, drop } from "./dragdrop/mouse.js";
 import { startDragging, stopDragging, dragging } from "./dragdrop/mouse.js";
 import { touchStart, touchMove, touchEnd, touchCancel, } from "./dragdrop/touch.js";
 import { findTasksByColumn, moveTaskToColumn, showTasks } from "./tasks.js";
-import { backend, setURL, downloadFromServer, jsonFromServer } from "../smallest_backend_ever/mini_backend_module.js";
+import { backend, setURL, downloadFromServer, jsonFromServer } from "../../smallest_backend_ever/mini_backend_module.js";
 import { attachAddColumnListeners } from "./column-user-func.js";
 
 
