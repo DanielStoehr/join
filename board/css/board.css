@@ -322,3 +322,7 @@ body {
     border: none;
     display: none;
 }
+
+.task-title, .task-description, .task-category {
+    outline: none;
+}
