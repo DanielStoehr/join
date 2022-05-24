@@ -30,6 +30,19 @@ const taskListeners = [
 **********************************/
 
 
+/**
+ * create a task, push it to the tasks array
+ * and write it to the backend
+ * 
+ * @param { string } columnId   - the ID of the column the task will be added to
+ * @param { string } title      - the title of the task
+ * @param { string } description - a description of the task
+ * @param { string } category   - the task's categoy
+ * @param { number } priority   - the number of the task's priority
+ * @param { string } deadline   - the date when the task need to be finished (UTC date string) 
+ * @param { number } personInCharge - the number of the person the task is assigned to 
+ * @returns { string } - the ID of the just created task
+ */
 function addTask(columnId, title, description, category, priority, deadline, personInCharge) {
     let addedAt = Date.now();
     let task = {
@@ -49,6 +62,11 @@ function addTask(columnId, title, description, category, priority, deadline, per
 }
 
 
+/**
+ * remove a task from the DOM, tasks array and backend
+ * 
+ * @param { string } taskId - the ID of the task to remove
+ */
 function removeTask(taskId) {
     let i = findTasksIndex(taskId);
     if (i >= 0) {
@@ -61,6 +79,9 @@ function removeTask(taskId) {
 }
 
 
+/**
+ * render all the tasks from the tasks array
+ */
 function showTasks() {
     tasks.sort((a, b) => a.deadline - b.deadline);
     tasks.forEach(task => {
@@ -76,6 +97,12 @@ function showTasks() {
 }
 
 
+/**
+ * create and setup a task's DOM element
+ * 
+ * @param { object } task - a task's object from the tasks array 
+ * @returns { object } - a reference to the task's object in the DOM
+ */
 function createTaskContainer(task) {
     const div = document.createElement("div");
     div.id = task.id;
@@ -88,6 +115,12 @@ function createTaskContainer(task) {
 }
 
 
+/**
+ * create a template string from a task's object
+ * 
+ * @param { object } task - a task's object from the tasks array
+ * @returns { string } - the task's template string
+ */
 function taskTemplate(task) {
     return `
     <div class="task-menu">
@@ -112,12 +145,23 @@ function taskTemplate(task) {
 }
 
 
+/**
+ * moves a task from one column to the other
+ * 
+ * @param { string } taskId     - the ID of the task to move
+ * @param { string } columnId   - the ID of the column the task will be moved to
+ */
 function moveTaskToColumn(taskId, columnId) {
     tasks[findTasksIndex(taskId)].columnId = columnId;
     writeAllTasksToBackend();
 }
 
 
+/**
+ * removes a task from the DOM
+ * 
+ * @param { object } task - the task's object from the tasks array
+ */
 function removeTaskFromColumn(task) {
     const taskItem = document.getElementById(task.id);
     const column = document.getElementById(task.columnId);
