@@ -19,7 +19,7 @@ const columnColors = {
 function insertUserAddedColumn(newColumnId, newColumnTitle) {
     if (!document.getElementById(newColumnId)) {
         const column = columns[columns.length - 1];
-        addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false, column.board, "add-column"); 
+        addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false, false, column.board, "add-column"); 
         writeAllColumnsToBackend();
         showTasks();
     }
