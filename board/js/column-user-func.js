@@ -16,6 +16,12 @@ const columnColors = {
 };
 
 
+/**
+ * inserts and renders a new column before the UI column
+ * 
+ * @param { string } newColumnId    - the ID of the new column that will be created
+ * @param { string } newColumnTitle - a title for the column to be created
+ */
 function insertUserAddedColumn(newColumnId, newColumnTitle) {
     if (!document.getElementById(newColumnId)) {
         const column = columns[columns.length - 1];
@@ -26,6 +32,9 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
 }
 
 
+/**
+ * attaches event listeners to the UI column
+ */
 function attachAddColumnListeners() {
     const lt = validateAddColumnListenerTargets();
     if (lt.valid) {
@@ -39,6 +48,10 @@ function attachAddColumnListeners() {
 }
 
 
+/**
+ * @returns { object }  - an object containing a flag indicating whether all elements are provided
+ *                        correctly and if so references to the elements themselves
+ */
 function validateAddColumnListenerTargets() {
     const link = document.getElementById("add-column-link");
     const inputForm = document.getElementById("enter-new-column");
@@ -52,6 +65,15 @@ function validateAddColumnListenerTargets() {
 }
 
 
+/**
+ * listens for a click onto the 'add column' button
+ * hides the just clicked link and shows the input field
+ * 
+ * @param { object } e          - the event object 
+ * @param { object } link       - a reference to the link's DOM element
+ * @param { object } inputForm  - a reference to the DOM element containing input related stuff 
+ * @param { object } input      - a reference to the input field's DOM element
+ */
 function addColumnLinkListener(e, link, inputForm, input) {
     e.stopPropagation();
     inputForm.style.display = "";
@@ -64,12 +86,24 @@ function addColumnLinkListener(e, link, inputForm, input) {
 }
 
 
+/**
+ * listens for input events 
+ * filters invalid inputs
+ * 
+ * @param { object } e - the event object 
+ */
 function inputFieldListener(e) {
     const pattern = /[a-z 0-9äöüß+-.()\/]/gi;
     e.target.value = (e.target.value.match(pattern) || []).toString().replaceAll(",", "");
 }
 
 
+/**
+ * listens for clicks on the input field
+ * changes color of the column to be created
+ * 
+ * @param { object } e - the event object 
+ */
 function inputFieldClicked(e) {
     e.stopPropagation();
     nextColumnColor();
@@ -78,6 +112,15 @@ function inputFieldClicked(e) {
 }
 
 
+/**
+ * listens for 'keyup' events and
+ * initiates appropiate actions
+ * 
+ * @param { object } e - the event object
+ * @param { object } link - a reference to the link's DOM element
+ * @param { object } inputForm - a reference to the DOM element containing input related stuff
+ * @param { object } input - a reference to the input field's DOM element
+ */
 function inputFieldKeyListener(e, link, inputForm, input) {
     const keyCodeActions = setKeyCodeActions();
     const modifier = e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.key == "AltGraph";
@@ -89,6 +132,11 @@ function inputFieldKeyListener(e, link, inputForm, input) {
 }
 
 
+/**
+ * returns an array of objects of valid key strokes and actions
+ * 
+ * @returns { object[] } - valid keys and their assigned callbacks
+ */
 function setKeyCodeActions() {
     return [
         { keyCode: 13, key: "Enter", callback: applyButtonHit },
@@ -99,28 +147,47 @@ function setKeyCodeActions() {
 }
 
 
+/** changes the color of the column to be created */
 function previousColumnColor() {
     (columnColors.choice > 0) ? columnColors.choice-- : columnColors.choice = columnColors.colors.length - 1;
 }
 
 
+/** changes the color of the column to be created */
 function nextColumnColor() {
     (columnColors.choice < columnColors.colors.length - 1 ) ? columnColors.choice++ : columnColors.choice = 0;
 }
 
 
+/**
+ * listens for clicks onto the 'cancel' button
+ * 
+ * @param { object } e - the event object
+ * @param { object } link - a reference to the link's DOM element
+ * @param { object } inputForm - a reference to the DOM element containing input related stuff
+ * @param { object } input - a reference to the input field's DOM element
+ */
 function cancelButtonListener(e, link, inputForm, input) {
     e.stopPropagation();
     cancelButtonHit(link, inputForm, input);
 }
 
 
+/**
+ * listens for clicks onto the 'apply' button
+ * 
+ * @param { object } e - the event object
+ * @param { object } link - a reference to the link's DOM element
+ * @param { object } inputForm - a reference to the DOM element containing input related stuff
+ * @param { object } input - a reference to the input field's DOM element
+ */
 function applyButtonListener(e, link, inputForm, input) {
     e.stopPropagation();
     applyButtonHit(link, inputForm, input);
 }
 
 
+/** add new colum canceled by user */
 function cancelButtonHit(link, inputForm, input) {
     input.value = "";
     inputForm.style.display = "none";
@@ -129,6 +196,14 @@ function cancelButtonHit(link, inputForm, input) {
 }
 
 
+/**
+ * generates a new column ID out of the user's input
+ * and initiates the creation of the column
+ * 
+ * @param { object } link - a reference to the link's DOM element
+ * @param { object } inputForm - a reference to the DOM element containing input related stuff
+ * @param { object } input - a reference to the input field's DOM element
+ */
 function applyButtonHit(link, inputForm, input) {
     const pattern = /[a-z0-9-]/gi;
     const newColumnTitle = (input.value) ? input.value : "";
@@ -137,9 +212,9 @@ function applyButtonHit(link, inputForm, input) {
     link.style.display = "";
     link.parentElement.style.cursor = "pointer";
     input.value = "";
-    if (newColumnId) {
-        const index = findRemovedColumnsIndex(newColumnId);
-        (index < 0) ? insertUserAddedColumn(newColumnId, newColumnTitle) : restoreColumn({}, index);
+    if (newColumnId) {                                              // if the column already has existed and was deleted
+        const index = findRemovedColumnsIndex(newColumnId);         // restore it from the undo stack, else create 
+        (index < 0) ? insertUserAddedColumn(newColumnId, newColumnTitle) : restoreColumn({}, index); // a new column
     }
 }
 
