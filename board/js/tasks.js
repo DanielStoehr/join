@@ -162,12 +162,22 @@ function euDateToUtc(date) {
 *************************************/
 
 
+/**
+ * listenes for clicks on the
+ * add-task button of a column
+ * @param { object } e - the event object
+ */ 
 function addTaskListener(e) {
     e.stopPropagation();
     insertUserAddedTask(e);
 }
 
 
+/**
+ * adds a new task's template to the
+ * column targeted by the event object 
+ * @param { object } e - the event object
+ */ 
 function insertUserAddedTask(e) {
     const col = e.target.parentNode;
     console.log("add task to '" + col.id + "'\n");
@@ -176,31 +186,49 @@ function insertUserAddedTask(e) {
 }
 
 
+/**
+ * listens for clicks on a task and 
+ * performs specific action on that task
+ * 
+ * @param { object } e - the event object
+ * @param { string } taskId - the ID of the task 
+ */
 function taskClicked(e, taskId) {
     const te = getTaskElement(taskId);
-    te.taskMenu.style.display = "flex";
-    te.details.style.display = "block";
-    (e.target == te.category || e.target == te.title || e.target == te.details || e.target == te.deadline) ? taskEditable(e, te) : false;
-    (e.target == te.priority) ? nextPriority(taskId, te) : false;
-    (e.target == te.inCharge) ? nextPersonInCharge(taskId, te) : false;
-    if (e.target.classList.contains("close-task")) {
-        te.details.style.display = "none";
-        te.taskMenu.style.display = "";
+    te.taskMenu.style.display = "flex";     // show task's action menu bar
+    te.details.style.display = "block";     // and details
+    (e.target == te.category || e.target == te.title || e.target == te.details || e.target == te.deadline) ? taskEditable(e, te) : false; // enter edit mode?
+    (e.target == te.priority) ? nextPriority(taskId, te) : false;       // switch to next priority
+    (e.target == te.inCharge) ? nextPersonInCharge(taskId, te) : false; // switch to the next team member
+    if (e.target.classList.contains("close-task")) {        // close icon has been clicked
+        te.details.style.display = "none";                  // hide task's details 
+        te.taskMenu.style.display = "";                     // and action menu bar
     }
-    if (e.target.classList.contains("delete-task")) {
-        const task = findTaskById(taskId);
-        (task.columnId == "trash") ? removeTask(taskId) : moveTaskToTrash(task);
+    if (e.target.classList.contains("delete-task")) {       // delete icon has been clicked
+        const task = findTaskById(taskId);                                          // either move task to the trash column
+        (task.columnId == "trash") ? removeTask(taskId) : moveTaskToTrash(task);    // or remove it entirely if it was already there
         showTasks();
     }
 }
 
 
+/**
+ * does what the functions's name implies
+ * 
+ * @param { object } task - the task object to perform the action on
+ */
 function moveTaskToTrash(task) {
     removeTaskFromColumn(task);
     moveTaskToColumn(task.id, "trash");
 }
 
 
+/**
+ * get a task's DOM elements
+ * 
+ * @param { string } taskId - the ID of the task 
+ * @returns { object } - references to the task and it's children
+ */
 function getTaskElement(taskId) {
     return {
         task: document.querySelector(`#${taskId}`),
@@ -217,22 +245,34 @@ function getTaskElement(taskId) {
 }
 
 
+/**
+ * make a task editalble by the user
+ * 
+ * @param { object } e - event object
+ * @param { object} taskElement - an object containing references to a task and it's children
+ */
 function taskEditable(e, taskElement) {
-    taskElement.details.style.display = "block";
-    taskElement.taskMenu.style.display = "flex";
+    taskElement.details.style.display = "block";    // show task's details
+    taskElement.taskMenu.style.display = "flex";    // and menue
     taskElement.task.style.cursor = "text";
-    taskElement.inputDeadline.style.display = "block";
-    taskElement.deadline.style.display = "none";
-    taskElement.task.draggable = false;
-    taskElement.column.draggable = false;
-    taskElement.category.contentEditable = true;
-    taskElement.title.contentEditable = true;
+    taskElement.inputDeadline.style.display = "block";  // show date input field
+    taskElement.deadline.style.display = "none";        // hide date display field
+    taskElement.task.draggable = false;     // do not drag the task
+    taskElement.column.draggable = false;   // while in edit mode 
+    taskElement.category.contentEditable = true;    // make the task's children
+    taskElement.title.contentEditable = true;       // elements editable
     taskElement.details.contentEditable = true;
-    (e.target.classList == "task-deadline") ? taskElement.inputDeadline.focus() : e.target.focus();
+    (e.target.classList == "task-deadline") ? taskElement.inputDeadline.focus() : e.target.focus(); // set focus to the clicked element
     //taskElement.column.firstElementChild.style.cursor = "default";
 }
 
 
+/**
+ * switch a task to the next priority option
+ * 
+ * @param { string } taskId - the ID of the task
+ * @param { object } te - an object containing references to a task and it's children
+ */
 function nextPriority(taskId, te) {
     const tasksIndex = findTasksIndex(taskId);
     (tasks[tasksIndex].priority < priorities.length - 1 ) ? tasks[tasksIndex].priority++ : tasks[tasksIndex].priority = 0;
@@ -241,6 +281,12 @@ function nextPriority(taskId, te) {
 }
 
 
+/**
+ * assign a task to the next person in charge option
+ * 
+ * @param { string } taskId - the ID of the task
+ * @param { object } te - an object containing references to a task and it's children
+ */
 function nextPersonInCharge(taskId, te) {
     const tasksIndex = findTasksIndex(taskId);
     const personsIndex = inCharge.findIndex(person => person == te.inCharge.textContent.slice(0, -1));
@@ -251,16 +297,27 @@ function nextPersonInCharge(taskId, te) {
 }
 
 
+/**
+ * listens for a task's element going out of focus
+ * resets editable state + initiates furter processing
+ * 
+ * @param { object } e - the event object
+ * @param { string } taskId - the ID of the task
+ */
 function taskOutOfFocus(e, taskId) {
-    const taskIndex = findTasksIndex(taskId);
     const taskElement = getTaskElement(taskId);
     if (e.target == taskElement.category || e.target == taskElement.title || e.target == taskElement.details || e.target == taskElement.inputDeadline) {
         taskNonEditable(taskElement);
-        setEditedTasksValues(taskElement, taskIndex);
+        setEditedTasksValues(taskElement, findTasksIndex(taskId));
     }
 }
 
 
+/**
+ * resets a task's editable state 
+ * 
+ * @param { object } taskElement - an object containing references to a task and it's children
+ */
 function taskNonEditable(taskElement) {
     window.getSelection().removeAllRanges();
     taskElement.inputDeadline.style.display = "none";
@@ -276,6 +333,13 @@ function taskNonEditable(taskElement) {
 }
 
 
+/**
+ * move edited task values to the tasks array
+ * and write it to the backend
+ * 
+ * @param { object } taskElement - an object containing references to a task and it's children
+ * @param { number } taskIndex - the index of the task inside the tasks array
+ */
 function setEditedTasksValues(taskElement, taskIndex) {
     tasks[taskIndex].category = taskElement.category.textContent;
     tasks[taskIndex].title = taskElement.title.textContent;
@@ -285,9 +349,12 @@ function setEditedTasksValues(taskElement, taskIndex) {
 }
 
 
-/******************************
-**       backend stuff       **
-******************************/
+/*********************************
+**  backend stuff               **
+**  if not commented otherwise, **
+**  the functions do what the   **
+**  function's names implies    **
+*********************************/
 
 
 function readAllTasksFromBackend() {
@@ -302,6 +369,7 @@ function readAllTasksFromBackend() {
     showTasks();
 }
 
+
 function readTaskSettingsFromBackend() {
     const priorityData = JSON.parse(backend.getItem('priorities')) || (defaultPriorities);
     const personsData = JSON.parse(backend.getItem('inCharge')) || (defaultPersons);
@@ -313,22 +381,24 @@ function readTaskSettingsFromBackend() {
 
 
 function writeAllTasksToBackend() {
-    tasks.forEach(task => task.assignedTo = task.inCharge);
+    tasks.forEach(task => task.assignedTo = task.inCharge); // match different field name used somewhere outside
     backend.startTransaction(); 
     backend.setItem('tasks', JSON.stringify(tasks));
-    console.log("tasks written to backend");
+    console.log("tasks queued for write");
     writeTaskSettingsToBackend();
+    await backend.commit();
+    console.log("changes written to backend");
 }
 
 
 async function writeTaskSettingsToBackend() {
     backend.setItem('priorities', JSON.stringify(priorities));
     backend.setItem('inCharge', JSON.stringify(inCharge));
-    await backend.commit();
-    console.log("tasks settings written to backend");
+    console.log("tasks settings queued for write");
 }
 
 
+// convert foreign data to match our data structure
 function convertForeignData(data) {
     data.inCharge = ('assignedTo' in data) ? data.assignedTo : inCharge[0];
     data.assignedTo = data.inCharge;

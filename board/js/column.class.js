@@ -265,7 +265,7 @@ class Column {
     // add column to the DOM, either append it
     // or insert it before an existing column
     static addToDom(parent, column, beforeColumn) {
-        const before = document.getElementById(beforeColumn);
+        const before = document.getElementById(beforeColumn) || false;
         (before) ? parent.insertBefore(column, before) : parent.appendChild(column);
     }
 }
