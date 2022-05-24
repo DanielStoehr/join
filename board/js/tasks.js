@@ -430,8 +430,6 @@ function writeAllTasksToBackend() {
     backend.setItem('tasks', JSON.stringify(tasks));
     console.log("tasks queued for write");
     writeTaskSettingsToBackend();
-    await backend.commit();
-    console.log("changes written to backend");
 }
 
 
@@ -439,6 +437,8 @@ async function writeTaskSettingsToBackend() {
     backend.setItem('priorities', JSON.stringify(priorities));
     backend.setItem('inCharge', JSON.stringify(inCharge));
     console.log("tasks settings queued for write");
+    await backend.commit();
+    console.log("changes written to backend");
 }
 
 
