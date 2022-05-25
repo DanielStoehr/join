@@ -80,8 +80,8 @@ function removeColumn(colId) {
     if (toRemove && !toRemove.protected) {
         backupRemovedColumn(toRemove, colIndex);
         toRemove.removeFrom(toRemove.board);
-        getColumnsProperties();
         columns.splice(colIndex, 1);
+        getColumnsProperties();
         //findTasksByColumn(colId).forEach(task => moveTaskToColumn(task.id, "trash"));
     }
     return (!toRemove.protected) ? findTasksByColumn(colId) : [];
@@ -137,6 +137,7 @@ function moveColumn(sourceColumn, targetColumn) {
         column.removeFrom(column.board);
         column.appendTo(column.board, tc);
         columns.splice(findColumnsIndex(tc), 0, column);
+        getColumnsProperties();
         writeAllColumnsToBackend();
         console.log("dropped " + sourceColumn + " onto " + targetColumn);
     }

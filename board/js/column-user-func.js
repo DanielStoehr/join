@@ -1,4 +1,4 @@
-import { columns, addColumn, removeColumn, findRemovedColumnById, findRemovedColumnsIndex, restoreColumn } from "./columns.js";
+import { columns, addColumn, removeColumn, findRemovedColumnById, findRemovedColumnsIndex, restoreColumn, getColumnsProperties } from "./columns.js";
 import { writeAllColumnsToBackend, readColumnsFromBackend } from "./columns.js";
 import { showTasks } from "./tasks.js";
 
@@ -26,6 +26,7 @@ function insertUserAddedColumn(newColumnId, newColumnTitle) {
     if (!document.getElementById(newColumnId)) {
         const column = columns[columns.length - 1];
         addColumn(newColumnId, newColumnTitle, columnColors.colors[columnColors.choice], false, false, column.board, "add-column"); 
+        getColumnsProperties();
         writeAllColumnsToBackend();
         showTasks();
     }

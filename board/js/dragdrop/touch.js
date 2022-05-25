@@ -16,12 +16,12 @@ const touch = {
 
 
 function touchStart(e, id) {
+    //e.preventDefault();
     e.stopPropagation();
     currentlyDraggedTask.id = "";
     currentlyDraggedColumn.id = "";
     touch.x = parseInt(e.changedTouches[0].clientX);
     touch.y = parseInt(e.changedTouches[0].clientY);
-    //e.preventDefault();
 }
 
 
@@ -67,16 +67,15 @@ function touchEnd(e, id) {
         removeTaskFromColumn(task);
         moveTaskToColumn(currentlyDraggedTask.id, colId);
         removePlaceholderFromColumn();
-        showTasks();
     }
     if (currentlyDraggedColumn.id) {
         removeTouchHighlighting();
         document.getElementById(currentlyDraggedColumn.id).style.position = "";
         removePlaceholderColumn();
-        getColumnsProperties();
         moveColumn(currentlyDraggedColumn.id, getTouchTargetColumn());
-        showTasks();
     }
+    showTasks();
+    getColumnsProperties();
 }
 
 
@@ -91,7 +90,6 @@ function touchCancel(e, id) {
     if (currentlyDraggedColumn.id) {
         document.getElementById(currentlyDraggedColumn.id).style.position = "";
         removePlaceholderColumn();
-        getColumnsProperties();
     }
     showTasks();
 }
@@ -99,6 +97,7 @@ function touchCancel(e, id) {
 
 function getTouchTargetColumn() {
     let col = "";
+    getColumnsProperties();
     columns.forEach(c => {
         if (touch.x >= c.x && touch.x <= c.x + c.width && touch.y >= c.y && touch.y <= c.y + c.height) {
             col = (c.minimized) ? "" : c.id;
@@ -109,6 +108,7 @@ function getTouchTargetColumn() {
 
 
 function highlightTouchedColumn() {
+    getColumnsProperties();
     columns.forEach(c => {
         if (c.id != currentlyDraggedTask.sourceColumn) {
             const col = document.getElementById(c.id);
