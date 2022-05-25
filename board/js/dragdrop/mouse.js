@@ -12,6 +12,7 @@ function startDragging(e, id) {
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.setData('text/plain', 'hello');
     e.target.classList.contains("task") ? startDraggingTask(id) : startDraggingColumn(id);
+    getColumnsProperties();
 }
 
 
@@ -36,8 +37,8 @@ function stopDragging(e, taskId) {
     if (findTaskById(currentlyDraggedTask.id)) {
         removeDraggedTaskHighlighting();
         currentlyDraggedTask.id = "";
-        currentlyDraggedColumn.id = "";
     }
+    currentlyDraggedColumn.id = "";
 }
 
 
@@ -66,6 +67,7 @@ function drop(e, colId) {
         currentlyDraggedTask.id = "";
         currentlyDraggedColumn.id = "";
         showTasks();
+        getColumnsProperties();
     }
 }
 
