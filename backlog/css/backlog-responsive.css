@@ -7,8 +7,18 @@
         flex-direction: column;
     }
 
+    table td:first-child, th:first-child {
+        padding-left: 0px;
+        margin: 18px;
+    }
+
+    table tr td:nth-child(2), th:nth-child(2) {
+        justify-content: center;
+    }
+
     table tr td:last-child, th:last-child {
         width: 100%;
+        justify-content: center;
     }
 
     .backlog-item-image-name {

@@ -1,6 +1,6 @@
 function templateBacklogTableHead() {
     return /*html*/ `
-    <tr>
+    <tr style="border-left: 10px solid transparent">
         <th>ASSIGNED-TO</th>
         <th>CATEGORY</th>
         <th>DETAILS</th>
@@ -12,8 +12,8 @@ function templateBacklogTask(backlogTask, colorOfUrgency) {
     return /*html*/ `
     <tr class="backlog-item" onclick="openTask(${backlogTask['addedAt']})" style="border-left: 10px solid ${colorOfUrgency}">
         <td class="backlog-item-image-name">
-            <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
-            <div class="name-mail-container">
+            <div class="name-image-container">
+                <img src="../img/user.svg" alt="user-image" class="backlog-user-image">
                 <span>${backlogTask['assignedTo']}</span>
             </div>
         </td>

@@ -15,7 +15,6 @@
     margin-right: auto;
 }
 
-
 .backlog-heading {
     margin: 0;
     font-weight: 700;
@@ -44,8 +43,6 @@ table tr {
 }
 
 table td, th {
-    padding-left: 12px;
-    padding-right: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,16 +55,23 @@ table th {
     text-transform: uppercase;
 }
 
-table tr td:first-child, th:first-child {
+table td:first-child, th:first-child {
     width: 30%;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 40px;
 }
 
 table tr td:nth-child(2), th:nth-child(2) {
     width: 30%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 table tr td:last-child, th:last-child {
     width: 40%;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .backlog-item {
@@ -92,8 +96,6 @@ table tr td:last-child, th:last-child {
     height: 50px;
     width: 50px;
     object-fit: contain;
-    margin-left: 12px;
-    margin-right: 12px;
 }
 
 .backlog-item-text {
@@ -102,17 +104,15 @@ table tr td:last-child, th:last-child {
     justify-content: space-between;
 }
 
-.name-mail-container {
+.name-image-container {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
 }
 
 .email {
     color: #596fbd;
-}
-
-.category {
-    margin: 0px 12px 0px 12px;
 }
 
 .details {
@@ -177,10 +177,6 @@ table tr td:last-child, th:last-child {
     border: 1px solid rgba(128, 128, 128, 0.555);
     outline: none;
     border-radius: 4px;
-}
-
-.form-description {
-
 }
 
 .form-textarea {
