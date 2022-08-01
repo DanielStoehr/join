@@ -37,7 +37,6 @@ export async function downloadFromServer() {
     transactionStarted = false;
     let result = await loadJSONFromServer();    // funktion für download aller Daten
     jsonFromServer = JSON.parse(result);
-    console.log(Object.keys(jsonFromServer).length + ' keys Loaded\n');
 }
 
 

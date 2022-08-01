@@ -47,7 +47,6 @@
             updateStatus('Laden ...');
             loadJSONFromServer()
                 .then(function (result) {
-                    console.log(result);
                     myJSON = JSON.parse(result);
                     updateStatus('Laden erfolgreich!');
                 })

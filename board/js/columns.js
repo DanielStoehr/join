@@ -147,7 +147,6 @@ function moveColumn(sourceColumn, targetColumn) {
  *  uses either the data read fron the backend or the default data */
 function initColumns() {
     const columnsData = readColumnsFromBackend() || defaultColumns;
-    console.log("columns read from backend");
     columnsData.forEach(column => addColumn(column.id, column.title, column.color, column.minimized || false, column.protected || false, column.board || "board"));
     readRemovedColumnsFromBackend();
     window.addEventListener("resize", resizeViewportListener);
@@ -259,14 +258,12 @@ function readRemovedColumnsFromBackend() {
         col.protected = rc.column.protected || false;
         removedColumns.push({ index: rc.index, column: col });
     });
-    console.log("removed columns read from backend");
 }
 
 
 async function writeAllColumnsToBackend() {
     await backend.setItem('columns', JSON.stringify(columns));
     await backend.setItem('removedColumns', JSON.stringify(removedColumns));
-    console.log("columns written to backend");
 }
 
 
