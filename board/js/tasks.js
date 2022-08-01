@@ -224,7 +224,6 @@ function addTaskListener(e) {
  */ 
 function insertUserAddedTask(e) {
     const col = e.target.parentNode;
-    console.log("add task to '" + col.id + "'\n");
     addTask(col.id, "neue Aufgabe", "Beschreibung", "allgemein", 1, euDateToUtc(new Date().toLocaleString().slice(0, -10)), inCharge[3]);
     showTasks();
 }
@@ -409,7 +408,6 @@ function readAllTasksFromBackend() {
         const tasksIndex = findTasksIndex(taskData.id);
         (tasksIndex < 0) ? tasks.push(taskData) : tasks.splice(tasksIndex, 1, taskData);
     });
-    console.log("tasks read from backend");
     showTasks();
 }
 
@@ -419,7 +417,6 @@ function readTaskSettingsFromBackend() {
     const personsData = JSON.parse(backend.getItem('inCharge')) || (defaultPersons);
     priorityData.forEach(p => priorities.push(p));
     personsData.forEach(p => inCharge.push(p));
-    console.log("tasks settings read from backend");
     writeTaskSettingsToBackend();
 }
 
@@ -428,7 +425,6 @@ function writeAllTasksToBackend() {
     tasks.forEach(task => task.assignedTo = task.inCharge); // match different field name used somewhere outside
     backend.startTransaction(); 
     backend.setItem('tasks', JSON.stringify(tasks));
-    console.log("tasks queued for write");
     writeTaskSettingsToBackend();
 }
 
@@ -436,9 +432,7 @@ function writeAllTasksToBackend() {
 async function writeTaskSettingsToBackend() {
     backend.setItem('priorities', JSON.stringify(priorities));
     backend.setItem('inCharge', JSON.stringify(inCharge));
-    console.log("tasks settings queued for write");
     await backend.commit();
-    console.log("changes written to backend");
 }
 
 
@@ -448,7 +442,6 @@ function convertForeignData(data) {
     data.assignedTo = data.inCharge;
     data.id = (data.id.startsWith("t")) ? data.id : "t" + data.id;
     data.id = (data.id.length != 17) ? 't' + Date.now() + String(Math.floor(Math.random() * 1000)) : data.id;
-    console.log("task data: ", data, "\n");
     return data;
 }
 

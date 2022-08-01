@@ -24,7 +24,6 @@ let colorsOfUrgency = {
 async function init() {
     await downloadFromServer();
     tasks = JSON.parse(backend.getItem('tasks'));
-    console.log('heruntergeladene tasks: ' + tasks)
     renderBacklogTasks();
 }
 

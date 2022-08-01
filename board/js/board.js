@@ -72,15 +72,11 @@ async function debug() {
     if (!debugMode && 't' in window) {
         delete window.t;
         delete window.c;
-        console.log("debug mode: off");
-        console.log("t and c removed from window object");
     }
     if (debugMode && !('t' in window)) {
         const t = await import("./tasks.js");
         const c = await import("./columns.js");
         window.t = t;
         window.c = c;
-        console.log("prefix t assigned to tasks.js");
-        console.log("prefix c assigned to columns.js");
     }
 }

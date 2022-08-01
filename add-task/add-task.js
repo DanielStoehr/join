@@ -18,14 +18,9 @@ let tasks = [];
 
 let user;
 
-// let taskload = [];
-
 async function init() {
     await downloadFromServer();
     tasks = await JSON.parse(backend.getItem('tasks')) || [];
-    console.log(tasks);
-    // taskload = JSON.parse(backend.getItem('task'+id)) || [];
-    // console.log('Geladen', taskload);
 }
 
 

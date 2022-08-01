@@ -139,7 +139,6 @@ function moveColumn(sourceColumn, targetColumn) {
         columns.splice(findColumnsIndex(tc), 0, column);
         getColumnsProperties();
         writeAllColumnsToBackend();
-        console.log("dropped " + sourceColumn + " onto " + targetColumn);
     }
 }
 
